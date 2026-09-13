@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tribunal Judiciaire de Martinique — Portail Officiel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #1a2744;
+      --navy-light: #243257;
+      --gold: #c9a84c;
+      --gold-light: #e2c06e;
+      --cream: #f7f5f0;
+      --white: #ffffff;
+      --slate: #4a5568;
+      --slate-light: #718096;
+      --border: #d8d3c8;
+      --red-republic: #8b1a1a;
+      --success: #2d6a4f;
+      --danger: #9b2335;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--cream);
+      color: var(--navy);
+      min-height: 100vh;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      background: var(--navy);
+      padding: 6px 0;
+      border-bottom: 2px solid var(--gold);
+    }
+    .topbar-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .topbar span {
+      color: #a0aec0;
+      font-size: 12px;
+      letter-spacing: 0.02em;
+    }
+    .topbar a {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .topbar a:hover { text-decoration: underline; }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(26,39,68,0.07);
+    }
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .coat-of-arms {
+      width: 72px;
+      height: 72px;
+      flex-shrink: 0;
+    }
+    .header-title h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.2;
+    }
+    .header-title .subtitle {
+      font-size: 13px;
+      color: var(--slate-light);
+      margin-top: 3px;
+      font-weight: 400;
+    }
+    .header-title .region-badge {
+      display: inline-block;
+      background: var(--navy);
+      color: var(--gold);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 2px;
+      margin-top: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--navy);
+    }
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      gap: 0;
+    }
+    nav a {
+      color: #b0bfd8;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 14px 18px;
+      display: block;
+      transition: background 0.15s, color 0.15s;
+      border-bottom: 3px solid transparent;
+    }
+    nav a:hover, nav a.active {
+      background: var(--navy-light);
+      color: var(--white);
+      border-bottom-color: var(--gold);
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, #2a3f6f 100%);
+      color: var(--white);
+      padding: 64px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; }
+    .hero-eyebrow {
+      display: inline-block;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      padding: 4px 14px;
+      margin-bottom: 20px;
+    }
+    .hero h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 16px;
+    }
+    .hero p {
+      font-size: 16px;
+      color: #b0bfd8;
+      margin-bottom: 32px;
+      font-weight: 300;
+    }
+    .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-block;
+      padding: 12px 28px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .btn-gold {
+      background: var(--gold);
+      color: var(--navy);
+    }
+    .btn-gold:hover { background: var(--gold-light); }
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,0.4);
+    }
+    .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.08); }
+    .btn-navy { background: var(--navy); color: var(--white); }
+    .btn-navy:hover { background: var(--navy-light); }
+    .btn-discord {
+      background: #5865F2;
+      color: var(--white);
+    }
+    .btn-discord:hover { background: #4752c4; }
+    .btn-danger { background: var(--danger); color: var(--white); }
+    .btn-danger:hover { background: #7a1c28; }
+    .btn-success { background: var(--success); color: var(--white); }
+    .btn-success:hover { background: #245a40; }
+
+    /* ── CONTENT SECTION ── */
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 3px;
+      background: var(--gold);
+      margin-top: 10px;
+    }
+    .section-lead {
+      color: var(--slate);
+      margin-bottom: 32px;
+      margin-top: 16px;
+      max-width: 600px;
+    }
+
+    /* ── CARDS ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      padding: 24px;
+    }
+    .card-icon {
+      font-size: 28px;
+      margin-bottom: 14px;
+    }
+    .card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .card p { font-size: 14px; color: var(--slate); line-height: 1.55; }
+
+    /* ── ANNONCES ── */
+    .annonce-list { display: flex; flex-direction: column; gap: 1px; }
+    .annonce-item {
+      background: var(--white);
+      border-left: 4px solid var(--gold);
+      padding: 18px 20px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--border);
+    }
+    .annonce-date {
+      font-size: 12px;
+      color: var(--slate-light);
+      white-space: nowrap;
+      margin-top: 2px;
+      min-width: 90px;
+    }
+    .annonce-content h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+    .annonce-content p { font-size: 13px; color: var(--slate); }
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .badge-urgent { background: #fef2f2; color: var(--danger); border: 1px solid #fecaca; }
+    .badge-info { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+    .badge-rp { background: #f0fdf4; color: var(--success); border: 1px solid #bbf7d0; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      color: #718096;
+      padding: 40px 24px 24px;
+      margin-top: 60px;
+    }
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 32px;
+    }
+    footer h4 {
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      margin-bottom: 14px;
+    }
+    footer p { font-size: 13px; line-height: 1.7; }
+    footer ul { list-style: none; }
+    footer li { margin-bottom: 8px; }
+    footer a { color: #718096; text-decoration: none; font-size: 13px; }
+    footer a:hover { color: var(--gold); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 20px;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .rp-disclaimer {
+      background: rgba(201,168,76,0.12);
+      border: 1px solid rgba(201,168,76,0.3);
+      color: var(--gold);
+      font-size: 11px;
+      padding: 6px 14px;
+      border-radius: 2px;
+    }
+
+    /* ── AUTH PAGES ── */
+    .auth-wrapper {
+      min-height: calc(100vh - 200px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 48px 24px;
+    }
+    .auth-box {
+      background: var(--white);
+      border: 1px solid var(--border);
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 4px 24px rgba(26,39,68,0.08);
+    }
+    .auth-header {
+      background: var(--navy);
+      padding: 28px 32px;
+      text-align: center;
+    }
+    .auth-header h2 {
+      font-family: 'Playfair Display', serif;
+      color: var(--white);
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .auth-header p { color: #a0aec0; font-size: 13px; }
+    .auth-body { padding: 32px; }
+    .form-group { margin-bottom: 20px; }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      background: var(--cream);
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 14px;
+      color: var(--navy);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-input:focus { border-color: var(--navy); background: var(--white); }
+    .form-select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      background: var(--cream);
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 14px;
+      color: var(--navy);
+      outline: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M6 8L0 0h12z' fill='%234a5568'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+    }
+    .form-hint { font-size: 12px; color: var(--slate-light); margin-top: 5px; }
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 24px 0;
+      color: var(--slate-light);
+      font-size: 12px;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .auth-footer {
+      padding: 16px 32px;
+      border-top: 1px solid var(--border);
+      background: var(--cream);
+      text-align: center;
+      font-size: 13px;
+      color: var(--slate);
+    }
+    .auth-footer a { color: var(--navy); font-weight: 600; text-decoration: none; }
+    .auth-footer a:hover { text-decoration: underline; }
+    .btn-full { width: 100%; text-align: center; }
+
+    /* ── DASHBOARD ── */
+    .dashboard-header {
+      background: var(--navy);
+      padding: 32px 24px;
+    }
+    .dashboard-header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .user-info { display: flex; align-items: center; gap: 16px; }
+    .user-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+      border: 2px solid rgba(201,168,76,0.4);
+    }
+    .user-details h3 {
+      color: var(--white);
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+    }
+    .user-details p { color: #a0aec0; font-size: 13px; }
+    .role-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 2px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+    .role-chip .dot { width: 7px; height: 7px; border-radius: 50%; }
+    .role-juge { background: rgba(201,168,76,0.15); color: var(--gold); border: 1px solid rgba(201,168,76,0.35); }
+    .role-juge .dot { background: var(--gold); }
+    .role-procureur { background: rgba(139,26,26,0.15); color: #e07070; border: 1px solid rgba(139,26,26,0.3); }
+    .role-procureur .dot { background: #e07070; }
+    .role-greffier { background: rgba(45,106,79,0.15); color: #6bc49a; border: 1px solid rgba(45,106,79,0.3); }
+    .role-greffier .dot { background: #6bc49a; }
+    .role-avocat { background: rgba(99,102,241,0.15); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.3); }
+    .role-avocat .dot { background: #a5b4fc; }
+    .role-citoyen { background: rgba(113,128,150,0.15); color: #a0aec0; border: 1px solid rgba(113,128,150,0.3); }
+    .role-citoyen .dot { background: #a0aec0; }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 0;
+      min-height: 500px;
+    }
+    .sidebar {
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      padding: 24px 0;
+    }
+    .sidebar-section { margin-bottom: 8px; }
+    .sidebar-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--slate-light);
+      padding: 8px 20px 4px;
+    }
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      font-size: 14px;
+      color: var(--slate);
+      cursor: pointer;
+      transition: background 0.1s;
+      border-left: 3px solid transparent;
+    }
+    .sidebar-link:hover { background: var(--cream); }
+    .sidebar-link.active { background: #eff6ff; color: var(--navy); border-left-color: var(--navy); font-weight: 600; }
+    .sidebar-link .icon { width: 18px; text-align: center; }
+
+    .main-content { padding: 32px; background: var(--cream); }
+    .content-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+    .stat-box {
+      background: var(--white);
+      border: 1px solid var(--border);
+      padding: 18px 20px;
+    }
+    .stat-box .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .stat-box .stat-label { font-size: 12px; color: var(--slate-light); margin-top: 2px; }
+
+    .table-box { background: var(--white); border: 1px solid var(--border); }
+    .table-head {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .table-head h4 { font-size: 15px; font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      text-align: left;
+      padding: 10px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--slate-light);
+      border-bottom: 1px solid var(--border);
+      background: var(--cream);
+    }
+    td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid #f0ece4; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fafaf8; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--white);
+      width: 100%;
+      max-width: 540px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .modal-header {
+      background: var(--navy);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-header h3 { color: var(--white); font-family: 'Playfair Display', serif; font-size: 18px; }
+    .modal-close {
+      color: #a0aec0;
+      background: none;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .modal-close:hover { color: var(--white); }
+    .modal-body { padding: 24px; }
+    .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
+
+    /* ── DISCORD OAUTH ── */
+    .discord-box {
+      background: #f0f2ff;
+      border: 1px solid #c7d0ff;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .discord-box h4 { font-size: 14px; font-weight: 600; margin-bottom: 8px; color: #3730a3; }
+    .discord-box p { font-size: 13px; color: var(--slate); margin-bottom: 14px; }
+    .discord-connected {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .discord-avatar { width: 40px; height: 40px; border-radius: 50%; background: #5865F2; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 16px; }
+    .discord-connected .dc-info p { font-size: 12px; color: var(--slate-light); }
+    .discord-connected .dc-info strong { font-size: 14px; color: var(--navy); }
+
+    /* ── NOTIFICATION ── */
+    .notif {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--navy);
+      color: white;
+      padding: 14px 20px;
+      border-left: 4px solid var(--gold);
+      font-size: 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 2000;
+      max-width: 300px;
+    }
+    .notif.show { transform: translateY(0); opacity: 1; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero h2 { font-size: 26px; }
+      .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .header-title h1 { font-size: 17px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NOTIFICATION -->
+<div class="notif" id="notif"></div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <span>République Française — Ministère de la Justice</span>
+    <div style="display:flex;gap:16px;">
+      <a href="#" onclick="showPage('accueil')">Accueil</a>
+      <a href="#" onclick="showPage('contact')">Contact</a>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <svg class="coat-of-arms" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <!-- Simplified judicial scales emblem -->
+      <circle cx="50" cy="50" r="48" fill="#1a2744" stroke="#c9a84c" stroke-width="2"/>
+      <!-- Scales of justice -->
+      <rect x="48" y="20" width="4" height="55" fill="#c9a84c"/>
+      <rect x="25" y="30" width="50" height="3" fill="#c9a84c"/>
+      <!-- Left pan -->
+      <path d="M25 33 Q18 45 32 45 Q46 45 39 33Z" fill="#c9a84c" opacity="0.8"/>
+      <!-- Right pan -->
+      <path d="M61 33 Q54 45 68 45 Q82 45 75 33Z" fill="#c9a84c" opacity="0.8"/>
+      <!-- Base -->
+      <rect x="36" y="75" width="28" height="3" rx="1" fill="#c9a84c"/>
+      <!-- Crown / stars -->
+      <text x="50" y="90" text-anchor="middle" fill="#c9a84c" font-size="9" font-family="serif">✦ JUSTICE ✦</text>
+    </svg>
+    <div class="header-title">
+      <div class="region-badge">COLLECTIVITÉ TERRITORIALE DE MARTINIQUE</div>
+      <h1>Tribunal Judiciaire de Martinique</h1>
+      <div class="subtitle">Portail officiel des services judiciaires — Fort-de-France</div>
+    </div>
+  </div>
+</header>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="active" onclick="showPage('accueil', this)">Accueil</a>
+    <a href="#" onclick="showPage('audiences', this)">Audiences</a>
+    <a href="#" onclick="showPage('dossiers', this)">Dossiers</a>
+    <a href="#" onclick="showPage('annuaire', this)">Annuaire</a>
+    <a href="#" onclick="showPage('bot', this)">Bot Discord</a>
+    <a href="#" onclick="showPage('connexion', this)" id="nav-connexion">Connexion</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PAGE : ACCUEIL -->
+<!-- ══════════════════════════════════════════ -->
+<div id="page-accueil" class="page active">
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-eyebrow">PORTAIL JUDICIAIRE</div>
+      <h2>Au service de la justice en Martinique</h2>
+      <p>Accédez aux dossiers, audiences et procédures du Tribunal Judiciaire de Fort-de-France. Connectez-vous via votre compte Discord pour accéder à votre espace personnel.</p>
+      <div class="hero-actions">
+        <button class="btn btn-gold" onclick="showPage('connexion')">Accéder à mon espace</button>
+        <button class="btn btn-outline" onclick="showPage('audiences')">Voir les audiences</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Services disponibles</div>
+    <p class="section-lead">Le portail numérique du tribunal vous permet d'accéder à l'ensemble des services judiciaires depuis votre espace personnel.</p>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon">⚖️</div>
+        <h3>Suivi des audiences</h3>
+        <p>Consultez le calendrier des audiences publiques, les dossiers en cours et les décisions rendues par le tribunal.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📂</div>
+        <h3>Gestion des dossiers</h3>
+        <p>Déposez, consultez et suivez l'avancement de vos dossiers judiciaires en temps réel.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📋</div>
+        <h3>Dépôt de plainte</h3>
+        <p>Soumettez une plainte ou une requête directement en ligne. Un greffier vous contactera sous 48h.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🤝</div>
+        <h3>Annuaire du barreau</h3>
+        <p>Retrouvez les avocats et auxiliaires de justice du barreau de Fort-de-France disponibles pour vous assister.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" style="padding-top:0;">
+    <div class="section-title">Annonces & actualités</div>
+    <p class="section-lead">Informations officielles du tribunal et du parquet de Martinique.</p>
+    <div class="annonce-list">
+      <div class="annonce-item">
+        <div class="annonce-date">13 sept. 2026</div>
+        <div class="annonce-content">
+          <span class="badge badge-urgent">Urgent</span>
+          <h4 style="margin-top:4px;">Fermeture exceptionnelle du greffe civil</h4>
+          <p>Le greffe civil sera fermé le vendredi 14 septembre pour inventaire annuel. Les urgences sont redirigées au +596 596 00 00 00.</p>
+        </div>
+      </div>
+      <div class="annonce-item">
+        <div class="annonce-date">10 sept. 2026</div>
+        <div class="annonce-content">
+          <span class="badge badge-rp">Audience publique</span>
+          <h4 style="margin-top:4px;">Audience correctionnelle — Affaire no 2026-CR-0047</h4>
+          <p>Audience publique fixée au 15 septembre 2026 à 09h00, salle 3 du Palais de Justice.</p>
+        </div>
+      </div>
+      <div class="annonce-item">
+        <div class="annonce-date">5 sept. 2026</div>
+        <div class="annonce-content">
+          <span class="badge badge-info">Information</span>
+          <h4 style="margin-top:4px;">Nouveau procureur de la République nommé</h4>
+          <p>Maître Jean-Claude BELFORT prend ses fonctions de Procureur de la République à compter du 1ᵉʳ octobre 2026.</p>
+        </div>
+      </div>
+      <div class="annonce-item">
+        <div class="annonce-date">1 sept. 2026</div>
+        <div class="annonce-content">
+          <span class="badge badge-info">Mise à jour</span>
+          <h4 style="margin-top:4px;">Portail judiciaire — Nouvelle version disponible</h4>
+          <p>La nouvelle version du portail intègre la connexion via Discord pour les membres du personnel et les avocats inscrits au barreau.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PAGE : CONNEXION -->
+<!-- ══════════════════════════════════════════ -->
+<div id="page-connexion" class="page">
+  <div class="auth-wrapper">
+    <div class="auth-box">
+      <div class="auth-header">
+        <h2>Connexion au portail</h2>
+        <p>Tribunal Judiciaire de Martinique</p>
+      </div>
+      <div class="auth-body">
+        <div class="discord-box">
+          <h4>🔗 Connexion via Discord</h4>
+          <p>Le portail utilise votre compte Discord pour authentifier votre identité et synchroniser automatiquement vos rôles judiciaires.</p>
+          <button class="btn btn-discord btn-full" onclick="simulateDiscordLogin()">
+            <svg style="width:18px;height:18px;vertical-align:middle;margin-right:8px;" viewBox="0 0 127.14 96.36" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
+            Se connecter avec Discord
+          </button>
+        </div>
+        <div class="divider">ou connexion par identifiants</div>
+        <div class="form-group">
+          <label class="form-label">Identifiant judiciaire</label>
+          <input type="text" class="form-input" placeholder="Ex : JGE-2026-0012" id="login-id" />
+          <div class="form-hint">Cet identifiant vous a été attribué par le greffe ou le Bot Discord</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mot de passe</label>
+          <input type="password" class="form-input" placeholder="••••••••" id="login-pw" />
+        </div>
+        <button class="btn btn-navy btn-full" onclick="loginManual()" style="margin-top:4px;">Se connecter</button>
+      </div>
+      <div class="auth-footer">
+        Pas encore de compte ? <a href="#" onclick="showPage('inscription')">Créer un compte</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PAGE : INSCRIPTION -->
+<!-- ══════════════════════════════════════════ -->
+<div id="page-inscription" class="page">
+  <div class="auth-wrapper">
+    <div class="auth-box" style="max-width:560px;">
+      <div class="auth-header">
+        <h2>Créer un compte</h2>
+        <p>Portail judiciaire — Martinique</p>
+      </div>
+      <div class="auth-body">
+        <div class="discord-box">
+          <h4>🔗 Recommandé — Inscription via Discord</h4>
+          <p>En vous inscrivant via Discord, vos rôles judiciaires sont synchronisés automatiquement par le Bot. Aucune vérification manuelle nécessaire.</p>
+          <button class="btn btn-discord btn-full" onclick="simulateDiscordRegister()">
+            <svg style="width:18px;height:18px;vertical-align:middle;margin-right:8px;" viewBox="0 0 127.14 96.36" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
+            S'inscrire avec Discord
+          </button>
+        </div>
+        <div class="divider">ou inscription manuelle</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div class="form-group">
+            <label class="form-label">Prénom</label>
+            <input type="text" class="form-input" placeholder="Jean-Marc" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nom</label>
+            <input type="text" class="form-input" placeholder="DUPONT" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Adresse e-mail</label>
+          <input type="email" class="form-input" placeholder="jm.dupont@exemple.fr" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Identifiant Discord</label>
+          <input type="text" class="form-input" placeholder="votrepseudo#0000 ou @votrepseudo" />
+          <div class="form-hint">Requis pour lier votre compte Discord et synchroniser vos rôles</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Fonction</label>
+          <select class="form-select">
+            <option value="">— Sélectionner votre fonction —</option>
+            <option>Citoyen / Justiciable</option>
+            <option>Avocat au barreau</option>
+            <option>Greffier</option>
+            <option>Magistrat — Parquet</option>
+            <option>Magistrat — Siège</option>
+            <option>Officier de Police Judiciaire</option>
+            <option>Huissier de justice</option>
+          </select>
+          <div class="form-hint">Votre rôle sera vérifié et attribué par le Bot Discord du serveur</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mot de passe</label>
+          <input type="password" class="form-input" placeholder="Minimum 8 caractères" />
+        </div>
+        <button class="btn btn-navy btn-full" onclick="registerManual()" style="margin-top:4px;">Créer mon compte</button>
+      </div>
+      <div class="auth-footer">
+        Déjà inscrit ? <a href="#" onclick="showPage('connexion')">Se connecter</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PAGE : DASHBOARD -->
+<!-- ══════════════════════════════════════════ -->
+<div id="page-dashboard" class="page">
+  <div class="dashboard-header">
+    <div class="dashboard-header-inner">
+      <div class="user-info">
+        <div class="user-avatar" id="dash-avatar">J</div>
+        <div class="user-details">
+          <h3 id="dash-name">Chargement...</h3>
+          <p id="dash-id">ID : —</p>
+          <div id="dash-role-chip" class="role-chip role-citoyen"><span class="dot"></span> <span id="dash-role-label">Citoyen</span></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <div class="discord-connected" style="margin:0;padding:10px 14px;">
+          <div class="discord-avatar" id="dash-discord-avatar">?</div>
+          <div class="dc-info">
+            <strong id="dash-discord-tag">Discord</strong>
+            <p>Rôles synchronisés ✓</p>
+          </div>
+        </div>
+        <button class="btn btn-danger" onclick="logout()">Déconnexion</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" style="padding:0;max-width:100%;">
+    <div class="dashboard-grid">
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-label">Mon espace</div>
+          <div class="sidebar-link active" onclick="showTab(this,'tab-overview')"><span class="icon">📊</span> Tableau de bord</div>
+          <div class="sidebar-link" onclick="showTab(this,'tab-dossiers')"><span class="icon">📂</span> Mes dossiers</div>
+          <div class="sidebar-link" onclick="showTab(this,'tab-audiences')"><span class="icon">⚖️</span> Mes audiences</div>
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-label">Outils</div>
+          <div class="sidebar-link" onclick="showTab(this,'tab-plainte')"><span class="icon">📋</span> Dépôt de plainte</div>
+          <div class="sidebar-link" onclick="showTab(this,'tab-discord')"><span class="icon">🤖</span> Bot Discord</div>
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-label">Compte</div>
+          <div class="sidebar-link" onclick="showTab(this,'tab-profil')"><span class="icon">👤</span> Mon profil</div>
+        </div>
+      </div>
+
+      <!-- CONTENT -->
+      <div class="main-content">
+
+        <!-- OVERVIEW -->
+        <div id="tab-overview">
+          <div class="content-title">Tableau de bord</div>
+          <div class="stats-row">
+            <div class="stat-box"><div class="stat-num">3</div><div class="stat-label">Dossiers actifs</div></div>
+            <div class="stat-box"><div class="stat-num">1</div><div class="stat-label">Audience à venir</div></div>
+            <div class="stat-box"><div class="stat-num">2</div><div class="stat-label">Notifications</div></div>
+            <div class="stat-box"><div class="stat-num">0</div><div class="stat-label">Actions requises</div></div>
+          </div>
+          <div class="table-box">
+            <div class="table-head">
+              <h4>Activité récente</h4>
+              <span class="badge badge-info">Synchronisé</span>
+            </div>
+            <table>
+              <thead><tr><th>Date</th><th>Événement</th><th>Dossier</th><th>Statut</th></tr></thead>
+              <tbody>
+                <tr><td>13/09/2026</td><td>Rôles Discord synchronisés</td><td>—</td><td><span class="badge badge-rp">✓ OK</span></td></tr>
+                <tr><td>10/09/2026</td><td>Audience fixée</td><td>2026-CR-0047</td><td><span class="badge badge-info">Planifié</span></td></tr>
+                <tr><td>05/09/2026</td><td>Dossier déposé</td><td>2026-CV-0091</td><td><span class="badge badge-urgent">En attente</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- DOSSIERS -->
+        <div id="tab-dossiers" style="display:none;">
+          <div class="content-title">Mes dossiers</div>
+          <div class="table-box">
+            <div class="table-head">
+              <h4>Dossiers actifs</h4>
+              <button class="btn btn-navy" onclick="openModal('modal-nouveau-dossier')" style="padding:6px 14px;font-size:13px;">+ Nouveau dossier</button>
+            </div>
+            <table>
+              <thead><tr><th>Numéro</th><th>Type</th><th>Objet</th><th>Juge</th><th>Statut</th></tr></thead>
+              <tbody>
+                <tr><td>2026-CV-0091</td><td>Civil</td><td>Litige locatif</td><td>Mme PELAGE</td><td><span class="badge badge-urgent">En attente</span></td></tr>
+                <tr><td>2026-CR-0047</td><td>Pénal</td><td>Audience fixée</td><td>M. ROSE</td><td><span class="badge badge-info">Planifié</span></td></tr>
+                <tr><td>2026-FA-0012</td><td>Famille</td><td>Divorce amiable</td><td>Mme BWANEL</td><td><span class="badge badge-rp">Instruit</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- AUDIENCES -->
+        <div id="tab-audiences" style="display:none;">
+          <div class="content-title">Mes audiences</div>
+          <div class="annonce-list">
+            <div class="annonce-item">
+              <div class="annonce-date">15 sept. 2026<br><small>09h00</small></div>
+              <div class="annonce-content">
+                <span class="badge badge-urgent">Imminente</span>
+                <h4 style="margin-top:4px;">Audience correctionnelle — Salle 3</h4>
+                <p>Dossier n° 2026-CR-0047 — Palais de Justice, Fort-de-France</p>
+              </div>
+            </div>
+            <div class="annonce-item" style="border-left-color:#718096;">
+              <div class="annonce-date">28 sept. 2026<br><small>14h30</small></div>
+              <div class="annonce-content">
+                <span class="badge badge-info">Planifiée</span>
+                <h4 style="margin-top:4px;">Audience famille — Chambre 1</h4>
+                <p>Dossier n° 2026-FA-0012 — Médiation en chambre du conseil</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PLAINTE -->
+        <div id="tab-plainte" style="display:none;">
+          <div class="content-title">Dépôt de plainte / requête</div>
+          <div class="table-box" style="padding:24px;">
+            <div class="form-group">
+              <label class="form-label">Type de procédure</label>
+              <select class="form-select">
+                <option>Plainte pénale</option>
+                <option>Requête civile</option>
+                <option>Requête en référé</option>
+                <option>Demande d'aide juridictionnelle</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Objet de la demande</label>
+              <input type="text" class="form-input" placeholder="Décrivez brièvement l'objet" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Description des faits</label>
+              <textarea class="form-input" rows="5" style="resize:vertical;" placeholder="Exposez les faits de manière chronologique et précise..."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Pièces justificatives (lien ou référence)</label>
+              <input type="text" class="form-input" placeholder="Lien Discord, référence document..." />
+              <div class="form-hint">Vous pouvez joindre des liens vers des preuves partagées sur le serveur Discord</div>
+            </div>
+            <button class="btn btn-success" onclick="showNotif('Votre requête a été transmise au greffe. Un identifiant vous sera attribué sous 24h.')">Soumettre la requête</button>
+          </div>
+        </div>
+
+        <!-- BOT DISCORD -->
+        <div id="tab-discord" style="display:none;">
+          <div class="content-title">Bot Discord — Synchronisation des rôles</div>
+          <div class="table-box" style="padding:24px;">
+            <div class="discord-connected" style="margin-bottom:24px;">
+              <div class="discord-avatar" id="bot-discord-avatar">?</div>
+              <div class="dc-info">
+                <strong id="bot-discord-tag">Discord</strong>
+                <p>Compte lié — Synchronisation active</p>
+              </div>
+            </div>
+            <h4 style="margin-bottom:16px;font-family:'Playfair Display',serif;font-size:16px;">Rôles Discord détectés</h4>
+            <div id="roles-list" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;"></div>
+            <hr style="border:none;border-top:1px solid var(--border);margin-bottom:20px;">
+            <h4 style="margin-bottom:12px;font-size:14px;font-weight:600;">Commandes du Bot</h4>
+            <div style="background:var(--navy);color:#a0e0b0;padding:16px;font-family:monospace;font-size:13px;line-height:2;">
+              <div><span style="color:#c9a84c;">/lier</span> — Lier votre compte Discord au portail</div>
+              <div><span style="color:#c9a84c;">/rôle</span> — Afficher vos rôles judiciaires actuels</div>
+              <div><span style="color:#c9a84c;">/dossier [numéro]</span> — Consulter un dossier</div>
+              <div><span style="color:#c9a84c;">/audience [date]</span> — Lister les audiences</div>
+              <div><span style="color:#c9a84c;">/identifier [@utilisateur]</span> — Générer un ID judiciaire</div>
+              <div><span style="color:#c9a84c;">/attribution [rôle] [@utilisateur]</span> — Attribuer un rôle (admins)</div>
+            </div>
+            <p style="font-size:12px;color:var(--slate-light);margin-top:12px;">Le Bot JusticeMTQ surveille les changements de rôles en temps réel sur le serveur Discord et met à jour automatiquement vos permissions sur ce portail.</p>
+            <button class="btn btn-discord" style="margin-top:16px;" onclick="showNotif('Synchronisation forcée... Rôles mis à jour avec succès !')">🔄 Forcer la synchronisation</button>
+          </div>
+        </div>
+
+        <!-- PROFIL -->
+        <div id="tab-profil" style="display:none;">
+          <div class="content-title">Mon profil</div>
+          <div class="table-box" style="padding:24px;">
+            <div class="form-group">
+              <label class="form-label">Identifiant judiciaire</label>
+              <input type="text" class="form-input" id="profil-id-input" readonly style="background:#f0ece4;color:var(--slate);" />
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div class="form-group">
+                <label class="form-label">Prénom</label>
+                <input type="text" class="form-input" id="profil-prenom" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nom</label>
+                <input type="text" class="form-input" id="profil-nom" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Fonction</label>
+              <input type="text" class="form-input" id="profil-fonction" readonly style="background:#f0ece4;color:var(--slate);" />
+              <div class="form-hint">La fonction est gérée par le Bot Discord et ne peut être modifiée ici</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Compte Discord lié</label>
+              <input type="text" class="form-input" id="profil-discord" readonly style="background:#f0ece4;color:var(--slate);" />
+            </div>
+            <button class="btn btn-success" onclick="showNotif('Profil mis à jour avec succès.')">Enregistrer les modifications</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PAGE : AUDIENCES PUBLIQUES -->
+<!-- ══════════════════════════════════════════ -->
+<div id="page-audiences" class="page">
+  <div class="section">
+    <div class="section-title">Calendrier des audiences</div>
+    <p class="section-lead">Les audiences publiques du Tribunal Judiciaire de Fort-de-France. Les audiences en chambre du conseil ne sont pas listées ici.</p>
+    <div class="table-box">
+      <div class="table-head"><h4>Audiences — Septembre 2026</h4></div>
+      <table>
+        <thead><tr><th>Date</th><th>Heure</th><th>Salle</th><th>Type</th><th>Affaire</th><th>Composition</th></tr></thead>
+        <tbody>
+          <tr><td>15/09/2026</td><td>09h00</td><td>Salle 3</td><td><span class="badge badge-urgent">Correctionnel</span></td><td>2026-CR-0047</td><td>M. ROSE (Pdt) — Mme PELAGE (Assesseur)</td></tr>
+          <tr><td>16/09/2026</td><td>14h00</td><td>Salle 1</td><td><span class="badge badge-info">Civil</span></td><td>2026-CV-0088 / 0089</td><td>Mme BWANEL (Pdt)</td></tr>
+          <tr><td>18/09/2026</td><td>09h30</td><td>Salle 2</td><td><span class="badge badge-rp">Commerce</span></td><td>2026-CO-0015</td><td>M. CYPARIS (Pdt)</td></tr>
+          <tr><td>22/09/2026</td><td>10h00</td><td>Grande salle</td><td><span class="badge badge-urgent">Assises</span></td><td>2026-CR-0031</td><td>Composition complète — Jury populaire</td></tr>
+          <tr><td>28/09/2026</td><td>14h30</td><td>Ch. du conseil</td><td><span class="badge badge-info">Famille</span></td><td>2026-FA-0012</td><td>Mme PELAGE</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PAGE : DOSSIERS PUBLICS -->
+<!-- ══════════════════════════════════════════ -->
+<div id="page-dossiers" class="page">
+  <div class="section">
+    <div class="section-title">Dossiers publics</div>
+    <p class="section-lead">Seuls les dossiers non soumis au secret de l'instruction sont accessibles ici. Connectez-vous pour accéder à vos dossiers personnels.</p>
+    <div class="table-box">
+      <div class="table-head"><h4>Dossiers ouverts au public</h4></div>
+      <table>
+        <thead><tr><th>Numéro</th><th>Type</th><th>Objet</th><th>État</th></tr></thead>
+        <tbody>
+          <tr><td>2026-CR-0047</td><td>Pénal</td><td>Violation de domicile — Audience fixée</td><td><span class="badge badge-info">En cours</span></td></tr>
+          <tr><td>2026-CO-0015</td><td>Commercial</td><td>Liquidation judiciaire SARL Antilles Négoce</td><td><span class="badge badge-rp">Instruit</span></td></tr>
+          <tr><td>2026-CR-0031</td><td>Pénal — Assises</td><td>Homicide volontaire — Instruction terminée</td><td><span class="badge badge-urgent">Assises</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PAGE : ANNUAIRE -->
+<!-- ══════════════════════════════════════════ -->
+<div id="page-annuaire" class="page">
+  <div class="section">
+    <div class="section-title">Annuaire judiciaire</div>
+    <p class="section-lead">Personnel du tribunal et avocats inscrits au barreau de Fort-de-France.</p>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="role-chip role-juge" style="margin-bottom:12px;"><span class="dot"></span> Magistrat — Siège</div>
+        <h3>M. ROSE, Henri</h3>
+        <p>Président de chambre correctionnelle<br><small style="color:var(--slate-light);">Nommé par décret du 12/01/2025</small></p>
+      </div>
+      <div class="card">
+        <div class="role-chip role-juge" style="margin-bottom:12px;"><span class="dot"></span> Magistrat — Siège</div>
+        <h3>Mme PELAGE, Marie-Claire</h3>
+        <p>Juge aux affaires familiales<br><small style="color:var(--slate-light);">Nommée par décret du 03/06/2024</small></p>
+      </div>
+      <div class="card">
+        <div class="role-chip role-procureur" style="margin-bottom:12px;"><span class="dot"></span> Parquet</div>
+        <h3>Procureur de la République</h3>
+        <p>Poste en cours de pourvoi<br><small style="color:var(--slate-light);">Prise de fonction : 1ᵉʳ oct. 2026</small></p>
+      </div>
+      <div class="card">
+        <div class="role-chip role-greffier" style="margin-bottom:12px;"><span class="dot"></span> Greffe</div>
+        <h3>Mme BWANEL, Sylvie</h3>
+        <p>Greffière en chef — Greffe civil<br><small style="color:var(--slate-light);">Tél : +596 596 00 01 01</small></p>
+      </div>
+      <div class="card">
+        <div class="role-chip role-avocat" style="margin-bottom:12px;"><span class="dot"></span> Barreau</div>
+        <h3>Me MONTAGNE, Éric</h3>
+        <p>Avocat — Droit pénal<br><small style="color:var(--slate-light);">Cabinet : Fort-de-France centre</small></p>
+      </div>
+      <div class="card">
+        <div class="role-chip role-avocat" style="margin-bottom:12px;"><span class="dot"></span> Barreau</div>
+        <h3>Me FLEUR, Isabelle</h3>
+        <p>Avocat — Droit de la famille<br><small style="color:var(--slate-light);">Cabinet : Le Lamentin</small></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PAGE : BOT DISCORD (publique) -->
+<!-- ══════════════════════════════════════════ -->
+<div id="page-bot" class="page">
+  <div class="section">
+    <div class="section-title">Bot Discord — JusticeMTQ</div>
+    <p class="section-lead">Le Bot JusticeMTQ gère automatiquement les identifiants judiciaires et la synchronisation des rôles entre votre serveur Discord et ce portail.</p>
+    <div class="cards-grid" style="margin-bottom:40px;">
+      <div class="card">
+        <div class="card-icon">🆔</div>
+        <h3>Attribution d'identifiants</h3>
+        <p>À chaque nouveau membre, le Bot génère automatiquement un identifiant judiciaire unique au format <strong>JGE-XXXX-XXXX</strong> selon son rôle.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔄</div>
+        <h3>Synchronisation des rôles</h3>
+        <p>Les rôles Discord (Juge, Procureur, Greffier, Avocat…) sont automatiquement reflétés sur le portail en temps réel à chaque changement.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔒</div>
+        <h3>Authentification sécurisée</h3>
+        <p>La connexion OAuth2 Discord garantit que seuls les membres du serveur autorisés peuvent accéder au portail judiciaire.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📣</div>
+        <h3>Notifications</h3>
+        <p>Le Bot envoie des rappels d'audience et des notifications de dossier directement en message privé Discord.</p>
+      </div>
+    </div>
+
+    <div class="section-title">Rôles Discord reconnus</div>
+    <div style="margin-top:20px;" class="table-box">
+      <table>
+        <thead><tr><th>Rôle Discord</th><th>Identifiant généré</th><th>Permissions portail</th></tr></thead>
+        <tbody>
+          <tr><td><span class="role-chip role-juge"><span class="dot"></span> Juge / Magistrat</span></td><td><code>JGE-XXXX-XXXX</code></td><td>Accès dossiers — Valider audiences — Rendre décisions</td></tr>
+          <tr><td><span class="role-chip role-procureur"><span class="dot"></span> Procureur / Parquet</span></td><td><code>PRO-XXXX-XXXX</code></td><td>Accès pénal — Réquisitoire — Classer sans suite</td></tr>
+          <tr><td><span class="role-chip role-greffier"><span class="dot"></span> Greffier</span></td><td><code>GRF-XXXX-XXXX</code></td><td>Gestion dossiers — Calendrier audiences — Transcription</td></tr>
+          <tr><td><span class="role-chip role-avocat"><span class="dot"></span> Avocat</span></td><td><code>AVT-XXXX-XXXX</code></td><td>Accès dossiers clients — Dépôt de mémoires</td></tr>
+          <tr><td><span class="role-chip role-citoyen"><span class="dot"></span> Citoyen</span></td><td><code>CTZ-XXXX-XXXX</code></td><td>Dépôt de plainte — Suivi de dossier personnel</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:32px;background:var(--navy);padding:24px;color:white;">
+      <h4 style="color:var(--gold);font-family:'Playfair Display',serif;margin-bottom:16px;">Inviter le Bot sur votre serveur</h4>
+      <p style="color:#a0aec0;margin-bottom:16px;font-size:14px;">Pour configurer le Bot JusticeMTQ sur votre serveur Discord, utilisez la commande d'invitation ci-dessous et suivez les instructions de configuration.</p>
+      <button class="btn btn-discord" onclick="showNotif('Lien d\'invitation copié ! Collez-le dans votre navigateur pour inviter le Bot.')">🤖 Inviter JusticeMTQ Bot</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PAGE : CONTACT -->
+<!-- ══════════════════════════════════════════ -->
+<div id="page-contact" class="page">
+  <div class="section" style="max-width:700px;">
+    <div class="section-title">Nous contacter</div>
+    <p class="section-lead">Tribunal Judiciaire de Fort-de-France — Palais de Justice</p>
+    <div class="card" style="margin-bottom:20px;">
+      <p><strong>Adresse :</strong> Place François Mitterrand, 97200 Fort-de-France<br>
+      <strong>Tél :</strong> +596 596 70 00 00<br>
+      <strong>Greffe civil :</strong> +596 596 70 00 01<br>
+      <strong>Parquet :</strong> +596 596 70 00 02<br><br>
+      <strong>Horaires :</strong> Lundi – Vendredi, 07h30 – 13h00</p>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Votre message</label>
+      <textarea class="form-input" rows="5" placeholder="Votre demande..."></textarea>
+    </div>
+    <button class="btn btn-navy" onclick="showNotif('Message envoyé. Le greffe vous répondra sous 48h.')">Envoyer</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- MODAL : NOUVEAU DOSSIER -->
+<!-- ══════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-nouveau-dossier">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Nouveau dossier</h3>
+      <button class="modal-close" onclick="closeModal('modal-nouveau-dossier')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Type de procédure</label>
+        <select class="form-select"><option>Procédure civile</option><option>Procédure pénale</option><option>Droit de la famille</option><option>Droit commercial</option></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Objet</label>
+        <input type="text" class="form-input" placeholder="Résumé de l'affaire" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Parties adverses</label>
+        <input type="text" class="form-input" placeholder="Nom de la partie adverse ou de l'entité" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" style="color:var(--slate);border-color:var(--border);" onclick="closeModal('modal-nouveau-dossier')">Annuler</button>
+      <button class="btn btn-success" onclick="closeModal('modal-nouveau-dossier');showNotif('Dossier créé. Numéro attribué par le greffe sous 24h.')">Créer le dossier</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL : DISCORD OAuth -->
+<div class="modal-overlay" id="modal-discord-oauth">
+  <div class="modal">
+    <div class="modal-header" style="background:#5865F2;">
+      <h3 style="color:white;">Autorisation Discord</h3>
+      <button class="modal-close" onclick="closeModal('modal-discord-oauth')">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="text-align:center;margin-bottom:20px;">
+        <svg viewBox="0 0 127.14 96.36" style="width:48px;height:48px;" xmlns="http://www.w3.org/2000/svg"><path fill="#5865F2" d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
+        <h4 style="margin-top:12px;font-family:'Playfair Display',serif;">JusticeMTQ souhaite accéder à votre compte Discord</h4>
+      </div>
+      <p style="font-size:14px;color:var(--slate);margin-bottom:16px;">L'application demande les permissions suivantes :</p>
+      <ul style="font-size:13px;color:var(--slate);list-style:none;display:flex;flex-direction:column;gap:8px;">
+        <li>✅ Lire votre nom d'utilisateur et avatar</li>
+        <li>✅ Lire vos rôles sur le serveur <strong>Justice Martinique RP</strong></li>
+        <li>✅ Vous envoyer des notifications (MP)</li>
+        <li>❌ Envoyer des messages en votre nom</li>
+        <li>❌ Accéder à vos autres serveurs</li>
+      </ul>
+      <p style="font-size:12px;color:var(--slate-light);margin-top:16px;">Choisissez un profil pour la simulation RP :</p>
+      <select class="form-select" id="discord-role-select" style="margin-top:8px;">
+        <option value="juge">👨‍⚖️ Magistrat — Juge</option>
+        <option value="procureur">⚖️ Procureur de la République</option>
+        <option value="greffier">📋 Greffier</option>
+        <option value="avocat">🤝 Avocat au barreau</option>
+        <option value="citoyen">👤 Citoyen / Justiciable</option>
+      </select>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" style="color:var(--slate);border-color:var(--border);" onclick="closeModal('modal-discord-oauth')">Refuser</button>
+      <button class="btn btn-discord" onclick="confirmDiscordLogin()">Autoriser</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <h4>Tribunal Judiciaire de Martinique</h4>
+        <p>Portail officiel des services judiciaires de Fort-de-France. Ce portail permet aux justiciables, avocats et personnels judiciaires d'accéder aux services dématérialisés du tribunal.</p>
+        <div class="rp-disclaimer" style="margin-top:14px;">⚠️ SERVEUR RP FICTIF — Usage roleplay uniquement</div>
+      </div>
+      <div>
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="#" onclick="showPage('accueil')">Accueil</a></li>
+          <li><a href="#" onclick="showPage('audiences')">Audiences</a></li>
+          <li><a href="#" onclick="showPage('dossiers')">Dossiers</a></li>
+          <li><a href="#" onclick="showPage('annuaire')">Annuaire</a></li>
+          <li><a href="#" onclick="showPage('bot')">Bot Discord</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Informations</h4>
+        <ul>
+          <li><a href="#">Mentions légales</a></li>
+          <li><a href="#">Politique de confidentialité</a></li>
+          <li><a href="#" onclick="showPage('contact')">Contact</a></li>
+          <li><a href="#">Aide juridictionnelle</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 — Tribunal Judiciaire de Martinique — République Française</span>
+      <span>Portail RP — JusticeMTQ v2.1</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── STATE ──
+  const USERS = {
+    juge:      { name: 'Marie-Claire PELAGE', prenom: 'Marie-Claire', nom: 'PELAGE', role: 'juge',      label: 'Magistrat — Juge',           id: 'JGE-2026-0012', discord: 'mcpelage_juge',    avatar: 'M', roleClass: 'role-juge'      },
+    procureur: { name: 'Jean-Claude BELFORT', prenom: 'Jean-Claude', nom: 'BELFORT', role: 'procureur', label: 'Procureur de la République',  id: 'PRO-2026-0003', discord: 'jcbelfort_procureur', avatar: 'J', roleClass: 'role-procureur' },
+    greffier:  { name: 'Sylvie BWANEL',       prenom: 'Sylvie',      nom: 'BWANEL',  role: 'greffier',  label: 'Greffière',                  id: 'GRF-2026-0008', discord: 'sbwanel_greffe',   avatar: 'S', roleClass: 'role-greffier'  },
+    avocat:    { name: 'Éric MONTAGNE',        prenom: 'Éric',        nom: 'MONTAGNE',role: 'avocat',    label: 'Avocat au barreau',          id: 'AVT-2026-0021', discord: 'emontagne_avocat', avatar: 'É', roleClass: 'role-avocat'    },
+    citoyen:   { name: 'Lucas DUPONT',         prenom: 'Lucas',       nom: 'DUPONT',  role: 'citoyen',   label: 'Citoyen',                    id: 'CTZ-2026-1047', discord: 'lucas_mq',         avatar: 'L', roleClass: 'role-citoyen'   },
+  };
+
+  let currentUser = null;
+
+  // ── NAVIGATION ──
+  function showPage(id, navEl) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const page = document.getElementById('page-' + id);
+    if (page) page.classList.add('active');
+    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+    if (navEl) navEl.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function showTab(el, tabId) {
+    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('[id^="tab-"]').forEach(t => t.style.display = 'none');
+    document.getElementById(tabId).style.display = 'block';
+  }
+
+  // ── AUTH ──
+  function simulateDiscordLogin() {
+    openModal('modal-discord-oauth');
+  }
+
+  function simulateDiscordRegister() {
+    openModal('modal-discord-oauth');
+  }
+
+  function confirmDiscordLogin() {
+    const sel = document.getElementById('discord-role-select').value;
+    const user = USERS[sel];
+    closeModal('modal-discord-oauth');
+    setTimeout(() => loginAs(user), 300);
+  }
+
+  function loginManual() {
+    const id = document.getElementById('login-id').value.trim();
+    const pw = document.getElementById('login-pw').value.trim();
+    if (!id || !pw) { showNotif('Veuillez remplir tous les champs.'); return; }
+    // find user by id
+    const user = Object.values(USERS).find(u => u.id === id) || USERS.citoyen;
+    loginAs(user);
+  }
+
+  function registerManual() {
+    showNotif('Compte créé. Le Bot Discord va vous attribuer votre identifiant sous 24h.');
+    setTimeout(() => showPage('connexion'), 1500);
+  }
+
+  function loginAs(user) {
+    currentUser = user;
+    populateDashboard(user);
+    showPage('dashboard');
+    document.getElementById('nav-connexion').textContent = 'Mon espace';
+    showNotif('Connecté en tant que ' + user.name + ' — Rôles Discord synchronisés ✓');
+  }
+
+  function logout() {
+    currentUser = null;
+    document.getElementById('nav-connexion').textContent = 'Connexion';
+    showPage('accueil');
+    showNotif('Vous avez été déconnecté.');
+  }
+
+  function populateDashboard(u) {
+    document.getElementById('dash-avatar').textContent = u.avatar;
+    document.getElementById('dash-name').textContent = u.name;
+    document.getElementById('dash-id').textContent = 'ID : ' + u.id;
+    const chip = document.getElementById('dash-role-chip');
+    chip.className = 'role-chip ' + u.roleClass;
+    document.getElementById('dash-role-label').textContent = u.label;
+    document.getElementById('dash-discord-avatar').textContent = u.avatar;
+    document.getElementById('dash-discord-tag').textContent = '@' + u.discord;
+    document.getElementById('bot-discord-avatar').textContent = u.avatar;
+    document.getElementById('bot-discord-tag').textContent = '@' + u.discord;
+    document.getElementById('profil-id-input').value = u.id;
+    document.getElementById('profil-prenom').value = u.prenom;
+    document.getElementById('profil-nom').value = u.nom;
+    document.getElementById('profil-fonction').value = u.label;
+    document.getElementById('profil-discord').value = '@' + u.discord;
+    // Roles list
+    const rolesList = document.getElementById('roles-list');
+    const discordRoles = {
+      juge:      [['Magistrat','role-juge'],['Personnel judiciaire','role-greffier'],['Membre vérifié','role-citoyen']],
+      procureur: [['Procureur','role-procureur'],['Parquet','role-procureur'],['Personnel judiciaire','role-greffier'],['Membre vérifié','role-citoyen']],
+      greffier:  [['Greffier','role-greffier'],['Personnel judiciaire','role-greffier'],['Membre vérifié','role-citoyen']],
+      avocat:    [['Avocat','role-avocat'],['Barreau','role-avocat'],['Membre vérifié','role-citoyen']],
+      citoyen:   [['Citoyen','role-citoyen'],['Membre vérifié','role-citoyen']],
+    };
+    rolesList.innerHTML = discordRoles[u.role].map(([label, cls]) =>
+      `<span class="role-chip ${cls}"><span class="dot"></span> ${label}</span>`
+    ).join('');
+    // reset tabs
+    document.querySelectorAll('[id^="tab-"]').forEach(t => t.style.display = 'none');
+    document.getElementById('tab-overview').style.display = 'block';
+    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+    document.querySelector('.sidebar-link').classList.add('active');
+  }
+
+  // ── MODALS ──
+  function openModal(id) {
+    document.getElementById(id).classList.add('open');
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+  }
+  document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('open'); });
+  });
+
+  // ── NOTIF ──
+  let notifTimer;
+  function showNotif(msg) {
+    const n = document.getElementById('notif');
+    n.textContent = msg;
+    n.classList.add('show');
+    clearTimeout(notifTimer);
+    notifTimer = setTimeout(() => n.classList.remove('show'), 3800);
+  }
+</script>
+</body>
+</html>
