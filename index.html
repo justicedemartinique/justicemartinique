@@ -6,30 +6,60 @@
 <title>Tribunal Judiciaire de Martinique</title>
 <!--
   ════════════════════════════════════════════════════════════════
-  PORTAIL RP — TRIBUNAL JUDICIAIRE DE MARTINIQUE  (v3.1)
+  PORTAIL RP — TRIBUNAL JUDICIAIRE DE MARTINIQUE  (v4.0 — Supabase)
   ════════════════════════════════════════════════════════════════
 
-  1) CONFIGURATION (obligatoire pour le multi-joueurs)
-     Va dans le <script> tout en bas et remplis FIREBASE_CONFIG :
-       - console.firebase.google.com → Créer un projet
-       - Build → Firestore Database → Créer une base (mod test)
-       - Paramètres du projet → Tes applications → Web → copier la config
+  1) CRÉER LE PROJET SUPABASE
+     - app.supabase.com → New project (choisis une région proche,
+       ex. eu-west, et un mot de passe pour la base — à conserver).
+     - Une fois le projet créé : Project Settings → Data API
+       → copie "Project URL" et la clé "anon public".
+
+  2) CRÉER LES TABLES
+     Ouvre l'onglet "SQL Editor" du projet Supabase, colle le SQL
+     ci-dessous, puis clique "Run" :
+
+     create table if not exists public.config    (id text primary key, data jsonb not null default '{}'::jsonb, created_at timestamptz not null default now());
+     create table if not exists public.news       (id text primary key, data jsonb not null default '{}'::jsonb, created_at timestamptz not null default now());
+     create table if not exists public.audiences  (id text primary key, data jsonb not null default '{}'::jsonb, created_at timestamptz not null default now());
+     create table if not exists public.users      (id text primary key, data jsonb not null default '{}'::jsonb, created_at timestamptz not null default now());
+     create table if not exists public.casiers    (id text primary key, data jsonb not null default '{}'::jsonb, created_at timestamptz not null default now());
+     create table if not exists public.messages   (id text primary key, data jsonb not null default '{}'::jsonb, created_at timestamptz not null default now());
+
+     alter table public.config   enable row level security;
+     alter table public.news     enable row level security;
+     alter table public.audiences enable row level security;
+     alter table public.users    enable row level security;
+     alter table public.casiers  enable row level security;
+     alter table public.messages enable row level security;
+
+     create policy "rp open access" on public.config    for all using (true) with check (true);
+     create policy "rp open access" on public.news      for all using (true) with check (true);
+     create policy "rp open access" on public.audiences for all using (true) with check (true);
+     create policy "rp open access" on public.users     for all using (true) with check (true);
+     create policy "rp open access" on public.casiers   for all using (true) with check (true);
+     create policy "rp open access" on public.messages  for all using (true) with check (true);
+
+     ⚠️ Ces règles laissent tout le monde lire/écrire avec la clé
+     "anon". C'est acceptable pour du RP entre gens de confiance,
+     pas pour de vraies données sensibles.
+
+  3) ACTIVER LE TEMPS RÉEL (facultatif mais recommandé)
+     Database → Replication → active la réplication pour les 6
+     tables ci-dessus (ou : alter publication supabase_realtime
+     add table config, news, audiences, users, casiers, messages;).
+     Sans ça, le site fonctionne quand même mais un joueur doit
+     changer d'onglet pour voir les nouveautés des autres.
+
+  4) CONFIGURATION DU FICHIER
+     Va dans le <script> tout en bas et remplis SUPABASE_CONFIG
+     avec l'URL et la clé "anon public" copiées à l'étape 1.
      Puis ajoute ton ID Discord dans ADMIN_IDS pour être admin O6.
 
-     Si FIREBASE_CONFIG reste vide, le site fonctionne quand même
+     Si SUPABASE_CONFIG reste vide, le site fonctionne quand même
      mais les données restent dans ton navigateur (mode démo local).
 
-  2) RÈGLES FIRESTORE conseillées (onglet "Règles") :
-     rules_version = '2';
-     service cloud.firestore {
-       match /databases/{database}/documents {
-         match /{document=**} { allow read, write: if true; }
-       }
-     }
-     ⚠️ Ces règles laissent tout le monde écrire. C'est acceptable
-     pour du RP entre gens de confiance, pas pour des vraies données.
-
-  3) Les niveaux O1→O6 sont un confort d'affichage, pas une
+  5) Les niveaux O1→O6 sont un confort d'affichage, pas une
      sécurité : tout se passe côté navigateur.
   ════════════════════════════════════════════════════════════════
 -->
@@ -294,7 +324,7 @@ footer{background:var(--bleu);color:rgba(255,255,255,.55);font-size:12px;padding
 </div>
 
 <div class="mode-banner" id="mode-banner">
-  Mode démonstration : Firebase n'est pas configuré, les données restent dans ce navigateur et ne sont pas partagées. Renseigne <code>FIREBASE_CONFIG</code> dans le fichier pour activer le multi-joueurs.
+  Mode démonstration : Supabase n'est pas configuré, les données restent dans ce navigateur et ne sont pas partagées. Renseigne <code>SUPABASE_CONFIG</code> dans le fichier pour activer le multi-joueurs.
 </div>
 
 <header>
@@ -789,13 +819,9 @@ footer{background:var(--bleu);color:rgba(255,255,255,.55);font-size:12px;padding
 /* ════════════════════════════════════════════════════
    1. CONFIGURATION — À REMPLIR
    ════════════════════════════════════════════════════ */
-const FIREBASE_CONFIG = {
-  apiKey:            "",
-  authDomain:        "",
-  projectId:         "",   // ← tant que c'est vide, le site tourne en mode local
-  storageBucket:     "",
-  messagingSenderId: "",
-  appId:             ""
+const SUPABASE_CONFIG = {
+  url:     "",   // ex : "https://xxxxxxxxxxxx.supabase.co" — tant que c'est vide, le site tourne en mode local
+  anonKey: ""    // la clé "anon public" du projet (Project Settings → Data API)
 };
 
 /* Administrateurs permanents (niveau O6), impossibles à retirer depuis le site */
@@ -806,9 +832,12 @@ const ADMIN_IDS = [
 
 /* ════════════════════════════════════════════════════
    2. COUCHE DONNÉES
-   Firestore si configuré, sinon stockage local du navigateur.
+   Supabase si configuré, sinon stockage local du navigateur.
    Les deux exposent la même API : doc/collection, get, set,
    update, delete, where, orderBy, limit, onSnapshot, add.
+   Cette API de type document (doc/collection) est reconstruite
+   au-dessus de Supabase (tables Postgres génériques {id, data
+   jsonb}) pour que tout le reste du site n'ait rien à changer.
    ════════════════════════════════════════════════════ */
 let DB_MODE = "local";
 
@@ -821,20 +850,123 @@ function loadScript(src) {
 }
 
 async function initDb() {
-  if (FIREBASE_CONFIG && FIREBASE_CONFIG.projectId) {
+  if (SUPABASE_CONFIG && SUPABASE_CONFIG.url && SUPABASE_CONFIG.anonKey) {
     try {
-      const base = "https://www.gstatic.com/firebasejs/10.12.2/";
-      await loadScript(base + "firebase-app-compat.js");
-      await loadScript(base + "firebase-firestore-compat.js");
-      firebase.initializeApp(FIREBASE_CONFIG);
-      DB_MODE = "firebase";
-      return firebase.firestore();
+      await loadScript("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2");
+      const client = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+      DB_MODE = "supabase";
+      return makeSupabaseDb(client);
     } catch (e) {
-      console.error("Firebase indisponible, passage en mode local :", e);
+      console.error("Supabase indisponible, passage en mode local :", e);
     }
   }
   DB_MODE = "local";
   return makeLocalDb();
+}
+
+/* ── Base Supabase (tables Postgres génériques, réalisées comme des
+   documents : id text + colonne data jsonb) ── */
+function makeSupabaseDb(client) {
+  const clone = o => JSON.parse(JSON.stringify(o));
+  const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+
+  function rowToDoc(row) {
+    return { id: row.id, exists: true, data: () => clone(row.data || {}) };
+  }
+  function emptyDoc(id) {
+    return { id, exists: false, data: () => undefined };
+  }
+
+  function docRef(path) {
+    const idx = path.indexOf("/");
+    const table = path.slice(0, idx);
+    const id = path.slice(idx + 1);
+    return {
+      path,
+      get: async () => {
+        const { data: row, error } = await client.from(table).select("id, data").eq("id", id).maybeSingle();
+        if (error) throw error;
+        return row ? rowToDoc(row) : emptyDoc(id);
+      },
+      set: async (data, opts) => {
+        let payload = clone(data);
+        if (opts && opts.merge) {
+          const { data: row } = await client.from(table).select("data").eq("id", id).maybeSingle();
+          payload = Object.assign({}, (row && row.data) || {}, payload);
+        }
+        const { error } = await client.from(table).upsert({ id, data: payload });
+        if (error) throw error;
+      },
+      update: async (data) => {
+        const { data: row, error: e1 } = await client.from(table).select("data").eq("id", id).maybeSingle();
+        if (e1) throw e1;
+        const payload = Object.assign({}, (row && row.data) || {}, clone(data));
+        const { error } = await client.from(table).upsert({ id, data: payload });
+        if (error) throw error;
+      },
+      delete: async () => {
+        const { error } = await client.from(table).delete().eq("id", id);
+        if (error) throw error;
+      },
+      onSnapshot: (next, onError) => {
+        let stopped = false;
+        const fetchAndEmit = async () => {
+          try {
+            const { data: row, error } = await client.from(table).select("id, data").eq("id", id).maybeSingle();
+            if (error) throw error;
+            if (!stopped) next(row ? rowToDoc(row) : emptyDoc(id));
+          } catch (e) { if (onError) onError(e); else console.error("[snapshot:" + path + "]", e); }
+        };
+        fetchAndEmit();
+        const channel = client
+          .channel("doc-" + table + "-" + id + "-" + newId())
+          .on("postgres_changes", { event: "*", schema: "public", table, filter: "id=eq." + id }, fetchAndEmit)
+          .subscribe();
+        return () => { stopped = true; client.removeChannel(channel); };
+      }
+    };
+  }
+
+  function makeQuery(table, q) {
+    async function runQuery() {
+      let query = client.from(table).select("id, data");
+      (q.filters || []).forEach(f => { query = query.eq("data->>" + f.field, String(f.value)); });
+      if (q.order) query = query.order("data->>" + q.order.field, { ascending: q.order.dir !== "desc" });
+      if (q.lim) query = query.limit(q.lim);
+      const { data: rows, error } = await query;
+      if (error) throw error;
+      const docs = (rows || []).map(rowToDoc);
+      return { docs, size: docs.length, empty: docs.length === 0 };
+    }
+    return {
+      where: (field, op, value) => makeQuery(table, Object.assign({}, q, { filters: (q.filters || []).concat([{ field, op, value }]) })),
+      orderBy: (field, dir) => makeQuery(table, Object.assign({}, q, { order: { field, dir: dir || "asc" } })),
+      limit: n => makeQuery(table, Object.assign({}, q, { lim: n })),
+      get: runQuery,
+      onSnapshot: (next, onError) => {
+        let stopped = false;
+        const fetchAndEmit = async () => {
+          try { const res = await runQuery(); if (!stopped) next(res); }
+          catch (e) { if (onError) onError(e); else console.error("[snapshot:" + table + "]", e); }
+        };
+        fetchAndEmit();
+        const channel = client
+          .channel("coll-" + table + "-" + newId())
+          .on("postgres_changes", { event: "*", schema: "public", table }, fetchAndEmit)
+          .subscribe();
+        return () => { stopped = true; client.removeChannel(channel); };
+      },
+      doc: id => docRef(table + "/" + (id || newId())),
+      add: async (data) => {
+        const id = newId();
+        const { error } = await client.from(table).insert({ id, data: clone(data) });
+        if (error) throw error;
+        return { id };
+      }
+    };
+  }
+
+  return { doc: docRef, collection: t => makeQuery(t, {}) };
 }
 
 /* ── Base locale (démo hors-ligne) ── */
