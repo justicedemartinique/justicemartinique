@@ -820,11 +820,14 @@ footer{background:var(--bleu);color:rgba(255,255,255,.55);font-size:12px;padding
    1. CONFIGURATION — À REMPLIR
    ════════════════════════════════════════════════════ */
 const SUPABASE_CONFIG = {
-  url:     "https://rstutofxjpeyxrjazgcr.supabase.co/",   // ex : "https://xxxxxxxxxxxx.supabase.co" — tant que c'est vide, le site tourne en mode local
+  url:     "https://rstutofxjpeyxrjazgcr.supabase.co",   // ex : "https://xxxxxxxxxxxx.supabase.co" — tant que c'est vide, le site tourne en mode local
   anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzdHV0b2Z4anBleXhyamF6Z2NyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk1NzkzNjEsImV4cCI6MjEwNTE1NTM2MX0.lYRzH7V9Dv1tu-hTvM-hZsnhBPggRFOCU17qsISbRFU"    // la clé "anon public" du projet (Project Settings → Data API)
 };
 
-/* Administrateurs permanents (niveau O6), impossibles à retirer depuis le site */
+/* Administrateurs permanents (niveau O6), impossibles à retirer depuis le site.
+   IMPORTANT : les ID Discord doivent être entre guillemets (chaînes de
+   caractères). Écrits comme des nombres, ils perdent en précision et ne
+   correspondent plus jamais à un vrai ID Discord. */
 const ADMIN_IDS = [
   "801484926573871104",
   "1091422450786512956",
@@ -1227,7 +1230,9 @@ async function doLogin() {
 }
 
 function levelFor(discordId, role) {
-  if (ADMIN_IDS.includes(discordId) || dbAdminIds.includes(discordId)) return { role: "admin", niveau: 6 };
+  const id = String(discordId);
+  const isAdmin = ADMIN_IDS.some(a => String(a) === id) || dbAdminIds.some(a => String(a) === id);
+  if (isAdmin) return { role: "admin", niveau: 6 };
   const cfg = ROLES[role] || ROLES.civil;
   return { role: ROLES[role] ? role : "civil", niveau: cfg.niveau };
 }
@@ -1687,7 +1692,7 @@ function renderUsersTable() {
   if (!allUsers.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--gris-t)">Aucun membre enregistré.</td></tr>'; return; }
 
   tbody.innerHTML = allUsers.slice().sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).map(u => {
-    const estAdmin = ADMIN_IDS.includes(u._id) || dbAdminIds.includes(u._id);
+    const estAdmin = ADMIN_IDS.some(a => String(a) === u._id) || dbAdminIds.some(a => String(a) === u._id);
     const cfg = estAdmin ? ROLES.admin : (ROLES[u.role] || ROLES.civil);
     return "<tr><td><code style=\"font-size:11px\">" + esc(u._id) + "</code></td>" +
       "<td>" + esc(u.pseudo || "—") + "</td>" +
@@ -1764,7 +1769,7 @@ async function addAdmin() {
   if (!requireLevel(6)) return;
   const id = document.getElementById("new-admin-id").value.trim();
   if (!ID_RE.test(id)) { toast("Identifiant Discord invalide", "error"); return; }
-  if (dbAdminIds.includes(id) || ADMIN_IDS.includes(id)) { toast("Déjà administrateur", "error"); return; }
+  if (dbAdminIds.includes(id) || ADMIN_IDS.some(a => String(a) === id)) { toast("Déjà administrateur", "error"); return; }
   try {
     await db.doc("config/admins").set({ ids: dbAdminIds.concat([id]) });
     document.getElementById("new-admin-id").value = "";
