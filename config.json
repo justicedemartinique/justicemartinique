@@ -5,9 +5,9 @@
 
   "formPlainte": "",
   "formRecrutement": "",
-  "formPv": "",
-  "formAudition": "",
-  "formPve": "",
+  "formPv": "https://docs.google.com/forms/d/e/1FAIpQLSe41xmi9HzRO4ZZDBXZ4dkjOyY00SvsOJplCGb4x7sT6WSmPg/viewform?usp=publish-editor",
+  "formAudition": "https://discord.com/channels/1543551996051718205/1548355287432429659/1548355287432429659",
+  "formPve": "https://docs.google.com/forms/d/e/1FAIpQLSdfvOJYdDJFF6MO_uJbDjoKst8TzXKiBbIkbLsY0nkAaOtcJA/viewform?usp=sharing&ouid=110729639012871070757",
 
   "titres": [
     "Président du Tribunal Judiciaire",
