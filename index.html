@@ -44,12 +44,18 @@
      "anon". C'est acceptable pour du RP entre gens de confiance,
      pas pour de vraies données sensibles.
 
-  3) ACTIVER LE TEMPS RÉEL (facultatif mais recommandé)
+  3) ACTIVER LE TEMPS RÉEL (fortement recommandé)
+     Tout le site (actualités, audiences, casiers, messagerie,
+     paramètres…) est déjà câblé pour s'actualiser tout seul, sans
+     recharger la page, dès qu'une donnée change — mais ça ne
+     fonctionne ENTRE DIFFÉRENTS joueurs que si le temps réel est
+     activé côté Supabase :
      Database → Replication → active la réplication pour les 6
      tables ci-dessus (ou : alter publication supabase_realtime
      add table config, news, audiences, users, casiers, messages;).
-     Sans ça, le site fonctionne quand même mais un joueur doit
-     changer d'onglet pour voir les nouveautés des autres.
+     Sans ça, chaque joueur voit bien ses propres actions
+     s'afficher instantanément, mais doit changer d'onglet (ou
+     recharger) pour voir les nouveautés publiées par les autres.
 
   4) CONFIGURATION DU FICHIER
      Va dans le <script> tout en bas et remplis SUPABASE_CONFIG
@@ -1758,19 +1764,16 @@ function casierSummaryBadges(items) {
   ).join("");
 }
 
-async function loadCasierPub() {
+function loadCasierPub() {
   if (!db || !currentUser) return;
   const el = document.getElementById("casier-pub-content");
   el.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement…</div>';
-  try {
-    const snap = await db.doc("casiers/" + currentUser.discordId).get();
+  sub("casier-pub", db.doc("casiers/" + currentUser.discordId), snap => {
     const items = sortCasierItems(snap.exists ? (snap.data().items || []) : []);
     el.innerHTML = items.length
       ? '<div class="alert alert-info">Dossier unique de <strong>' + esc(currentUser.nom) + "</strong> — " + items.length + " inscription(s) au total<br><div style=\"margin-top:8px\">" + casierSummaryBadges(items) + "</div></div>" + items.map(it => casierEntry(it, currentUser.discordId, currentUser.niveau >= 5)).join("")
       : '<div class="empty"><div class="empty-icon">✅</div><p>Casier vierge : aucune inscription.</p></div>';
-  } catch (e) {
-    el.innerHTML = '<div class="alert alert-danger">Casier illisible : ' + esc(e.message) + "</div>";
-  }
+  });
 }
 
 function casierEntry(item, discordId, canDelete) {
@@ -1785,7 +1788,7 @@ function casierEntry(item, discordId, canDelete) {
     '<div style="font-size:11px;color:var(--gris-t);margin-top:6px">Inscrit par ' + esc(item.auteur || "—") + "</div></div>";
 }
 
-async function searchCasier() {
+function searchCasier() {
   if (!requireLevel(3)) return;
   const query = document.getElementById("casier-search-input").value.trim();
   const el = document.getElementById("casier-search-result");
@@ -1801,8 +1804,7 @@ async function searchCasier() {
     discordId = found._id;
   }
 
-  try {
-    const snap = await db.doc("casiers/" + discordId).get();
+  sub("casier-search", db.doc("casiers/" + discordId), snap => {
     const profil = allUsers.find(u => u._id === discordId);
     const nom = profil ? (profil.nom || profil.pseudo || discordId) : discordId;
     const items = sortCasierItems(snap.exists ? (snap.data().items || []) : []);
@@ -1813,9 +1815,7 @@ async function searchCasier() {
       ? '<div class="alert alert-info">Dossier unique de <strong>' + esc(nom) + "</strong> — " + items.length + " inscription(s) au total<br><div style=\"margin-top:8px\">" + casierSummaryBadges(items) + "</div>" + btnSuppr + "</div>" + items.map(it => casierEntry(it, discordId, currentUser.niveau >= 5)).join("")
       : '<div class="alert alert-success">Casier vierge pour <strong>' + esc(nom) + "</strong> (" + esc(discordId) + ")</div>";
     if (currentUser.niveau >= 5) document.getElementById("casier-mod-id").value = discordId;
-  } catch (e) {
-    el.innerHTML = '<div class="alert alert-danger">Recherche impossible : ' + esc(e.message) + "</div>";
-  }
+  });
 }
 
 async function deleteCasier(discordId) {
