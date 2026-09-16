@@ -10,15 +10,14 @@
   "formPve": "",
 
   "titres": [
-    "Magistrat du Siège",
-    "Magistrat du Parquet",
-    "Avocat au Barreau",
+    "Président du Tribunal Judiciaire",
+    "Procureur Général",
     "Procureur de la République",
+    "Substitut",
+    "Juge",
     "Juge d'instruction",
-    "Greffier en chef",
-    "OPJ — Brigadier",
-    "OPJ — Lieutenant",
-    "OPJ — Commandant",
-    "OPJ — Commissaire"
+    "Avocat",
+    "Greffier",
+    "OPJ"
   ]
 }
