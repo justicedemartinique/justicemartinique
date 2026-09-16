@@ -1,0 +1,24 @@
+{
+  "_lisezmoi": "Ce fichier doit rester à côté de index.html, dans le même dossier du dépôt GitHub. Modifie les valeurs ci-dessous et pousse (commit + push) : le site les charge automatiquement au chargement de la page, sans rien à faire dans Administration -> Paramètres. Si un champ est aussi rempli dans Administration -> Paramètres, cette valeur-là est utilisée à la place de celle-ci.",
+
+  "discord": "",
+
+  "formPlainte": "",
+  "formRecrutement": "",
+  "formPv": "",
+  "formAudition": "",
+  "formPve": "",
+
+  "titres": [
+    "Magistrat du Siège",
+    "Magistrat du Parquet",
+    "Avocat au Barreau",
+    "Procureur de la République",
+    "Juge d'instruction",
+    "Greffier en chef",
+    "OPJ — Brigadier",
+    "OPJ — Lieutenant",
+    "OPJ — Commandant",
+    "OPJ — Commissaire"
+  ]
+}
