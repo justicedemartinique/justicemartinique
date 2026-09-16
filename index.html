@@ -61,22 +61,28 @@
 
   5) Les niveaux O1→O6 sont un confort d'affichage, pas une
      sécurité : tout se passe côté navigateur.
+
+  6) CONNEXION DISCORD OFFICIELLE (recommandé, optionnelle)
+     Par défaut, la connexion se fait en tapant un identifiant Discord
+     à la main : n'importe qui peut taper celui de quelqu'un d'autre.
+     Pour empêcher ça, configure DISCORD_OAUTH plus bas dans le
+     <script> (instructions juste au-dessus de ce bloc de config).
   ════════════════════════════════════════════════════════════════
 -->
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=Public+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bleu:#002395;--bleu-h:#001a6e;--bleu-l:#e8ecf8;--bleu-ll:#f0f3fc;
   --rouge:#ED2939;--rouge-h:#c01f2d;--rouge-l:#fceaec;
   --blanc:#ffffff;--gris:#f5f6f8;--gris-b:#e8eaed;--gris-t:#6b7280;
-  --noir:#111827;--bord:#dde1e7;
+  --noir:#111827;--bord:#dde1e7;--or:#a8863f;--or-l:#f5efe0;
   --shadow:0 1px 4px rgba(0,0,0,.08);
   --shadow-m:0 4px 16px rgba(0,0,0,.1);
   --r:3px;
 }
 html{scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;background:var(--gris);color:var(--noir);min-height:100vh;display:flex;flex-direction:column}
+body{font-family:'Public Sans',sans-serif;background:var(--gris);color:var(--noir);min-height:100vh;display:flex;flex-direction:column}
 :focus-visible{outline:2px solid var(--bleu);outline-offset:2px}
 
 /* ── BANDE TRICOLORE ── */
@@ -101,7 +107,7 @@ body{font-family:'Inter',sans-serif;background:var(--gris);color:var(--noir);min
 header{background:var(--blanc);border-bottom:1px solid var(--bord);padding:0 24px 0 36px;box-shadow:var(--shadow)}
 .header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:20px;padding:16px 0}
 .header-emblem{width:58px;height:58px;flex-shrink:0}
-.header-text h1{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--bleu);line-height:1.2}
+.header-text h1{font-family:'Source Serif 4',serif;font-size:19px;font-weight:700;color:var(--bleu);line-height:1.2}
 .header-text p{font-size:12px;color:var(--gris-t);margin-top:2px}
 .header-text .rf-label{font-size:10px;font-weight:600;letter-spacing:.08em;color:var(--bleu);border-left:3px solid var(--rouge);padding-left:6px;margin-bottom:4px}
 .header-right{margin-left:auto;display:flex;align-items:center;gap:12px}
@@ -143,7 +149,7 @@ main{flex:1;padding:32px 24px 32px 36px}
 /* ── CARDS ── */
 .card{background:var(--blanc);border:1px solid var(--bord);border-radius:var(--r);box-shadow:var(--shadow)}
 .card-head{padding:18px 22px;border-bottom:1px solid var(--bord);display:flex;align-items:center;justify-content:space-between}
-.card-head h2{font-family:'Playfair Display',serif;font-size:17px;font-weight:600;color:var(--bleu)}
+.card-head h2{font-family:'Source Serif 4',serif;font-size:17px;font-weight:600;color:var(--bleu)}
 .card-body{padding:22px}
 
 /* ── GRID ── */
@@ -153,20 +159,21 @@ main{flex:1;padding:32px 24px 32px 36px}
 @media(max-width:900px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
 
 /* ── STAT CARD ── */
-.stat-card{background:var(--blanc);border:1px solid var(--bord);padding:20px 22px;border-radius:var(--r);box-shadow:var(--shadow)}
-.stat-card .num{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--bleu);line-height:1}
-.stat-card .lbl{font-size:12px;color:var(--gris-t);margin-top:4px}
+.stat-card{background:var(--blanc);border:1px solid var(--bord);border-top:2px solid var(--bleu);padding:19px 22px;border-radius:0 0 var(--r) var(--r);box-shadow:var(--shadow)}
+.stat-card .num{font-family:'Source Serif 4',serif;font-size:31px;font-weight:600;color:var(--bleu);line-height:1}
+.stat-card .lbl{font-size:11.5px;color:var(--gris-t);margin-top:5px;letter-spacing:.02em}
+.stat-card.rouge{border-top-color:var(--rouge)}
 .stat-card.rouge .num{color:var(--rouge)}
 
 /* ── HERO ── */
-.hero{background:linear-gradient(135deg,var(--bleu) 0%,#1a3a8f 100%);color:#fff;border-radius:var(--r);padding:36px 40px;margin-bottom:28px;position:relative;overflow:hidden}
-.hero-pattern{position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%23ffffff" fill-opacity="0.03"%3E%3Cpath d="M20 20h20v20H20zM0 0h20v20H0z"/%3E%3C/g%3E%3C/svg%3E')}
+.hero{background:var(--bleu-h);color:#fff;border-radius:var(--r);padding:38px 42px;margin-bottom:28px;position:relative;overflow:hidden;border-bottom:3px solid var(--or)}
+.hero-pattern{position:absolute;inset:0;background-image:repeating-linear-gradient(115deg,rgba(255,255,255,.035) 0 1px,transparent 1px 26px)}
 .hero-inner{position:relative;z-index:1;max-width:600px}
-.hero-tag{display:inline-block;border:1px solid rgba(237,41,57,.5);color:#f9a8b0;font-size:11px;font-weight:600;padding:3px 10px;margin-bottom:18px;letter-spacing:.08em}
-.hero h2{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;line-height:1.25;margin-bottom:12px}
-.hero p{color:rgba(255,255,255,.7);font-size:14px;line-height:1.7;margin-bottom:24px}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;border-left:2px solid var(--or);color:var(--or-l);font-size:11px;font-weight:600;padding:2px 0 2px 10px;margin-bottom:20px;letter-spacing:.12em;text-transform:uppercase}
+.hero h2{font-family:'Source Serif 4',serif;font-size:28px;font-weight:600;line-height:1.3;margin-bottom:14px}
+.hero p{color:rgba(255,255,255,.68);font-size:14px;line-height:1.7;margin-bottom:24px;max-width:480px}
 .hero-actions{display:flex;gap:10px;flex-wrap:wrap}
-.hero-mark{position:absolute;right:40px;bottom:20px;opacity:.08;font-size:120px}
+.hero-mark{position:absolute;right:38px;bottom:-10px;opacity:.07;font-size:130px}
 
 /* ── NEWS / AUDIENCES ── */
 .news-list,.aud-list{display:flex;flex-direction:column;gap:1px}
@@ -176,7 +183,7 @@ main{flex:1;padding:32px 24px 32px 36px}
 .news-meta{font-size:12px;color:var(--gris-t);margin-bottom:8px}
 .news-body{font-size:14px;color:#374151;line-height:1.6;white-space:pre-wrap}
 .aud-date{min-width:80px;text-align:center;background:var(--bleu-ll);border-radius:var(--r);padding:8px;flex-shrink:0;height:fit-content}
-.aud-date .day{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--bleu);line-height:1}
+.aud-date .day{font-family:'Source Serif 4',serif;font-size:22px;font-weight:700;color:var(--bleu);line-height:1}
 .aud-date .mon{font-size:11px;color:var(--gris-t);font-weight:500}
 .aud-info h4{font-size:14px;font-weight:600;margin-bottom:4px}
 .aud-info p{font-size:13px;color:var(--gris-t)}
@@ -192,7 +199,7 @@ tr:hover td{background:#fafbff}
 /* ── FORM ── */
 .form-group{margin-bottom:18px}
 .form-label{display:block;font-size:13px;font-weight:500;color:var(--noir);margin-bottom:5px}
-.form-input,.form-select,.form-textarea{width:100%;padding:9px 12px;border:1px solid var(--bord);border-radius:var(--r);font-family:'Inter',sans-serif;font-size:13.5px;color:var(--noir);background:var(--blanc);outline:none;transition:border-color .15s,box-shadow .15s}
+.form-input,.form-select,.form-textarea{width:100%;padding:9px 12px;border:1px solid var(--bord);border-radius:var(--r);font-family:'Public Sans',sans-serif;font-size:13.5px;color:var(--noir);background:var(--blanc);outline:none;transition:border-color .15s,box-shadow .15s}
 .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--bleu);box-shadow:0 0 0 3px rgba(0,35,149,.1)}
 .form-textarea{resize:vertical;min-height:100px}
 .form-hint{font-size:11.5px;color:var(--gris-t);margin-top:4px}
@@ -201,7 +208,7 @@ tr:hover td{background:#fafbff}
 .form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M5 6L0 0h10z' fill='%236b7280'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
 
 /* ── BUTTONS ── */
-.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:500;border:none;border-radius:var(--r);cursor:pointer;transition:all .15s;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;font-family:'Public Sans',sans-serif;font-size:13.5px;font-weight:500;border:none;border-radius:var(--r);cursor:pointer;transition:all .15s;white-space:nowrap}
 .btn-primary{background:var(--bleu);color:#fff}.btn-primary:hover{background:var(--bleu-h)}
 .btn-danger{background:var(--rouge);color:#fff}.btn-danger:hover{background:var(--rouge-h)}
 .btn-ghost{background:transparent;color:var(--bleu);border:1px solid var(--bleu)}.btn-ghost:hover{background:var(--bleu-ll)}
@@ -224,8 +231,8 @@ tr:hover td{background:#fafbff}
 
 /* ── SECTION HEADER ── */
 .sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px}
-.sec-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--bleu)}
-.sec-title::after{content:'';display:block;width:36px;height:3px;background:var(--rouge);margin-top:7px}
+.sec-title{font-family:'Source Serif 4',serif;font-size:20px;font-weight:600;color:var(--bleu)}
+.sec-title::after{content:'';display:flex;width:40px;height:3px;margin-top:8px;background:linear-gradient(90deg,var(--rouge) 0 65%,var(--or) 65%)}
 
 /* ── DISCORD FIELD ── */
 .discord-field{display:flex;align-items:center;gap:8px;background:#5865F2;color:#fff;border-radius:var(--r);padding:10px 14px;margin-bottom:18px;font-size:13px}
@@ -236,7 +243,7 @@ tr:hover td{background:#fafbff}
 .overlay.open{display:flex}
 .modal{background:var(--blanc);border-radius:var(--r);box-shadow:var(--shadow-m);width:100%;max-width:560px;max-height:90vh;overflow-y:auto}
 .modal-head{background:var(--bleu);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0}
-.modal-head h3{color:#fff;font-family:'Playfair Display',serif;font-size:17px}
+.modal-head h3{color:#fff;font-family:'Source Serif 4',serif;font-size:17px}
 .modal-close{background:none;border:none;color:rgba(255,255,255,.7);font-size:22px;cursor:pointer;line-height:1;padding:0 4px}
 .modal-close:hover{color:#fff}
 .modal-body{padding:22px}
@@ -254,6 +261,8 @@ tr:hover td{background:#fafbff}
 .casier-entry .ce-type{font-weight:600;font-size:14px}
 .casier-entry .ce-date{font-size:12px;color:var(--gris-t);white-space:nowrap}
 .casier-entry .ce-desc{font-size:13px;color:#374151;line-height:1.5}
+.ce-del-btn{background:none;border:none;color:var(--gris-t);font-size:14px;line-height:1;cursor:pointer;padding:2px 4px;border-radius:2px;transition:color .15s,background .15s}
+.ce-del-btn:hover{color:var(--rouge);background:var(--rouge-l)}
 
 /* ── MSG ── */
 .msg-list{display:flex;flex-direction:column;gap:8px}
@@ -264,6 +273,8 @@ tr:hover td{background:#fafbff}
 .msg-item .mi-from{font-weight:600;font-size:13.5px}
 .msg-item .mi-date{font-size:12px;color:var(--gris-t);white-space:nowrap}
 .msg-item .mi-subj{font-size:13px;color:var(--gris-t)}
+.msg-del-btn{background:none;border:none;color:var(--gris-t);font-size:14px;line-height:1;cursor:pointer;padding:2px 4px;border-radius:2px;transition:color .15s,background .15s}
+.msg-del-btn:hover{color:var(--rouge);background:var(--rouge-l)}
 
 /* ── IFRAME FORM ── */
 .form-iframe-wrap{background:var(--blanc);border:1px solid var(--bord);border-radius:var(--r);overflow:hidden}
@@ -271,6 +282,15 @@ tr:hover td{background:#fafbff}
 .form-placeholder{padding:60px;text-align:center;color:var(--gris-t)}
 .form-placeholder .fp-icon{font-size:48px;margin-bottom:16px}
 .form-placeholder p{font-size:14px;margin-bottom:20px}
+
+/* ── VOIR PLUS (menu déroulant) ── */
+.more-toggle-wrap{margin-top:2px}
+.more-toggle-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;background:var(--blanc);border:1px dashed var(--bord);color:var(--bleu);font-family:'Public Sans',sans-serif;font-size:12.5px;font-weight:600;padding:10px;border-radius:var(--r);cursor:pointer;transition:background .15s,border-color .15s}
+.more-toggle-btn:hover{background:var(--bleu-ll);border-color:var(--bleu)}
+.more-toggle-btn .mt-arrow{transition:transform .15s;font-size:10px}
+.more-toggle-btn.open .mt-arrow{transform:rotate(180deg)}
+.more-toggle-list{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.more-toggle-list[hidden]{display:none}
 
 /* ── SEARCH ── */
 .search-bar{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
@@ -362,6 +382,7 @@ footer{background:var(--bleu);color:rgba(255,255,255,.55);font-size:12px;padding
   <div class="nav-inner" id="nav-bar">
     <div class="nav-tab active" data-tab="accueil" onclick="goTab('accueil',this)">Accueil</div>
     <div class="nav-tab" data-tab="plainte" onclick="goTab('plainte',this)">Dépôt de plainte</div>
+    <div class="nav-tab" data-tab="recrutement" data-max="3" onclick="goTab('recrutement',this)">Recrutement</div>
     <div class="nav-tab" data-tab="audiences" onclick="goTab('audiences',this)">Audiences</div>
     <div class="nav-tab" data-tab="casier-pub" onclick="goTab('casier-pub',this)">Casier judiciaire</div>
     <div class="nav-tab locked" data-tab="messagerie" data-min="2" onclick="goTab('messagerie',this)">Messagerie ✉</div>
@@ -421,6 +442,24 @@ footer{background:var(--bleu);color:rgba(255,255,255,.55);font-size:12px;padding
         <div class="form-placeholder" id="form-plainte-placeholder">
           <div class="fp-icon">📋</div>
           <p>Le formulaire de dépôt de plainte n'est pas encore configuré.</p>
+          <p style="font-size:12px;margin-top:8px">Un administrateur peut l'ajouter dans Administration → Paramètres.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ RECRUTEMENT ═══ -->
+<div class="page" id="page-recrutement">
+  <div class="sec-head"><h2 class="sec-title">Recrutement</h2></div>
+  <div class="card">
+    <div class="card-head"><h2>Candidature — rejoindre les services du tribunal</h2></div>
+    <div class="card-body">
+      <div class="alert alert-info">Avocat, OPJ, greffier… Déposez votre candidature via ce formulaire, elle sera étudiée par l'administration (RP).</div>
+      <div class="form-iframe-wrap" id="form-recrutement-wrap">
+        <div class="form-placeholder" id="form-recrutement-placeholder">
+          <div class="fp-icon">🧑‍⚖️</div>
+          <p>Le formulaire de recrutement n'est pas encore configuré.</p>
           <p style="font-size:12px;margin-top:8px">Un administrateur peut l'ajouter dans Administration → Paramètres.</p>
         </div>
       </div>
@@ -560,7 +599,9 @@ footer{background:var(--bleu);color:rgba(255,255,255,.55);font-size:12px;padding
 
   <div id="a-users">
     <div class="sec-head" style="margin-bottom:14px">
-      <div></div>
+      <div class="search-bar" style="margin-bottom:0;flex:1;max-width:420px">
+        <input type="text" class="form-input" id="users-search-input" placeholder="Rechercher par pseudo ou ID Discord…" oninput="renderUsersTable()"/>
+      </div>
       <button class="btn btn-primary btn-sm" onclick="newUser()">Ajouter un membre</button>
     </div>
     <div class="card">
@@ -603,6 +644,10 @@ footer{background:var(--bleu);color:rgba(255,255,255,.55);font-size:12px;padding
           <input type="text" class="form-input" id="s-form-plainte" placeholder="https://docs.google.com/forms/d/e/.../viewform?embedded=true"/>
         </div>
         <div class="form-group">
+          <label class="form-label" for="s-form-recrutement">Google Form — recrutement</label>
+          <input type="text" class="form-input" id="s-form-recrutement" placeholder="https://docs.google.com/forms/d/e/.../viewform?embedded=true"/>
+        </div>
+        <div class="form-group">
           <label class="form-label" for="s-form-pv">Google Form — PV de mise en fourrière</label>
           <input type="text" class="form-input" id="s-form-pv" placeholder="https://docs.google.com/forms/d/e/.../viewform?embedded=true"/>
         </div>
@@ -636,21 +681,34 @@ footer{background:var(--bleu);color:rgba(255,255,255,.55);font-size:12px;padding
   <div class="modal" style="max-width:400px">
     <div class="modal-head"><h3>Connexion au portail</h3><button class="modal-close" onclick="closeModal('modal-login')">×</button></div>
     <div class="modal-body">
-      <div class="discord-field">
-        <svg width="20" height="15" viewBox="0 0 127.14 96.36" fill="white" aria-hidden="true"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
-        Identification par identifiant Discord
+
+      <div id="login-oauth-block" style="display:none">
+        <p style="font-size:13px;color:var(--gris-t);margin-bottom:16px;line-height:1.6">Connecte-toi avec ton compte Discord réel : l'identifiant utilisé sur le portail sera celui renvoyé par Discord, impossible d'usurper le compte de quelqu'un d'autre.</p>
+        <button class="btn btn-primary" style="width:100%;background:#5865F2;justify-content:center" onclick="discordLoginRedirect()">
+          <svg width="18" height="14" viewBox="0 0 127.14 96.36" fill="white" aria-hidden="true"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
+          Se connecter avec Discord
+        </button>
       </div>
-      <div class="form-group">
-        <label class="form-label" for="login-discord-id">Identifiant Discord</label>
-        <input type="text" class="form-input" id="login-discord-id" placeholder="ex : 123456789012345678" maxlength="20"/>
-        <div class="form-hint">Discord → Paramètres → Avancés → Mode développeur, puis clic droit sur ton nom → Copier l'identifiant.</div>
+
+      <div id="login-manual-block">
+        <div class="discord-field">
+          <svg width="20" height="15" viewBox="0 0 127.14 96.36" fill="white" aria-hidden="true"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
+          Identification par identifiant Discord
+        </div>
+        <div class="alert alert-danger" id="login-manual-warning" style="display:none;font-size:12px">⚠️ La connexion Discord officielle n'est pas configurée ici. Ce mode manuel ne vérifie pas l'identité : n'utilise que ton propre identifiant, jamais celui de quelqu'un d'autre.</div>
+        <div class="form-group">
+          <label class="form-label" for="login-discord-id">Identifiant Discord</label>
+          <input type="text" class="form-input" id="login-discord-id" placeholder="ex : 123456789012345678" maxlength="20"/>
+          <div class="form-hint">Discord → Paramètres → Avancés → Mode développeur, puis clic droit sur ton nom → Copier l'identifiant.</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="login-pseudo">Pseudo Discord</label>
+          <input type="text" class="form-input" id="login-pseudo" placeholder="TonPseudo"/>
+        </div>
       </div>
-      <div class="form-group">
-        <label class="form-label" for="login-pseudo">Pseudo Discord</label>
-        <input type="text" class="form-input" id="login-pseudo" placeholder="TonPseudo"/>
-      </div>
+
     </div>
-    <div class="modal-foot">
+    <div class="modal-foot" id="login-manual-foot">
       <button class="btn btn-neutral" onclick="closeModal('modal-login')">Annuler</button>
       <button class="btn btn-primary" onclick="doLogin()">Se connecter</button>
     </div>
@@ -807,7 +865,10 @@ footer{background:var(--bleu);color:rgba(255,255,255,.55);font-size:12px;padding
   <div class="modal">
     <div class="modal-head"><h3 id="rm-title">Message</h3><button class="modal-close" onclick="closeModal('modal-read-msg')">×</button></div>
     <div class="modal-body" id="rm-body"></div>
-    <div class="modal-foot"><button class="btn btn-neutral" onclick="closeModal('modal-read-msg')">Fermer</button></div>
+    <div class="modal-foot">
+      <button class="btn btn-danger" onclick="deleteMessage(currentReadMsgId)">Supprimer</button>
+      <button class="btn btn-neutral" onclick="closeModal('modal-read-msg')">Fermer</button>
+    </div>
   </div>
 </div>
 
@@ -822,6 +883,28 @@ footer{background:var(--bleu);color:rgba(255,255,255,.55);font-size:12px;padding
 const SUPABASE_CONFIG = {
   url:     "https://rstutofxjpeyxrjazgcr.supabase.co",   // ex : "https://xxxxxxxxxxxx.supabase.co" — tant que c'est vide, le site tourne en mode local
   anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzdHV0b2Z4anBleXhyamF6Z2NyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk1NzkzNjEsImV4cCI6MjEwNTE1NTM2MX0.lYRzH7V9Dv1tu-hTvM-hZsnhBPggRFOCU17qsISbRFU"    // la clé "anon public" du projet (Project Settings → Data API)
+};
+
+/* ── CONNEXION DISCORD OFFICIELLE (OAuth2) ──────────────────────────
+   Tant que clientId est vide, le site reste en connexion manuelle
+   (id + pseudo tapés à la main) : pratique pour tester, mais rien
+   n'empêche quelqu'un de taper l'identifiant d'un autre.
+
+   Pour activer la vraie connexion Discord (recommandé, empêche
+   l'usurpation) :
+   1) discord.com/developers/applications → New Application.
+   2) OAuth2 → General → copie le "CLIENT ID", colle-le ci-dessous.
+   3) OAuth2 → General → "Redirects" → ajoute EXACTEMENT l'URL où ce
+      fichier est hébergé (celle affichée par le navigateur, sans
+      rien après, ex : https://tonsite.exemple/index.html). Le site
+      calcule cette URL tout seul (redirectUri ci-dessous), donc il
+      suffit de recopier ce qui est réellement dans la barre
+      d'adresse une fois le site en ligne.
+   Aucun "client secret" n'est nécessaire : la connexion utilise le
+   flux OAuth2 "implicit" de Discord, entièrement côté navigateur. */
+const DISCORD_OAUTH = {
+  clientId: "",   // ex : "1234567890123456789" — laisse vide pour garder la connexion manuelle
+  redirectUri: window.location.origin + window.location.pathname
 };
 
 /* Administrateurs permanents (niveau O6), impossibles à retirer depuis le site.
@@ -1094,10 +1177,15 @@ const ROLES = {
 };
 const NIVEAU_LABELS = ["", "O1 — Civil", "O2 — Avocat", "O3 — OPJ", "O4 — Juge", "O5 — Procureur", "O6 — Admin"];
 const ID_RE = /^\d{17,20}$/;
+const DEFAULT_TITRES = [
+  "Magistrat du Siège", "Magistrat du Parquet", "Avocat au Barreau", "Procureur de la République",
+  "Juge d'instruction", "Greffier en chef", "OPJ — Brigadier", "OPJ — Lieutenant", "OPJ — Commandant", "OPJ — Commissaire"
+];
 
 let db = null;
 let currentUser = null;
 let settings = {};
+let siteConfig = {};   // config.json — liens de formulaires & titres, modifiables directement sur GitHub
 let allNews = [];
 let allAuds = [];
 let allUsers = [];
@@ -1124,7 +1212,34 @@ const ls = {
 /* ════════════════════════════════════════════════════
    4. DÉMARRAGE
    ════════════════════════════════════════════════════ */
+/* ── config.json ─────────────────────────────────────────────────
+   Fichier séparé, à côté de index.html dans le dépôt GitHub. Le
+   modifier (et le pousser sur GitHub) change directement le site,
+   sans passer par Administration → Paramètres ni par Supabase.
+   Sert de valeur par défaut : si un admin renseigne aussi les
+   mêmes champs dans Administration → Paramètres, ces derniers
+   prennent le dessus. */
+async function loadSiteConfig() {
+  try {
+    const res = await fetch("config.json", { cache: "no-store" });
+    if (res.ok) siteConfig = await res.json();
+  } catch (e) {
+    console.warn("config.json introuvable ou illisible, valeurs par défaut utilisées.", e);
+  }
+  populateTitreOptions();
+}
+
+function populateTitreOptions() {
+  const sel = document.getElementById("au-titre");
+  if (!sel) return;
+  const titres = (siteConfig.titres && siteConfig.titres.length) ? siteConfig.titres : DEFAULT_TITRES;
+  const current = sel.value;
+  sel.innerHTML = '<option value="">— Aucun —</option>' + titres.map(t => "<option>" + esc(t) + "</option>").join("");
+  if (titres.includes(current)) sel.value = current;
+}
+
 async function init() {
+  await loadSiteConfig();
   db = await initDb();
   if (DB_MODE === "local") document.getElementById("mode-banner").classList.add("show");
 
@@ -1156,9 +1271,12 @@ async function init() {
     if (currentUser) refreshLevel();
   });
 
-  const savedId = ls.get("jmtq_discord_id");
-  const savedPseudo = ls.get("jmtq_pseudo");
-  if (savedId && savedPseudo) loginWithId(savedId, savedPseudo, false);
+  const cameFromDiscord = await handleDiscordOAuthReturn();
+  if (!cameFromDiscord) {
+    const savedId = ls.get("jmtq_discord_id");
+    const savedPseudo = ls.get("jmtq_pseudo");
+    if (savedId && savedPseudo) loginWithId(savedId, savedPseudo, false);
+  }
 }
 
 /* ════════════════════════════════════════════════════
@@ -1166,15 +1284,17 @@ async function init() {
    ════════════════════════════════════════════════════ */
 function applySettings() {
   const link = document.getElementById("top-discord-link");
-  link.href = settings.discord || "#";
+  link.href = settings.discord || siteConfig.discord || "#";
 
-  setValue("s-discord", settings.discord);
-  setValue("s-form-plainte", settings.formPlainte);
-  setValue("s-form-pv", settings.formPv);
-  setValue("s-form-audition", settings.formAudition);
-  setValue("s-form-pve", settings.formPve);
+  setValue("s-discord", settings.discord || siteConfig.discord);
+  setValue("s-form-plainte", settings.formPlainte || siteConfig.formPlainte);
+  setValue("s-form-recrutement", settings.formRecrutement || siteConfig.formRecrutement);
+  setValue("s-form-pv", settings.formPv || siteConfig.formPv);
+  setValue("s-form-audition", settings.formAudition || siteConfig.formAudition);
+  setValue("s-form-pve", settings.formPve || siteConfig.formPve);
 
-  applyForm("form-plainte-wrap", "form-plainte-placeholder", settings.formPlainte);
+  applyForm("form-plainte-wrap", "form-plainte-placeholder", settings.formPlainte || siteConfig.formPlainte);
+  applyForm("form-recrutement-wrap", "form-recrutement-placeholder", settings.formRecrutement || siteConfig.formRecrutement);
 }
 
 function setValue(id, v) {
@@ -1205,6 +1325,7 @@ async function saveSettings() {
   const data = {
     discord:      document.getElementById("s-discord").value.trim(),
     formPlainte:  document.getElementById("s-form-plainte").value.trim(),
+    formRecrutement: document.getElementById("s-form-recrutement").value.trim(),
     formPv:       document.getElementById("s-form-pv").value.trim(),
     formAudition: document.getElementById("s-form-audition").value.trim(),
     formPve:      document.getElementById("s-form-pve").value.trim()
@@ -1218,7 +1339,48 @@ async function saveSettings() {
 /* ════════════════════════════════════════════════════
    6. CONNEXION
    ════════════════════════════════════════════════════ */
-function showLogin() { openModal("modal-login"); }
+function showLogin() {
+  const secure = !!DISCORD_OAUTH.clientId;
+  document.getElementById("login-oauth-block").style.display = secure ? "block" : "none";
+  document.getElementById("login-manual-block").style.display = secure ? "none" : "block";
+  document.getElementById("login-manual-foot").style.display = secure ? "none" : "flex";
+  document.getElementById("login-manual-warning").style.display = secure ? "none" : "block";
+  openModal("modal-login");
+}
+
+function discordLoginRedirect() {
+  if (!DISCORD_OAUTH.clientId) { toast("La connexion Discord n'est pas configurée sur ce portail", "error"); return; }
+  const params = new URLSearchParams({
+    client_id: DISCORD_OAUTH.clientId,
+    redirect_uri: DISCORD_OAUTH.redirectUri,
+    response_type: "token",
+    scope: "identify"
+  });
+  window.location.href = "https://discord.com/oauth2/authorize?" + params.toString();
+}
+
+/* Au retour de Discord, le token arrive dans le fragment d'URL
+   (#access_token=...). On le récupère, on interroge l'API Discord
+   pour connaître le VRAI id et pseudo de la personne connectée
+   (impossible de le falsifier), puis on nettoie l'URL. */
+async function handleDiscordOAuthReturn() {
+  if (!location.hash.includes("access_token")) return false;
+  const hash = new URLSearchParams(location.hash.slice(1));
+  const token = hash.get("access_token");
+  history.replaceState(null, "", location.pathname + location.search);
+  if (!token) return false;
+  try {
+    const res = await fetch("https://discord.com/api/users/@me", { headers: { Authorization: "Bearer " + token } });
+    if (!res.ok) throw new Error("réponse Discord invalide");
+    const me = await res.json();
+    const pseudo = me.username || me.global_name || me.id;
+    await loginWithId(me.id, pseudo, true);
+    return true;
+  } catch (e) {
+    toast("Connexion Discord impossible : " + e.message, "error");
+    return false;
+  }
+}
 
 async function doLogin() {
   const discordId = document.getElementById("login-discord-id").value.trim();
@@ -1324,9 +1486,10 @@ function updateUI() {
 
   const niveau = loggedIn ? currentUser.niveau : 0;
   let besoinRetour = false;
-  document.querySelectorAll(".nav-tab[data-min]").forEach(tab => {
-    const min = parseInt(tab.dataset.min, 10);
-    const ok = niveau >= min;
+  document.querySelectorAll(".nav-tab[data-min], .nav-tab[data-max]").forEach(tab => {
+    const min = tab.dataset.min !== undefined ? parseInt(tab.dataset.min, 10) : null;
+    const max = tab.dataset.max !== undefined ? parseInt(tab.dataset.max, 10) : null;
+    const ok = (min === null || niveau >= min) && (max === null || niveau <= max);
     tab.classList.toggle("locked", !ok);
     if (!ok && tab.dataset.tab === currentTab) besoinRetour = true;
   });
@@ -1357,13 +1520,37 @@ function goTab(tabId, el) {
 /* ════════════════════════════════════════════════════
    8. ACTUALITÉS
    ════════════════════════════════════════════════════ */
+/* Affiche les 2 premiers éléments puis regroupe le reste derrière un
+   bouton « Voir plus » (menu déroulant), pour ne pas surcharger l'accueil. */
+function renderWithMore(items, cardFn, count) {
+  count = count || 2;
+  const visible = items.slice(0, count).map(cardFn).join("");
+  const reste = items.slice(count);
+  if (!reste.length) return visible;
+  const label = reste.length + " de plus";
+  return visible +
+    '<div class="more-toggle-wrap">' +
+    '<button type="button" class="more-toggle-btn" data-n="' + reste.length + '" onclick="toggleMore(this)">' +
+    '<span class="mt-label">Voir ' + label + '</span><span class="mt-arrow">▾</span></button>' +
+    '<div class="more-toggle-list" hidden>' + reste.map(cardFn).join("") + "</div></div>";
+}
+
+function toggleMore(btn) {
+  const list = btn.nextElementSibling;
+  const label = btn.querySelector(".mt-label");
+  const wasHidden = list.hidden;
+  list.hidden = !wasHidden;
+  btn.classList.toggle("open", wasHidden);
+  label.textContent = wasHidden ? "Réduire" : "Voir " + btn.dataset.n + " de plus";
+}
+
 function renderNews() {
   const publiees = allNews.filter(n => Number(n.publie) === 1);
   document.getElementById("stat-news").textContent = publiees.length;
 
   const pub = document.getElementById("news-list-pub");
   pub.innerHTML = publiees.length
-    ? publiees.slice(0, 6).map(n => newsCard(n, false)).join("")
+    ? renderWithMore(publiees, n => newsCard(n, false), 2)
     : '<div class="empty"><div class="empty-icon">📰</div><p>Aucune actualité publiée pour l\'instant.</p></div>';
 
   const g = document.getElementById("gnews-list");
@@ -1444,8 +1631,8 @@ function renderAudiences() {
   document.getElementById("stat-audiences").textContent = futures.length;
 
   const vide = '<div class="empty"><div class="empty-icon">📅</div><p>Aucune audience planifiée.</p></div>';
-  const html6 = futures.length ? futures.slice(0, 6).map(a => audCard(a, false)).join("") : vide;
-  document.getElementById("aud-list-pub").innerHTML = html6;
+  document.getElementById("aud-list-pub").innerHTML = futures.length
+    ? renderWithMore(futures, a => audCard(a, false), 2) : vide;
   document.getElementById("aud-list-full").innerHTML = futures.length ? futures.map(a => audCard(a, false)).join("") : vide;
 
   const g = document.getElementById("gauds-list");
@@ -1507,26 +1694,46 @@ function renderStatsUsers() {
 /* ════════════════════════════════════════════════════
    11. CASIERS
    ════════════════════════════════════════════════════ */
+/* Toutes les inscriptions (contraventions, délits, crimes…) d'une personne
+   vivent dans un seul document "casiers/{discordId}" — jamais plusieurs
+   dossiers pour la même personne. Ces deux fonctions les trient et
+   résument le tout pour bien montrer qu'il s'agit d'un dossier unique. */
+function sortCasierItems(items) {
+  return items.slice().sort((a, b) => (b.addedAt || 0) - (a.addedAt || 0) || String(b.date || "").localeCompare(String(a.date || "")));
+}
+
+function casierSummaryBadges(items) {
+  const counts = {};
+  items.forEach(it => { const t = it.type || "Autre"; counts[t] = (counts[t] || 0) + 1; });
+  const cols = { Contravention: "badge-or", "Délit": "badge-rouge", Crime: "badge-rouge", "Mention effacée": "badge-gris" };
+  return Object.keys(counts).map(t =>
+    '<span class="badge ' + (cols[t] || "badge-gris") + '" style="margin-right:6px">' + counts[t] + " " + esc(t) + (counts[t] > 1 ? "s" : "") + "</span>"
+  ).join("");
+}
+
 async function loadCasierPub() {
   if (!db || !currentUser) return;
   const el = document.getElementById("casier-pub-content");
   el.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement…</div>';
   try {
     const snap = await db.doc("casiers/" + currentUser.discordId).get();
-    const items = snap.exists ? (snap.data().items || []) : [];
+    const items = sortCasierItems(snap.exists ? (snap.data().items || []) : []);
     el.innerHTML = items.length
-      ? '<div class="alert alert-info">Casier judiciaire de <strong>' + esc(currentUser.nom) + "</strong> — " + items.length + " inscription(s)</div>" + items.map(casierEntry).join("")
+      ? '<div class="alert alert-info">Dossier unique de <strong>' + esc(currentUser.nom) + "</strong> — " + items.length + " inscription(s) au total<br><div style=\"margin-top:8px\">" + casierSummaryBadges(items) + "</div></div>" + items.map(it => casierEntry(it, currentUser.discordId, currentUser.niveau >= 5)).join("")
       : '<div class="empty"><div class="empty-icon">✅</div><p>Casier vierge : aucune inscription.</p></div>';
   } catch (e) {
     el.innerHTML = '<div class="alert alert-danger">Casier illisible : ' + esc(e.message) + "</div>";
   }
 }
 
-function casierEntry(item) {
+function casierEntry(item, discordId, canDelete) {
   const cols = { Contravention: "badge-or", "Délit": "badge-rouge", Crime: "badge-rouge", "Mention effacée": "badge-gris" };
+  const del = (canDelete && item.id)
+    ? '<button class="ce-del-btn" title="Supprimer cette inscription" onclick="deleteCasierEntry(\'' + discordId + "','" + item.id + '\')">✕</button>'
+    : "";
   return '<div class="casier-entry"><div class="ce-head">' +
     '<span class="ce-type"><span class="badge ' + (cols[item.type] || "badge-gris") + '">' + esc(item.type || "") + "</span></span>" +
-    '<span class="ce-date">' + esc(item.date || "") + "</span></div>" +
+    '<span style="display:flex;align-items:center;gap:10px"><span class="ce-date">' + esc(item.date || "") + "</span>" + del + "</span></div>" +
     '<div class="ce-desc">' + esc(item.description || "") + "</div>" +
     '<div style="font-size:11px;color:var(--gris-t);margin-top:6px">Inscrit par ' + esc(item.auteur || "—") + "</div></div>";
 }
@@ -1551,15 +1758,30 @@ async function searchCasier() {
     const snap = await db.doc("casiers/" + discordId).get();
     const profil = allUsers.find(u => u._id === discordId);
     const nom = profil ? (profil.nom || profil.pseudo || discordId) : discordId;
-    const items = snap.exists ? (snap.data().items || []) : [];
+    const items = sortCasierItems(snap.exists ? (snap.data().items || []) : []);
+    const btnSuppr = (currentUser.niveau >= 6 && items.length)
+      ? '<button class="btn btn-danger btn-sm" style="margin-top:10px" onclick="deleteCasier(\'' + discordId + '\')">Supprimer le casier entier</button>'
+      : "";
     el.innerHTML = items.length
-      ? '<div class="alert alert-info">Casier de <strong>' + esc(nom) + "</strong> — " + items.length + " inscription(s)</div>" + items.map(casierEntry).join("")
+      ? '<div class="alert alert-info">Dossier unique de <strong>' + esc(nom) + "</strong> — " + items.length + " inscription(s) au total<br><div style=\"margin-top:8px\">" + casierSummaryBadges(items) + "</div>" + btnSuppr + "</div>" + items.map(it => casierEntry(it, discordId, currentUser.niveau >= 5)).join("")
       : '<div class="alert alert-success">Casier vierge pour <strong>' + esc(nom) + "</strong> (" + esc(discordId) + ")</div>";
     if (currentUser.niveau >= 5) document.getElementById("casier-mod-id").value = discordId;
   } catch (e) {
     el.innerHTML = '<div class="alert alert-danger">Recherche impossible : ' + esc(e.message) + "</div>";
   }
 }
+
+async function deleteCasier(discordId) {
+  if (!requireLevel(6)) return;
+  if (!confirm("Supprimer définitivement tout le casier de cette personne (toutes les inscriptions) ?")) return;
+  try {
+    await db.doc("casiers/" + discordId).delete();
+    toast("Casier supprimé", "success");
+    searchCasier();
+  } catch (e) { toast("Suppression impossible : " + e.message, "error"); }
+}
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
 
 async function addCasierEntry() {
   if (!requireLevel(5)) return;
@@ -1573,13 +1795,26 @@ async function addCasierEntry() {
   try {
     const snap = await db.doc("casiers/" + id).get();
     const items = snap.exists ? (snap.data().items || []) : [];
-    items.push({ type, date, description: desc, auteur: currentUser.nom || currentUser.pseudo, addedAt: Date.now() });
+    items.push({ id: uid(), type, date, description: desc, auteur: currentUser.nom || currentUser.pseudo, addedAt: Date.now() });
     await db.doc("casiers/" + id).set({ items });
     document.getElementById("casier-mod-desc").value = "";
     document.getElementById("casier-mod-date").value = "";
     toast("Entrée ajoutée au casier", "success");
     if (document.getElementById("casier-search-input").value.trim()) searchCasier();
   } catch (e) { toast("Ajout impossible : " + e.message, "error"); }
+}
+
+async function deleteCasierEntry(discordId, itemId) {
+  if (!requireLevel(5)) return;
+  if (!confirm("Supprimer cette inscription du casier ?")) return;
+  try {
+    const snap = await db.doc("casiers/" + discordId).get();
+    const items = snap.exists ? (snap.data().items || []) : [];
+    await db.doc("casiers/" + discordId).set({ items: items.filter(it => it.id !== itemId) });
+    toast("Inscription supprimée", "success");
+    if (document.getElementById("casier-search-input") && document.getElementById("casier-search-input").value.trim()) searchCasier();
+    if (currentUser && currentUser.discordId === discordId) loadCasierPub();
+  } catch (e) { toast("Suppression impossible : " + e.message, "error"); }
 }
 
 /* ════════════════════════════════════════════════════
@@ -1609,15 +1844,20 @@ function msgItem(m, box) {
   const date = new Date(m.createdAt || Date.now()).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
   const who = box === "inbox" ? "De : " + esc(m.fromPseudo || m.from) : "À : " + esc(m.toPseudo || m.to);
   return '<div class="msg-item' + unread + '" onclick="readMessage(\'' + m._id + "','" + box + '\')">' +
-    '<div class="mi-head"><span class="mi-from">' + who + '</span><span class="mi-date">' + date + "</span></div>" +
+    '<div class="mi-head"><span class="mi-from">' + who + '</span>' +
+    '<span style="display:flex;align-items:center;gap:12px"><span class="mi-date">' + date + '</span>' +
+    '<button class="msg-del-btn" title="Supprimer ce message" onclick="event.stopPropagation();deleteMessage(\'' + m._id + '\')">✕</button></span></div>' +
     '<div class="mi-subj">' + esc(m.objet || "(sans objet)") + "</div></div>";
 }
+
+let currentReadMsgId = null;
 
 async function readMessage(id, box) {
   try {
     const snap = await db.doc("messages/" + id).get();
     if (!snap.exists) return;
     const m = snap.data();
+    currentReadMsgId = id;
     const date = new Date(m.createdAt || Date.now()).toLocaleString("fr-FR");
     document.getElementById("rm-title").textContent = m.objet || "(sans objet)";
     document.getElementById("rm-body").innerHTML =
@@ -1629,6 +1869,15 @@ async function readMessage(id, box) {
     if (box === "inbox" && !m.lu) db.doc("messages/" + id).set({ lu: true }, { merge: true }).catch(() => {});
     openModal("modal-read-msg");
   } catch (e) { toast("Message illisible : " + e.message, "error"); }
+}
+
+async function deleteMessage(id) {
+  if (!confirm("Supprimer définitivement ce message ?")) return;
+  try {
+    await db.doc("messages/" + id).delete();
+    if (currentReadMsgId === id) { closeModal("modal-read-msg"); currentReadMsgId = null; }
+    toast("Message supprimé", "success");
+  } catch (e) { toast("Suppression impossible : " + e.message, "error"); }
 }
 
 async function sendMessage() {
@@ -1663,7 +1912,11 @@ function showMsgTab(tab, el) {
    13. FORMULAIRES PV
    ════════════════════════════════════════════════════ */
 function openPVForm(type) {
-  const urls = { pv: settings.formPv, audition: settings.formAudition, pve: settings.formPve };
+  const urls = {
+    pv: settings.formPv || siteConfig.formPv,
+    audition: settings.formAudition || siteConfig.formAudition,
+    pve: settings.formPve || siteConfig.formPve
+  };
   const noms = { pv: "PV de mise en fourrière", audition: "PV d'audition", pve: "PV électronique" };
   const wrap = document.getElementById("pv-form-container");
   const content = document.getElementById("pv-form-content");
@@ -1691,7 +1944,16 @@ function renderUsersTable() {
   if (!currentUser || currentUser.niveau < 6) { tbody.innerHTML = ""; return; }
   if (!allUsers.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--gris-t)">Aucun membre enregistré.</td></tr>'; return; }
 
-  tbody.innerHTML = allUsers.slice().sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).map(u => {
+  const searchEl = document.getElementById("users-search-input");
+  const q = searchEl ? searchEl.value.trim().toLowerCase() : "";
+  const liste = allUsers.filter(u => !q ||
+    (u.pseudo || "").toLowerCase().includes(q) ||
+    (u.nom || "").toLowerCase().includes(q) ||
+    u._id.toLowerCase().includes(q));
+
+  if (!liste.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--gris-t)">Aucun membre ne correspond à « ' + esc(q) + ' ».</td></tr>'; return; }
+
+  tbody.innerHTML = liste.slice().sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).map(u => {
     const estAdmin = ADMIN_IDS.some(a => String(a) === u._id) || dbAdminIds.some(a => String(a) === u._id);
     const cfg = estAdmin ? ROLES.admin : (ROLES[u.role] || ROLES.civil);
     return "<tr><td><code style=\"font-size:11px\">" + esc(u._id) + "</code></td>" +
