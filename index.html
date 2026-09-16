@@ -394,13 +394,14 @@ footer{background:var(--bleu-h);color:rgba(255,255,255,.55);font-size:12px;paddi
   <div class="nav-inner" id="nav-bar">
     <div class="nav-tab active" data-tab="accueil" onclick="goTab('accueil',this)">Accueil</div>
     <div class="nav-tab" data-tab="plainte" onclick="goTab('plainte',this)">Dépôt de plainte</div>
-    <div class="nav-tab" data-tab="recrutement" data-max="3" onclick="goTab('recrutement',this)">Recrutement</div>
+    <div class="nav-tab" data-tab="recrutement" onclick="goTab('recrutement',this)">Recrutement</div>
+    <div class="nav-tab" data-tab="annonces" onclick="goTab('annonces',this)">Annonces</div>
     <div class="nav-tab" data-tab="audiences" onclick="goTab('audiences',this)">Audiences</div>
     <div class="nav-tab" data-tab="casier-pub" onclick="goTab('casier-pub',this)">Casier judiciaire</div>
     <div class="nav-tab locked" data-tab="messagerie" data-min="2" onclick="goTab('messagerie',this)">Messagerie ✉</div>
     <div class="nav-tab locked" data-tab="pv" data-min="3" onclick="goTab('pv',this)">Formulaires PV</div>
     <div class="nav-tab locked" data-tab="casier-opj" data-min="3" onclick="goTab('casier-opj',this)">Casiers</div>
-    <div class="nav-tab locked" data-tab="gestion-news" data-min="4" onclick="goTab('gestion-news',this)">Gérer actualités</div>
+    <div class="nav-tab locked" data-tab="gestion-news" data-min="4" onclick="goTab('gestion-news',this)">Gérer annonces</div>
     <div class="nav-tab locked" data-tab="admin" data-min="6" onclick="goTab('admin',this)">Administration</div>
   </div>
 </nav>
@@ -426,18 +427,24 @@ footer{background:var(--bleu-h);color:rgba(255,255,255,.55);font-size:12px;paddi
 
   <div class="grid-4" style="margin-bottom:28px">
     <div class="stat-card"><div class="num" id="stat-audiences">…</div><div class="lbl">Audiences à venir</div></div>
-    <div class="stat-card"><div class="num" id="stat-news">…</div><div class="lbl">Actualités publiées</div></div>
+    <div class="stat-card"><div class="num" id="stat-news">…</div><div class="lbl">Annonces publiées</div></div>
     <div class="stat-card"><div class="num" id="stat-magistrats">…</div><div class="lbl">Magistrats actifs</div></div>
     <div class="stat-card rouge"><div class="num" id="stat-avocats">…</div><div class="lbl">Avocats au barreau</div></div>
   </div>
 
   <div class="grid-2" style="align-items:start">
     <div>
-      <div class="sec-head"><h2 class="sec-title">Actualités</h2></div>
+      <div class="sec-head">
+        <h2 class="sec-title">Annonces</h2>
+        <button class="btn btn-ghost btn-sm" onclick="goTab('annonces')">Voir toutes les annonces</button>
+      </div>
       <div id="news-list-pub" class="news-list"><div class="loading"><div class="spinner"></div> Chargement…</div></div>
     </div>
     <div>
-      <div class="sec-head"><h2 class="sec-title">Prochaines audiences</h2></div>
+      <div class="sec-head">
+        <h2 class="sec-title">Prochaines audiences</h2>
+        <button class="btn btn-ghost btn-sm" onclick="goTab('audiences')">Voir toutes les audiences</button>
+      </div>
       <div id="aud-list-pub" class="aud-list"><div class="loading"><div class="spinner"></div> Chargement…</div></div>
     </div>
   </div>
@@ -477,6 +484,12 @@ footer{background:var(--bleu-h);color:rgba(255,255,255,.55);font-size:12px;paddi
       </div>
     </div>
   </div>
+</div>
+
+<!-- ═══ ANNONCES ═══ -->
+<div class="page" id="page-annonces">
+  <div class="sec-head"><h2 class="sec-title">Toutes les annonces</h2></div>
+  <div id="news-list-full" class="news-list"><div class="loading"><div class="spinner"></div> Chargement…</div></div>
 </div>
 
 <!-- ═══ AUDIENCES ═══ -->
@@ -523,7 +536,7 @@ footer{background:var(--bleu-h);color:rgba(255,255,255,.55);font-size:12px;paddi
         <div style="font-size:12px;color:var(--gris-t)">Procès-verbal officiel</div>
       </div>
     </div>
-    <div class="card" style="cursor:pointer" onclick="openPVForm('audition')">
+    <div class="card" style="cursor:pointer" onclick="openPVForm('gav')">
       <div class="card-body" style="text-align:center;padding:32px">
         <div style="font-size:40px;margin-bottom:12px">🎙️</div>
         <div style="font-weight:600;font-size:15px;margin-bottom:6px">PV de GAV</div>
@@ -586,14 +599,14 @@ footer{background:var(--bleu-h);color:rgba(255,255,255,.55);font-size:12px;paddi
 <!-- ═══ GESTION ═══ -->
 <div class="page" id="page-gestion-news">
   <div class="sec-head">
-    <h2 class="sec-title">Actualités et audiences</h2>
+    <h2 class="sec-title">Annonces et audiences</h2>
     <div style="display:flex;gap:10px">
-      <button class="btn btn-primary btn-sm" onclick="newNews()">Nouvelle actualité</button>
+      <button class="btn btn-primary btn-sm" onclick="newNews()">Nouvelle annonce</button>
       <button class="btn btn-ghost btn-sm" onclick="openModal('modal-new-aud')">Nouvelle audience</button>
     </div>
   </div>
   <div class="inner-tabs">
-    <div class="inner-tab active" onclick="showGTab('gnews',this)">Actualités</div>
+    <div class="inner-tab active" onclick="showGTab('gnews',this)">Annonces</div>
     <div class="inner-tab" onclick="showGTab('gauds',this)">Audiences</div>
   </div>
   <div id="gnews-list"><div class="loading"><div class="spinner"></div></div></div>
@@ -664,8 +677,8 @@ footer{background:var(--bleu-h);color:rgba(255,255,255,.55);font-size:12px;paddi
           <input type="text" class="form-input" id="s-form-pv" placeholder="https://docs.google.com/forms/d/e/.../viewform?embedded=true"/>
         </div>
         <div class="form-group">
-          <label class="form-label" for="s-form-audition">Google Form — PV de GAV</label>
-          <input type="text" class="form-input" id="s-form-audition" placeholder="https://docs.google.com/forms/d/e/.../viewform?embedded=true"/>
+          <label class="form-label" for="s-form-gav">Google Form — PV de GAV</label>
+          <input type="text" class="form-input" id="s-form-gav" placeholder="https://docs.google.com/forms/d/e/.../viewform?embedded=true"/>
         </div>
         <div class="form-group">
           <label class="form-label" for="s-form-pve">Google Form — PV électronique</label>
@@ -754,15 +767,15 @@ footer{background:var(--bleu-h);color:rgba(255,255,255,.55);font-size:12px;paddi
 
 <div class="overlay" id="modal-new-news">
   <div class="modal">
-    <div class="modal-head"><h3 id="news-modal-title">Nouvelle actualité</h3><button class="modal-close" onclick="closeModal('modal-new-news')">×</button></div>
+    <div class="modal-head"><h3 id="news-modal-title">Nouvelle annonce</h3><button class="modal-close" onclick="closeModal('modal-new-news')">×</button></div>
     <div class="modal-body">
       <div class="form-group">
         <label class="form-label" for="news-titre">Titre</label>
-        <input type="text" class="form-input" id="news-titre" placeholder="Titre de l'actualité"/>
+        <input type="text" class="form-input" id="news-titre" placeholder="Titre de l'annonce"/>
       </div>
       <div class="form-group">
         <label class="form-label" for="news-corps">Contenu</label>
-        <textarea class="form-textarea" id="news-corps" rows="5" placeholder="Contenu de l'actualité…"></textarea>
+        <textarea class="form-textarea" id="news-corps" rows="5" placeholder="Contenu de l'annonce…"></textarea>
       </div>
       <div class="form-group">
         <label class="form-label" for="news-statut">Statut</label>
@@ -1340,7 +1353,7 @@ async function saveSettings() {
     formPlainte:  document.getElementById("s-form-plainte").value.trim(),
     formRecrutement: document.getElementById("s-form-recrutement").value.trim(),
     formPv:       document.getElementById("s-form-pv").value.trim(),
-    formAudition: document.getElementById("s-form-audition").value.trim(),
+    formGav:      document.getElementById("s-form-gav").value.trim(),
     formPve:      document.getElementById("s-form-pve").value.trim()
   };
   try {
@@ -1531,7 +1544,7 @@ function goTab(tabId, el) {
 }
 
 /* ════════════════════════════════════════════════════
-   8. ACTUALITÉS
+   8. ANNONCES
    ════════════════════════════════════════════════════ */
 /* Affiche les 2 premiers éléments puis regroupe le reste derrière un
    bouton « Voir plus » (menu déroulant), pour ne pas surcharger l'accueil. */
@@ -1561,16 +1574,19 @@ function renderNews() {
   const publiees = allNews.filter(n => Number(n.publie) === 1);
   document.getElementById("stat-news").textContent = publiees.length;
 
+  const videNews = '<div class="empty"><div class="empty-icon">📰</div><p>Aucune annonce publiée pour l\'instant.</p></div>';
+
   const pub = document.getElementById("news-list-pub");
-  pub.innerHTML = publiees.length
-    ? renderWithMore(publiees, n => newsCard(n, false), 2)
-    : '<div class="empty"><div class="empty-icon">📰</div><p>Aucune actualité publiée pour l\'instant.</p></div>';
+  pub.innerHTML = publiees.length ? publiees.slice(0, 2).map(n => newsCard(n, false)).join("") : videNews;
+
+  const full = document.getElementById("news-list-full");
+  if (full) full.innerHTML = publiees.length ? publiees.map(n => newsCard(n, false)).join("") : videNews;
 
   const g = document.getElementById("gnews-list");
   if (g) {
     g.innerHTML = allNews.length
       ? allNews.map(n => newsCard(n, currentUser && currentUser.niveau >= 4)).join("")
-      : '<div class="empty"><div class="empty-icon">📰</div><p>Aucune actualité. Crée la première avec « Nouvelle actualité ».</p></div>';
+      : '<div class="empty"><div class="empty-icon">📰</div><p>Aucune annonce. Crée la première avec « Nouvelle annonce ».</p></div>';
   }
 }
 
@@ -1589,7 +1605,7 @@ function newsCard(n, admin) {
 
 function newNews() {
   editingNewsId = null;
-  document.getElementById("news-modal-title").textContent = "Nouvelle actualité";
+  document.getElementById("news-modal-title").textContent = "Nouvelle annonce";
   document.getElementById("news-titre").value = "";
   document.getElementById("news-corps").value = "";
   document.getElementById("news-statut").value = "1";
@@ -1600,7 +1616,7 @@ function editNews(id) {
   const n = allNews.find(x => x._id === id);
   if (!n) return;
   editingNewsId = id;
-  document.getElementById("news-modal-title").textContent = "Modifier l'actualité";
+  document.getElementById("news-modal-title").textContent = "Modifier l'annonce";
   document.getElementById("news-titre").value = n.titre || "";
   document.getElementById("news-corps").value = n.corps || "";
   document.getElementById("news-statut").value = String(Number(n.publie) === 0 ? 0 : 1);
@@ -1624,14 +1640,14 @@ async function saveNews() {
     }
     closeModal("modal-new-news");
     editingNewsId = null;
-    toast(publie ? "Actualité publiée" : "Brouillon enregistré", "success");
+    toast(publie ? "Annonce publiée" : "Brouillon enregistré", "success");
   } catch (e) { toast("Enregistrement impossible : " + e.message, "error"); }
 }
 
 async function deleteNews(id) {
   if (!requireLevel(4)) return;
-  if (!confirm("Supprimer cette actualité ?")) return;
-  try { await db.doc("news/" + id).delete(); toast("Actualité supprimée", "success"); }
+  if (!confirm("Supprimer cette annonce ?")) return;
+  try { await db.doc("news/" + id).delete(); toast("Annonce supprimée", "success"); }
   catch (e) { toast("Suppression impossible : " + e.message, "error"); }
 }
 
@@ -1645,7 +1661,7 @@ function renderAudiences() {
 
   const vide = '<div class="empty"><div class="empty-icon">📅</div><p>Aucune audience planifiée.</p></div>';
   document.getElementById("aud-list-pub").innerHTML = futures.length
-    ? renderWithMore(futures, a => audCard(a, false), 2) : vide;
+    ? futures.slice(0, 2).map(a => audCard(a, false)).join("") : vide;
   document.getElementById("aud-list-full").innerHTML = futures.length ? futures.map(a => audCard(a, false)).join("") : vide;
 
   const g = document.getElementById("gauds-list");
@@ -1927,10 +1943,10 @@ function showMsgTab(tab, el) {
 function openPVForm(type) {
   const urls = {
     pv: settings.formPv || siteConfig.formPv,
-    audition: settings.formAudition || siteConfig.formAudition,
+    gav: settings.formGav || siteConfig.formGav,
     pve: settings.formPve || siteConfig.formPve
   };
-  const noms = { pv: "PV de mise en fourrière", audition: "PV de GAV", pve: "PV électronique" };
+  const noms = { pv: "PV de mise en fourrière", gav: "PV de GAV", pve: "PV électronique" };
   const wrap = document.getElementById("pv-form-container");
   const content = document.getElementById("pv-form-content");
   wrap.style.display = "block";
