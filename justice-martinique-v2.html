@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Tribunal Judiciaire de Martinique</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bleu:#002395;--bleu-h:#001a6e;--bleu-l:#e8ecf8;--bleu-ll:#f0f3fc;
+  --rouge:#ED2939;--rouge-h:#c01f2d;--rouge-l:#fceaec;
+  --blanc:#ffffff;--gris:#f5f6f8;--gris-b:#e8eaed;--gris-t:#6b7280;
+  --noir:#111827;--bord:#dde1e7;
+  --shadow:0 1px 4px rgba(0,0,0,.08);
+  --shadow-m:0 4px 16px rgba(0,0,0,.1);
+  --r:3px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--gris);color:var(--noir);min-height:100vh;display:flex;flex-direction:column}
+
+/* ── BANDE TRICOLORE ── */
+.tricolor-bar{position:fixed;left:0;top:0;bottom:0;width:6px;z-index:200;display:flex;flex-direction:column}
+.tricolor-bar span{flex:1}
+.tricolor-bar span:nth-child(1){background:var(--bleu)}
+.tricolor-bar span:nth-child(2){background:var(--blanc);border-left:1px solid #ddd;border-right:1px solid #ddd}
+.tricolor-bar span:nth-child(3){background:var(--rouge)}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--bleu);color:rgba(255,255,255,.7);font-size:12px;padding:5px 24px 5px 36px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--rouge)}
+.topbar strong{color:#fff}
+.topbar-right{display:flex;gap:16px;align-items:center}
+.topbar-right a{color:rgba(255,255,255,.6);text-decoration:none;font-size:12px}
+.topbar-right a:hover{color:#fff}
+
+/* ── HEADER ── */
+header{background:var(--blanc);border-bottom:1px solid var(--bord);padding:0 24px 0 36px;box-shadow:var(--shadow)}
+.header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:20px;padding:16px 0}
+.header-emblem{width:58px;height:58px;flex-shrink:0}
+.header-text h1{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--bleu);line-height:1.2}
+.header-text p{font-size:12px;color:var(--gris-t);margin-top:2px}
+.header-text .rf-label{font-size:10px;font-weight:600;letter-spacing:.08em;color:var(--bleu);border-left:3px solid var(--rouge);padding-left:6px;margin-bottom:4px}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+
+/* ── USER BADGE ── */
+.user-badge{display:flex;align-items:center;gap:9px;background:var(--gris);border:1px solid var(--bord);padding:7px 14px;border-radius:20px;font-size:13px}
+.user-badge .avatar{width:28px;height:28px;border-radius:50%;background:var(--bleu);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.user-badge .u-name{font-weight:600;color:var(--noir);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.user-badge .u-role{font-size:11px;color:var(--gris-t)}
+.nivel-chip{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;white-space:nowrap}
+.nivel-o1{background:#f3f4f6;color:#6b7280;border:1px solid #e5e7eb}
+.nivel-o2{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
+.nivel-o3{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
+.nivel-o4{background:#fefce8;color:#a16207;border:1px solid #fde68a}
+.nivel-o5{background:#fdf4ff;color:#7e22ce;border:1px solid #e9d5ff}
+.nivel-o6{background:#fff1f2;color:#be123c;border:1px solid #fecdd3}
+
+/* ── NAV ── */
+nav{background:var(--blanc);border-bottom:2px solid var(--bleu-l);padding-left:36px}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;gap:0;overflow-x:auto}
+.nav-tab{padding:13px 18px;font-size:13.5px;font-weight:500;color:var(--gris-t);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s;user-select:none}
+.nav-tab:hover{color:var(--bleu)}
+.nav-tab.active{color:var(--bleu);border-bottom-color:var(--bleu);font-weight:600}
+.nav-tab.locked{opacity:.35;cursor:default}
+.nav-tab.locked:hover{color:var(--gris-t)}
+
+/* ── MAIN ── */
+main{flex:1;padding:32px 24px 32px 36px}
+.content{max-width:1200px;margin:0 auto}
+
+/* ── PAGE SECTIONS ── */
+.page{display:none}.page.active{display:block}
+
+/* ── LOADING ── */
+.loading{display:flex;align-items:center;justify-content:center;padding:80px;gap:12px;color:var(--gris-t)}
+.spinner{width:20px;height:20px;border:2px solid var(--bord);border-top-color:var(--bleu);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── CARDS ── */
+.card{background:var(--blanc);border:1px solid var(--bord);border-radius:var(--r);box-shadow:var(--shadow)}
+.card-head{padding:18px 22px;border-bottom:1px solid var(--bord);display:flex;align-items:center;justify-content:space-between}
+.card-head h2{font-family:'Playfair Display',serif;font-size:17px;font-weight:600;color:var(--bleu)}
+.card-body{padding:22px}
+
+/* ── GRID ── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:900px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
+
+/* ── STAT CARD ── */
+.stat-card{background:var(--blanc);border:1px solid var(--bord);padding:20px 22px;border-radius:var(--r);box-shadow:var(--shadow)}
+.stat-card .num{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--bleu);line-height:1}
+.stat-card .lbl{font-size:12px;color:var(--gris-t);margin-top:4px}
+.stat-card.rouge .num{color:var(--rouge)}
+
+/* ── NEWS / AUDIENCES ── */
+.news-list,.aud-list{display:flex;flex-direction:column;gap:1px}
+.news-item,.aud-item{background:var(--blanc);border:1px solid var(--bord);padding:16px 20px;display:flex;gap:16px;border-radius:var(--r);margin-bottom:8px}
+.news-item{flex-direction:column}
+.news-dot{width:10px;height:10px;border-radius:50%;background:var(--bleu);flex-shrink:0;margin-top:5px}
+.news-title{font-weight:600;font-size:15px;margin-bottom:4px}
+.news-meta{font-size:12px;color:var(--gris-t);margin-bottom:8px}
+.news-body{font-size:14px;color:#374151;line-height:1.6;white-space:pre-wrap}
+.aud-date{min-width:80px;text-align:center;background:var(--bleu-ll);border-radius:var(--r);padding:8px;flex-shrink:0}
+.aud-date .day{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--bleu);line-height:1}
+.aud-date .mon{font-size:11px;color:var(--gris-t);font-weight:500}
+.aud-info h4{font-size:14px;font-weight:600;margin-bottom:4px}
+.aud-info p{font-size:13px;color:var(--gris-t)}
+
+/* ── TABLE ── */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:10px 14px;font-size:12px;font-weight:600;color:var(--gris-t);background:var(--gris);border-bottom:2px solid var(--bord)}
+td{padding:11px 14px;font-size:13px;border-bottom:1px solid var(--gris-b);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafbff}
+
+/* ── FORM ── */
+.form-group{margin-bottom:18px}
+.form-label{display:block;font-size:13px;font-weight:500;color:var(--noir);margin-bottom:5px}
+.form-input,.form-select,.form-textarea{width:100%;padding:9px 12px;border:1px solid var(--bord);border-radius:var(--r);font-family:'Inter',sans-serif;font-size:13.5px;color:var(--noir);background:var(--blanc);outline:none;transition:border-color .15s,box-shadow .15s}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--bleu);box-shadow:0 0 0 3px rgba(0,35,149,.1)}
+.form-textarea{resize:vertical;min-height:100px}
+.form-hint{font-size:11.5px;color:var(--gris-t);margin-top:4px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:600px){.form-row{grid-template-columns:1fr}}
+.form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M5 6L0 0h10z' fill='%236b7280'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:500;border:none;border-radius:var(--r);cursor:pointer;transition:all .15s;white-space:nowrap}
+.btn-primary{background:var(--bleu);color:#fff}.btn-primary:hover{background:var(--bleu-h)}
+.btn-danger{background:var(--rouge);color:#fff}.btn-danger:hover{background:var(--rouge-h)}
+.btn-ghost{background:transparent;color:var(--bleu);border:1px solid var(--bleu)}.btn-ghost:hover{background:var(--bleu-ll)}
+.btn-neutral{background:var(--gris);color:var(--noir);border:1px solid var(--bord)}.btn-neutral:hover{background:var(--gris-b)}
+.btn-sm{padding:6px 12px;font-size:12px}
+.btn-full{width:100%;justify-content:center}
+
+/* ── BADGE ── */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
+.badge-bleu{background:var(--bleu-l);color:var(--bleu)}
+.badge-rouge{background:var(--rouge-l);color:var(--rouge-h)}
+.badge-vert{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
+.badge-gris{background:#f3f4f6;color:#6b7280}
+.badge-or{background:#fefce8;color:#a16207;border:1px solid #fde68a}
+
+/* ── ALERT ── */
+.alert{padding:12px 16px;border-radius:var(--r);font-size:13.5px;margin-bottom:20px;border-left:4px solid}
+.alert-info{background:var(--bleu-ll);border-color:var(--bleu);color:var(--bleu-h)}
+.alert-danger{background:var(--rouge-l);border-color:var(--rouge);color:var(--rouge-h)}
+.alert-success{background:#f0fdf4;border-color:#22c55e;color:#15803d}
+
+/* ── SECTION HEADER ── */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px}
+.sec-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--bleu)}
+.sec-title::after{content:'';display:block;width:36px;height:3px;background:var(--rouge);margin-top:7px}
+
+/* ── LOGIN PAGE ── */
+.login-wrap{min-height:calc(100vh - 120px);display:flex;align-items:center;justify-content:center;padding:40px 20px}
+.login-box{background:var(--blanc);border:1px solid var(--bord);border-radius:var(--r);box-shadow:var(--shadow-m);width:100%;max-width:420px;overflow:hidden}
+.login-head{background:var(--bleu);padding:28px 32px;text-align:center}
+.login-head h2{font-family:'Playfair Display',serif;color:#fff;font-size:20px;margin-bottom:6px}
+.login-head p{color:rgba(255,255,255,.65);font-size:13px}
+.login-body{padding:28px 32px}
+.login-foot{padding:14px 32px;background:var(--gris);border-top:1px solid var(--bord);font-size:12px;color:var(--gris-t);text-align:center}
+
+/* ── DISCORD FIELD ── */
+.discord-field{display:flex;align-items:center;gap:8px;background:#5865F2;color:#fff;border-radius:var(--r);padding:10px 14px;margin-bottom:18px;font-size:13px}
+.discord-field svg{flex-shrink:0}
+
+/* ── MODAL ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--blanc);border-radius:var(--r);box-shadow:var(--shadow-m);width:100%;max-width:560px;max-height:90vh;overflow-y:auto}
+.modal-head{background:var(--bleu);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0}
+.modal-head h3{color:#fff;font-family:'Playfair Display',serif;font-size:17px}
+.modal-close{background:none;border:none;color:rgba(255,255,255,.7);font-size:22px;cursor:pointer;line-height:1;padding:0 4px}
+.modal-close:hover{color:#fff}
+.modal-body{padding:22px}
+.modal-foot{padding:14px 22px;border-top:1px solid var(--bord);display:flex;gap:10px;justify-content:flex-end}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--noir);color:#fff;padding:12px 18px;border-radius:var(--r);font-size:13.5px;border-left:4px solid var(--bleu);box-shadow:var(--shadow-m);transform:translateY(80px);opacity:0;transition:all .3s;z-index:9999;max-width:340px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{border-color:#22c55e}
+.toast.error{border-color:var(--rouge)}
+
+/* ── CASIER ── */
+.casier-entry{border:1px solid var(--bord);border-radius:var(--r);padding:14px 18px;margin-bottom:10px;background:var(--blanc)}
+.casier-entry .ce-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.casier-entry .ce-type{font-weight:600;font-size:14px}
+.casier-entry .ce-date{font-size:12px;color:var(--gris-t)}
+.casier-entry .ce-desc{font-size:13px;color:#374151;line-height:1.5}
+
+/* ── MSG ── */
+.msg-list{display:flex;flex-direction:column;gap:8px}
+.msg-item{background:var(--blanc);border:1px solid var(--bord);border-radius:var(--r);padding:14px 18px;cursor:pointer;transition:border-color .15s}
+.msg-item:hover{border-color:var(--bleu)}
+.msg-item.unread{border-left:3px solid var(--bleu)}
+.msg-item .mi-head{display:flex;justify-content:space-between;margin-bottom:4px}
+.msg-item .mi-from{font-weight:600;font-size:13.5px}
+.msg-item .mi-date{font-size:12px;color:var(--gris-t)}
+.msg-item .mi-subj{font-size:13px;color:var(--gris-t)}
+
+/* ── IFRAME FORM ── */
+.form-iframe-wrap{background:var(--blanc);border:1px solid var(--bord);border-radius:var(--r);overflow:hidden}
+.form-iframe-wrap iframe{width:100%;height:700px;border:none;display:block}
+.form-placeholder{padding:60px;text-align:center;color:var(--gris-t)}
+.form-placeholder .fp-icon{font-size:48px;margin-bottom:16px}
+.form-placeholder p{font-size:14px;margin-bottom:20px}
+
+/* ── DISCORD ID SEARCH ── */
+.search-bar{display:flex;gap:10px;margin-bottom:20px}
+.search-bar input{flex:1}
+
+/* ── ADMIN PANEL ── */
+.admin-section{margin-bottom:32px}
+.role-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--gris-b)}
+.role-row:last-child{border-bottom:none}
+.role-row .discord-id{font-family:monospace;font-size:12px;color:var(--gris-t);flex:1;word-break:break-all}
+.role-row .rr-name{font-weight:600;font-size:14px}
+.role-row .rr-actions{display:flex;gap:8px;flex-shrink:0}
+
+/* ── FOOTER ── */
+footer{background:var(--bleu);color:rgba(255,255,255,.55);font-size:12px;padding:18px 24px 18px 36px;margin-top:auto}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.footer-inner .rp-tag{background:rgba(237,41,57,.2);border:1px solid rgba(237,41,57,.4);color:#f9a8b0;padding:4px 10px;font-size:11px;font-weight:600;border-radius:2px}
+
+/* ── EMPTY STATE ── */
+.empty{padding:60px;text-align:center;color:var(--gris-t)}
+.empty-icon{font-size:40px;margin-bottom:14px}
+.empty p{font-size:14px}
+
+/* ── TABS inside page ── */
+.inner-tabs{display:flex;gap:0;border-bottom:1px solid var(--bord);margin-bottom:24px}
+.inner-tab{padding:10px 18px;font-size:13px;font-weight:500;color:var(--gris-t);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s}
+.inner-tab:hover{color:var(--bleu)}
+.inner-tab.active{color:var(--bleu);border-bottom-color:var(--bleu);font-weight:600}
+
+/* ── RESPONSIVE ── */
+@media(max-width:700px){
+  .header-inner{gap:12px}
+  .header-text h1{font-size:15px}
+  main{padding:20px 16px 20px 22px}
+  .tricolor-bar{width:4px}
+  nav{padding-left:22px}
+  .topbar{padding-left:22px}
+  header{padding-left:22px}
+  footer{padding-left:22px}
+  .grid-4{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Bande tricolore -->
+<div class="tricolor-bar"><span></span><span></span><span></span></div>
+
+<!-- Top bar -->
+<div class="topbar">
+  <span>République Française &nbsp;·&nbsp; <strong>Ministère de la Justice</strong> &nbsp;·&nbsp; Collectivité Territoriale de Martinique</span>
+  <div class="topbar-right">
+    <a href="#" id="top-discord-link">Serveur Discord</a>
+    <span id="top-niveau-label"></span>
+  </div>
+</div>
+
+<!-- Header -->
+<header>
+  <div class="header-inner">
+    <svg class="header-emblem" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="40" cy="40" r="38" fill="#002395" stroke="#ED2939" stroke-width="2"/>
+      <rect x="38" y="14" width="4" height="46" fill="#C9A84C"/>
+      <rect x="18" y="24" width="44" height="3" fill="#C9A84C"/>
+      <path d="M18 27 Q11 38 28 38 Q45 38 38 27Z" fill="#C9A84C" opacity=".85"/>
+      <path d="M42 27 Q35 38 52 38 Q69 38 62 27Z" fill="#C9A84C" opacity=".85"/>
+      <rect x="28" y="60" width="24" height="3" rx="1" fill="#C9A84C"/>
+      <text x="40" y="75" text-anchor="middle" fill="#C9A84C" font-size="7" font-family="serif" letter-spacing="1">JUSTICE</text>
+    </svg>
+    <div class="header-text">
+      <div class="rf-label">RÉPUBLIQUE FRANÇAISE</div>
+      <h1>Tribunal Judiciaire de Martinique</h1>
+      <p>Portail officiel des services judiciaires — Fort-de-France</p>
+    </div>
+    <div class="header-right">
+      <div class="user-badge" id="user-badge" style="display:none">
+        <div class="avatar" id="ub-avatar">?</div>
+        <div>
+          <div class="u-name" id="ub-name">—</div>
+          <div class="u-role" id="ub-role">—</div>
+        </div>
+        <div id="ub-chip"></div>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="btn-login" onclick="showLogin()">Connexion</button>
+      <button class="btn btn-danger btn-sm" id="btn-logout" style="display:none" onclick="doLogout()">Déconnexion</button>
+    </div>
+  </div>
+</header>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-inner" id="nav-bar">
+    <div class="nav-tab active" data-tab="accueil" onclick="goTab('accueil',this)">Accueil</div>
+    <div class="nav-tab" data-tab="plainte" onclick="goTab('plainte',this)">Dépôt de plainte</div>
+    <div class="nav-tab" data-tab="audiences" onclick="goTab('audiences',this)">Audiences</div>
+    <div class="nav-tab" data-tab="casier-pub" onclick="goTab('casier-pub',this)">Casier judiciaire</div>
+    <!-- o2+ -->
+    <div class="nav-tab locked" data-tab="messagerie" data-min="2" onclick="goTab('messagerie',this)">Messagerie ✉</div>
+    <!-- o3+ -->
+    <div class="nav-tab locked" data-tab="pv" data-min="3" onclick="goTab('pv',this)">Formulaires PV</div>
+    <div class="nav-tab locked" data-tab="casier-opj" data-min="3" onclick="goTab('casier-opj',this)">Casiers</div>
+    <!-- o4+ -->
+    <div class="nav-tab locked" data-tab="gestion-news" data-min="4" onclick="goTab('gestion-news',this)">Gérer actualités</div>
+    <!-- o6 -->
+    <div class="nav-tab locked" data-tab="admin" data-min="6" onclick="goTab('admin',this)">Administration</div>
+  </div>
+</nav>
+
+<!-- Main -->
+<main>
+<div class="content">
+
+<!-- ═══ ACCUEIL ═══ -->
+<div class="page active" id="page-accueil">
+  <div id="hero-section" style="background:linear-gradient(135deg,var(--bleu) 0%,#1a3a8f 100%);color:#fff;border-radius:var(--r);padding:36px 40px;margin-bottom:28px;position:relative;overflow:hidden">
+    <div style="position:absolute;inset:0;background:url(\"data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M20 20h20v20H20zM0 0h20v20H0z'/%3E%3C/g%3E%3C/svg%3E\");"></div>
+    <div style="position:relative;z-index:1;max-width:600px">
+      <div style="display:inline-block;border:1px solid rgba(237,41,57,.5);color:#f9a8b0;font-size:11px;font-weight:600;padding:3px 10px;margin-bottom:18px;letter-spacing:.08em">PORTAIL JUDICIAIRE OFFICIEL</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;line-height:1.25;margin-bottom:12px">Au service de la justice<br>en Martinique</h2>
+      <p style="color:rgba(255,255,255,.7);font-size:14px;line-height:1.7;margin-bottom:24px">Consultez les audiences, déposez une plainte ou accédez à votre espace personnel en vous connectant avec votre identifiant Discord.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-danger" onclick="goTab('plainte',null)">Déposer une plainte</button>
+        <button class="btn btn-ghost" style="color:#fff;border-color:rgba(255,255,255,.4)" onclick="goTab('audiences',null)">Voir les audiences</button>
+      </div>
+    </div>
+    <div style="position:absolute;right:40px;bottom:20px;opacity:.08;font-size:120px">⚖️</div>
+  </div>
+
+  <!-- Stats -->
+  <div class="grid-4" style="margin-bottom:28px">
+    <div class="stat-card"><div class="num" id="stat-audiences">…</div><div class="lbl">Audiences à venir</div></div>
+    <div class="stat-card"><div class="num" id="stat-news">…</div><div class="lbl">Actualités publiées</div></div>
+    <div class="stat-card"><div class="num" id="stat-magistrats">…</div><div class="lbl">Magistrats actifs</div></div>
+    <div class="stat-card rouge"><div class="num" id="stat-avocats">…</div><div class="lbl">Avocats au barreau</div></div>
+  </div>
+
+  <!-- Actualités -->
+  <div class="grid-2" style="align-items:start">
+    <div>
+      <div class="sec-head"><h2 class="sec-title">Actualités</h2></div>
+      <div id="news-list-pub" class="news-list">
+        <div class="loading"><div class="spinner"></div> Chargement…</div>
+      </div>
+    </div>
+    <div>
+      <div class="sec-head"><h2 class="sec-title">Prochaines audiences</h2></div>
+      <div id="aud-list-pub" class="aud-list">
+        <div class="loading"><div class="spinner"></div> Chargement…</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PLAINTE ═══ -->
+<div class="page" id="page-plainte">
+  <div class="sec-head"><h2 class="sec-title">Dépôt de plainte</h2></div>
+  <div class="card">
+    <div class="card-head"><h2>Formulaire de dépôt de plainte</h2></div>
+    <div class="card-body">
+      <div class="alert alert-info">📋 Le formulaire de plainte est géré via Google Forms. Votre plainte sera transmise au greffe sous 48h.</div>
+      <div class="form-iframe-wrap" id="form-plainte-wrap">
+        <div class="form-placeholder" id="form-plainte-placeholder">
+          <div class="fp-icon">📋</div>
+          <p>Le formulaire de dépôt de plainte n'a pas encore été configuré par l'administration.</p>
+          <p style="font-size:12px;margin-top:8px">Contactez un administrateur sur le serveur Discord.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ AUDIENCES ═══ -->
+<div class="page" id="page-audiences">
+  <div class="sec-head"><h2 class="sec-title">Audiences publiques</h2></div>
+  <div id="aud-list-full" class="aud-list">
+    <div class="loading"><div class="spinner"></div> Chargement…</div>
+  </div>
+</div>
+
+<!-- ═══ CASIER PUBLIC ═══ -->
+<div class="page" id="page-casier-pub">
+  <div class="sec-head"><h2 class="sec-title">Casier judiciaire</h2></div>
+  <div class="card">
+    <div class="card-head"><h2>Consulter mon casier judiciaire</h2></div>
+    <div class="card-body">
+      <div class="alert alert-info">Connectez-vous avec votre identifiant Discord pour consulter votre casier judiciaire.</div>
+      <div id="casier-pub-content">
+        <div class="empty"><div class="empty-icon">🔒</div><p>Connexion requise pour accéder à cette section.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MESSAGERIE ═══ -->
+<div class="page" id="page-messagerie">
+  <div class="sec-head">
+    <h2 class="sec-title">Messagerie interne</h2>
+    <button class="btn btn-primary btn-sm" onclick="openModal('modal-new-msg')">+ Nouveau message</button>
+  </div>
+  <div class="inner-tabs">
+    <div class="inner-tab active" onclick="showMsgTab('inbox',this)">Boîte de réception</div>
+    <div class="inner-tab" onclick="showMsgTab('sent',this)">Envoyés</div>
+  </div>
+  <div id="msg-inbox" class="msg-list"><div class="loading"><div class="spinner"></div> Chargement…</div></div>
+  <div id="msg-sent" class="msg-list" style="display:none"></div>
+</div>
+
+<!-- ═══ PV FORMULAIRES ═══ -->
+<div class="page" id="page-pv">
+  <div class="sec-head"><h2 class="sec-title">Formulaires de procédure</h2></div>
+  <div class="grid-3" style="margin-bottom:24px">
+    <div class="card" style="cursor:pointer" onclick="openPVForm('pv')">
+      <div class="card-body" style="text-align:center;padding:32px">
+        <div style="font-size:40px;margin-bottom:12px">📄</div>
+        <div style="font-weight:600;font-size:15px;margin-bottom:6px">PV de Mise en fourrière</div>
+        <div style="font-size:12px;color:var(--gris-t)">Procès-verbal officiel</div>
+      </div>
+    </div>
+    <div class="card" style="cursor:pointer" onclick="openPVForm('audition')">
+      <div class="card-body" style="text-align:center;padding:32px">
+        <div style="font-size:40px;margin-bottom:12px">🎙️</div>
+        <div style="font-weight:600;font-size:15px;margin-bottom:6px">PV d'Audition</div>
+        <div style="font-size:12px;color:var(--gris-t)">Procès-verbal d'audition</div>
+      </div>
+    </div>
+    <div class="card" style="cursor:pointer" onclick="openPVForm('pve')">
+      <div class="card-body" style="text-align:center;padding:32px">
+        <div style="font-size:40px;margin-bottom:12px">💻</div>
+        <div style="font-weight:600;font-size:15px;margin-bottom:6px">PV Électronique</div>
+        <div style="font-size:12px;color:var(--gris-t)">Procès-verbal numérique</div>
+      </div>
+    </div>
+  </div>
+  <div class="form-iframe-wrap" id="pv-form-container" style="display:none">
+    <div id="pv-form-content"></div>
+  </div>
+</div>
+
+<!-- ═══ CASIERS OPJ ═══ -->
+<div class="page" id="page-casier-opj">
+  <div class="sec-head"><h2 class="sec-title">Consultation des casiers judiciaires</h2></div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-body">
+      <div class="search-bar">
+        <input type="text" class="form-input" id="casier-search-input" placeholder="ID Discord (ex: 123456789012345678) ou pseudo"/>
+        <button class="btn btn-primary" onclick="searchCasier()">Rechercher</button>
+      </div>
+      <div id="casier-search-result"></div>
+    </div>
+  </div>
+  <!-- Si procureur o5+ : modifier -->
+  <div id="casier-modifier-section" style="display:none">
+    <div class="card">
+      <div class="card-head"><h2>Modifier / Ajouter une entrée</h2></div>
+      <div class="card-body">
+        <div class="form-group">
+          <label class="form-label">ID Discord de la personne</label>
+          <input type="text" class="form-input" id="casier-mod-id" placeholder="ID Discord"/>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Type d'infraction</label>
+            <select class="form-select" id="casier-mod-type">
+              <option>Contravention</option><option>Délit</option><option>Crime</option><option>Mention effacée</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Date</label>
+            <input type="date" class="form-input" id="casier-mod-date"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-textarea" id="casier-mod-desc" placeholder="Détails de l'infraction…"></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="addCasierEntry()">Ajouter l'entrée</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ GÉRER ACTUALITÉS ═══ -->
+<div class="page" id="page-gestion-news">
+  <div class="sec-head">
+    <h2 class="sec-title">Gestion des actualités & audiences</h2>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-primary btn-sm" onclick="openModal('modal-new-news')">+ Actualité</button>
+      <button class="btn btn-ghost btn-sm" onclick="openModal('modal-new-aud')">+ Audience</button>
+    </div>
+  </div>
+  <div class="inner-tabs">
+    <div class="inner-tab active" onclick="showGTab('gnews',this)">Actualités</div>
+    <div class="inner-tab" onclick="showGTab('gauds',this)">Audiences</div>
+  </div>
+  <div id="gnews-list"><div class="loading"><div class="spinner"></div></div></div>
+  <div id="gauds-list" style="display:none"><div class="loading"><div class="spinner"></div></div></div>
+</div>
+
+<!-- ═══ ADMINISTRATION ═══ -->
+<div class="page" id="page-admin">
+  <div class="sec-head"><h2 class="sec-title">Administration — Niveau O6</h2></div>
+  <div class="inner-tabs">
+    <div class="inner-tab active" onclick="showAdminTab('a-users',this)">Membres</div>
+    <div class="inner-tab" onclick="showAdminTab('a-admins',this)">Administrateurs</div>
+    <div class="inner-tab" onclick="showAdminTab('a-settings',this)">Paramètres</div>
+  </div>
+
+  <!-- MEMBRES -->
+  <div id="a-users">
+    <div class="sec-head" style="margin-bottom:14px">
+      <div></div>
+      <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-user')">+ Ajouter un membre</button>
+    </div>
+    <div class="card">
+      <div class="card-body" style="padding:0">
+        <div class="tbl-wrap">
+          <table id="users-table">
+            <thead><tr><th>ID Discord</th><th>Pseudo</th><th>Rôle</th><th>Titre</th><th>Niveau</th><th>Actions</th></tr></thead>
+            <tbody id="users-tbody"><tr><td colspan="6" style="text-align:center;padding:30px;color:var(--gris-t)"><div class="spinner" style="margin:0 auto"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMINS -->
+  <div id="a-admins" style="display:none">
+    <div class="card">
+      <div class="card-head"><h2>IDs Discord des administrateurs du site</h2></div>
+      <div class="card-body">
+        <div class="alert alert-info">Les administrateurs listés ci-dessous ont un accès de niveau O6 au portail.</div>
+        <div class="form-row" style="margin-bottom:16px">
+          <input type="text" class="form-input" id="new-admin-id" placeholder="ID Discord (18 chiffres)"/>
+          <button class="btn btn-primary" onclick="addAdmin()">Ajouter administrateur</button>
+        </div>
+        <div id="admins-list"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="a-settings" style="display:none">
+    <div class="card">
+      <div class="card-head"><h2>Paramètres du portail</h2></div>
+      <div class="card-body">
+        <div class="alert alert-info">Collez ici les URLs de vos formulaires Google Forms (lien de partage ou d'intégration).</div>
+        <div class="form-group">
+          <label class="form-label">🔗 Lien Discord du serveur</label>
+          <input type="text" class="form-input" id="s-discord" placeholder="https://discord.gg/..."/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">📋 Google Form — Dépôt de plainte</label>
+          <input type="text" class="form-input" id="s-form-plainte" placeholder="https://docs.google.com/forms/d/.../viewform?embedded=true"/>
+          <div class="form-hint">URL d'intégration du formulaire (paramètre ?embedded=true)</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">📄 Google Form — PV de mise en fourrière</label>
+          <input type="text" class="form-input" id="s-form-pv" placeholder="https://docs.google.com/forms/d/.../viewform?embedded=true"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">🎙️ Google Form — PV d'audition</label>
+          <input type="text" class="form-input" id="s-form-audition" placeholder="https://docs.google.com/forms/d/.../viewform?embedded=true"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">💻 Google Form — PV électronique</label>
+          <input type="text" class="form-input" id="s-form-pve" placeholder="https://docs.google.com/forms/d/.../viewform?embedded=true"/>
+        </div>
+        <button class="btn btn-primary" onclick="saveSettings()">Enregistrer les paramètres</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+</main>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <span>© 2026 — Tribunal Judiciaire de Martinique — République Française</span>
+    <span class="rp-tag">⚠️ SERVEUR ROLEPLAY — Usage fictif uniquement</span>
+    <span>Portail RP v3.0</span>
+  </div>
+</footer>
+
+<!-- ══════════ MODALS ══════════ -->
+
+<!-- LOGIN -->
+<div class="overlay" id="modal-login">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-head"><h3>Connexion au portail</h3><button class="modal-close" onclick="closeModal('modal-login')">×</button></div>
+    <div class="modal-body">
+      <div class="discord-field">
+        <svg width="20" height="15" viewBox="0 0 127.14 96.36" fill="white"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
+        Identification via identifiant Discord
+      </div>
+      <div class="form-group">
+        <label class="form-label">Votre identifiant Discord (18 chiffres)</label>
+        <input type="text" class="form-input" id="login-discord-id" placeholder="ex: 123456789012345678" maxlength="20"/>
+        <div class="form-hint">Votre ID Discord — Paramètres → Avancés → Mode développeur → clic droit sur votre nom</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Pseudo Discord</label>
+        <input type="text" class="form-input" id="login-pseudo" placeholder="VotrePseudo"/>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-neutral" onclick="closeModal('modal-login')">Annuler</button>
+      <button class="btn btn-primary" onclick="doLogin()">Se connecter</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOUVEAU MESSAGE -->
+<div class="overlay" id="modal-new-msg">
+  <div class="modal">
+    <div class="modal-head"><h3>Nouveau message</h3><button class="modal-close" onclick="closeModal('modal-new-msg')">×</button></div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Destinataire (ID Discord)</label>
+        <input type="text" class="form-input" id="msg-to" placeholder="ID Discord du destinataire"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Objet</label>
+        <input type="text" class="form-input" id="msg-subj" placeholder="Objet du message"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Message</label>
+        <textarea class="form-textarea" id="msg-body" rows="5" placeholder="Votre message…"></textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-neutral" onclick="closeModal('modal-new-msg')">Annuler</button>
+      <button class="btn btn-primary" onclick="sendMessage()">Envoyer</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOUVELLE ACTUALITÉ -->
+<div class="overlay" id="modal-new-news">
+  <div class="modal">
+    <div class="modal-head"><h3>Nouvelle actualité</h3><button class="modal-close" onclick="closeModal('modal-new-news')">×</button></div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Titre</label>
+        <input type="text" class="form-input" id="news-titre" placeholder="Titre de l'actualité"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contenu</label>
+        <textarea class="form-textarea" id="news-corps" rows="5" placeholder="Contenu de l'actualité…"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Statut</label>
+        <select class="form-select" id="news-statut">
+          <option value="1">Publié</option>
+          <option value="0">Brouillon</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-neutral" onclick="closeModal('modal-new-news')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveNews()">Publier</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOUVELLE AUDIENCE -->
+<div class="overlay" id="modal-new-aud">
+  <div class="modal">
+    <div class="modal-head"><h3>Nouvelle audience</h3><button class="modal-close" onclick="closeModal('modal-new-aud')">×</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Date</label>
+          <input type="date" class="form-input" id="aud-date"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Heure</label>
+          <input type="time" class="form-input" id="aud-heure"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Salle</label>
+        <input type="text" class="form-input" id="aud-salle" placeholder="ex: Salle 3"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Type d'audience</label>
+        <select class="form-select" id="aud-type">
+          <option>Correctionnel</option><option>Civil</option><option>Famille</option><option>Commerce</option><option>Assises</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Dossier / Affaire</label>
+        <input type="text" class="form-input" id="aud-dossier" placeholder="ex: 2026-CR-0047"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Président de séance</label>
+        <input type="text" class="form-input" id="aud-president" placeholder="Nom du magistrat"/>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-neutral" onclick="closeModal('modal-new-aud')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveAudience()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- AJOUTER MEMBRE -->
+<div class="overlay" id="modal-add-user">
+  <div class="modal">
+    <div class="modal-head"><h3>Ajouter / Modifier un membre</h3><button class="modal-close" onclick="closeModal('modal-add-user')">×</button></div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">ID Discord</label>
+        <input type="text" class="form-input" id="au-discord-id" placeholder="18 chiffres"/>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Pseudo Discord</label>
+          <input type="text" class="form-input" id="au-pseudo"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Prénom NOM (RP)</label>
+          <input type="text" class="form-input" id="au-nom" placeholder="ex: Jean DUPONT"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Rôle judiciaire</label>
+          <select class="form-select" id="au-role">
+            <option value="civil">Civil / Justiciable</option>
+            <option value="avocat">Avocat</option>
+            <option value="opj">OPJ</option>
+            <option value="juge">Juge</option>
+            <option value="procureur">Procureur</option>
+            <option value="admin">Administrateur</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Titre / Qualification</label>
+          <select class="form-select" id="au-titre">
+            <option value="">— Aucun —</option>
+            <option>Magistrat du Siège</option>
+            <option>Magistrat du Parquet</option>
+            <option>Avocat au Barreau</option>
+            <option>Procureur de la République</option>
+            <option>Juge d'instruction</option>
+            <option>Greffier en chef</option>
+            <option>OPJ — Brigadier</option>
+            <option>OPJ — Lieutenant</option>
+            <option>OPJ — Commandant</option>
+            <option>OPJ — Commissaire</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-neutral" onclick="closeModal('modal-add-user')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveUser()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- LIRE MESSAGE -->
+<div class="overlay" id="modal-read-msg">
+  <div class="modal">
+    <div class="modal-head"><h3 id="rm-title">Message</h3><button class="modal-close" onclick="closeModal('modal-read-msg')">×</button></div>
+    <div class="modal-body" id="rm-body"></div>
+    <div class="modal-foot"><button class="btn btn-neutral" onclick="closeModal('modal-read-msg')">Fermer</button></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ════════════════════════════════════════════════════
+//  CONSTANTES & ÉTAT
+// ════════════════════════════════════════════════════
+const ROLES = {
+  civil:     { label:'Civil / Justiciable', niveau:1, chip:'nivel-o1', emoji:'👤' },
+  avocat:    { label:'Avocat',              niveau:2, chip:'nivel-o2', emoji:'⚖️' },
+  opj:       { label:'OPJ',                niveau:3, chip:'nivel-o3', emoji:'🔍' },
+  juge:      { label:'Juge',               niveau:4, chip:'nivel-o4', emoji:'👨‍⚖️' },
+  procureur: { label:'Procureur',           niveau:5, chip:'nivel-o5', emoji:'🏛️' },
+  admin:     { label:'Administrateur',      niveau:6, chip:'nivel-o6', emoji:'🛡️' },
+};
+const NIVEAU_LABELS = ['','O1 — Civil','O2 — Avocat','O3 — OPJ','O4 — Juge','O5 — Procureur','O6 — Admin'];
+
+let db = null, user = null;
+let currentUser = null; // { discordId, pseudo, role, titre, niveau }
+let settings = {};
+let unsubs = [];
+
+// ════════════════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════════════════
+async function init() {
+  [db, user] = await Promise.all([
+    claude.use('db'),
+    claude.use('user'),
+  ]);
+
+  // Charger settings
+  if (db) {
+    db.doc('config/settings').onSnapshot(snap => {
+      if (snap.exists) {
+        settings = snap.data;
+        applySettings();
+      }
+    });
+
+    // Charger stats et contenus publics
+    loadPublicAudiences();
+    loadPublicNews();
+    loadStats();
+  }
+
+  // Vérifier session locale
+  const savedId = localStorage.getItem('jmtq_discord_id');
+  const savedPseudo = localStorage.getItem('jmtq_pseudo');
+  if (savedId && savedPseudo && db) {
+    await loginWithId(savedId, savedPseudo, false);
+  }
+}
+
+// ════════════════════════════════════════════════════
+//  SETTINGS
+// ════════════════════════════════════════════════════
+function applySettings() {
+  // Lien Discord
+  if (settings.discord) {
+    document.getElementById('top-discord-link').href = settings.discord;
+  }
+  // Forms
+  applyForm('form-plainte-wrap', 'form-plainte-placeholder', settings.formPlainte);
+  // Input fields dans admin
+  ['discord','formPlainte','formPv','formAudition','formPve'].forEach(k => {
+    const el = document.getElementById('s-' + k.toLowerCase().replace(/([A-Z])/g, m => '-'+m.toLowerCase()));
+    if (el && settings[k]) el.value = settings[k];
+  });
+  if (document.getElementById('s-discord') && settings.discord)
+    document.getElementById('s-discord').value = settings.discord;
+  if (document.getElementById('s-form-plainte') && settings.formPlainte)
+    document.getElementById('s-form-plainte').value = settings.formPlainte;
+  if (document.getElementById('s-form-pv') && settings.formPv)
+    document.getElementById('s-form-pv').value = settings.formPv;
+  if (document.getElementById('s-form-audition') && settings.formAudition)
+    document.getElementById('s-form-audition').value = settings.formAudition;
+  if (document.getElementById('s-form-pve') && settings.formPve)
+    document.getElementById('s-form-pve').value = settings.formPve;
+}
+
+function applyForm(wrapId, placeholderId, url) {
+  const wrap = document.getElementById(wrapId);
+  const ph = document.getElementById(placeholderId);
+  if (!wrap) return;
+  if (url) {
+    if (ph) ph.style.display = 'none';
+    let iframe = wrap.querySelector('iframe');
+    if (!iframe) {
+      iframe = document.createElement('iframe');
+      iframe.style.cssText = 'width:100%;height:700px;border:none;display:block';
+      wrap.appendChild(iframe);
+    }
+    iframe.src = url;
+  } else {
+    if (ph) ph.style.display = '';
+  }
+}
+
+async function saveSettings() {
+  if (!db) return;
+  const data = {
+    discord:      document.getElementById('s-discord').value.trim(),
+    formPlainte:  document.getElementById('s-form-plainte').value.trim(),
+    formPv:       document.getElementById('s-form-pv').value.trim(),
+    formAudition: document.getElementById('s-form-audition').value.trim(),
+    formPve:      document.getElementById('s-form-pve').value.trim(),
+  };
+  try {
+    await db.doc('config/settings').set(data);
+    settings = data;
+    applySettings();
+    toast('Paramètres enregistrés', 'success');
+  } catch(e) { toast('Erreur: ' + e.message, 'error'); }
+}
+
+// ════════════════════════════════════════════════════
+//  AUTH
+// ════════════════════════════════════════════════════
+function showLogin() { openModal('modal-login'); }
+
+async function doLogin() {
+  const discordId = document.getElementById('login-discord-id').value.trim();
+  const pseudo    = document.getElementById('login-pseudo').value.trim();
+  if (!discordId || !pseudo) { toast('Remplissez tous les champs','error'); return; }
+  if (!/^\d{15,20}$/.test(discordId)) { toast('ID Discord invalide (15-20 chiffres)','error'); return; }
+  closeModal('modal-login');
+  await loginWithId(discordId, pseudo, true);
+}
+
+async function loginWithId(discordId, pseudo, saveLocal) {
+  if (!db) { toast('Base de données indisponible','error'); return; }
+  try {
+    // Vérifier si admin hardcodé
+    const adminSnap = await db.doc('config/admins').get();
+    const adminIds = adminSnap.exists ? (adminSnap.data.ids || []) : [];
+
+    // Charger ou créer user
+    const snap = await db.doc('users/' + discordId).get();
+    let role = 'civil';
+    let titre = '';
+    let nom = pseudo;
+
+    if (snap.exists) {
+      role  = snap.data.role  || 'civil';
+      titre = snap.data.titre || '';
+      nom   = snap.data.nom   || snap.data.pseudo || pseudo;
+      // Mettre à jour le pseudo si nécessaire
+      if (snap.data.pseudo !== pseudo) {
+        await db.doc('users/' + discordId).update({ pseudo });
+      }
+    } else {
+      // Créer le profil
+      await db.doc('users/' + discordId).set({
+        discordId, pseudo, nom: pseudo, role:'civil', titre:'', createdAt: Date.now()
+      });
+    }
+
+    // Override admin si dans la liste
+    if (adminIds.includes(discordId)) role = 'admin';
+
+    const cfg = ROLES[role] || ROLES.civil;
+    currentUser = { discordId, pseudo, nom, role, titre, niveau: cfg.niveau };
+
+    if (saveLocal) {
+      localStorage.setItem('jmtq_discord_id', discordId);
+      localStorage.setItem('jmtq_pseudo', pseudo);
+    }
+
+    updateUI();
+    toast('Connecté en tant que ' + nom, 'success');
+  } catch(e) {
+    toast('Erreur de connexion: ' + e.message, 'error');
+  }
+}
+
+function doLogout() {
+  currentUser = null;
+  localStorage.removeItem('jmtq_discord_id');
+  localStorage.removeItem('jmtq_pseudo');
+  updateUI();
+  goTab('accueil', null);
+  toast('Déconnecté', 'success');
+}
+
+// ════════════════════════════════════════════════════
+//  UI UPDATE
+// ════════════════════════════════════════════════════
+function updateUI() {
+  const loggedIn = !!currentUser;
+  document.getElementById('btn-login').style.display  = loggedIn ? 'none' : '';
+  document.getElementById('btn-logout').style.display = loggedIn ? '' : 'none';
+  const badge = document.getElementById('user-badge');
+
+  if (loggedIn) {
+    const cfg = ROLES[currentUser.role] || ROLES.civil;
+    badge.style.display = 'flex';
+    document.getElementById('ub-avatar').textContent = (currentUser.nom || currentUser.pseudo || '?')[0].toUpperCase();
+    document.getElementById('ub-name').textContent = currentUser.nom || currentUser.pseudo;
+    document.getElementById('ub-role').textContent = (currentUser.titre || cfg.label);
+    document.getElementById('ub-chip').innerHTML = `<span class="nivel-chip ${cfg.chip}">${cfg.emoji} ${NIVEAU_LABELS[currentUser.niveau]}</span>`;
+    document.getElementById('top-niveau-label').innerHTML = `<span class="nivel-chip ${cfg.chip}" style="font-size:11px">${cfg.emoji} ${cfg.label}</span>`;
+
+    // Casier public
+    if (currentUser.niveau >= 1) loadCasierPub();
+    // Casier modifier (o5+)
+    const modSection = document.getElementById('casier-modifier-section');
+    if (modSection) modSection.style.display = currentUser.niveau >= 5 ? 'block' : 'none';
+  } else {
+    badge.style.display = 'none';
+    document.getElementById('top-niveau-label').innerHTML = '';
+  }
+
+  // Nav tabs
+  document.querySelectorAll('.nav-tab[data-min]').forEach(tab => {
+    const min = parseInt(tab.dataset.min);
+    const niveau = currentUser ? currentUser.niveau : 0;
+    if (niveau >= min) {
+      tab.classList.remove('locked');
+    } else {
+      tab.classList.add('locked');
+    }
+  });
+}
+
+// ════════════════════════════════════════════════════
+//  NAVIGATION
+// ════════════════════════════════════════════════════
+function goTab(tabId, el) {
+  const min = el ? parseInt(el.dataset.min || '0') : 0;
+  const niveau = currentUser ? currentUser.niveau : 0;
+  if (min > 0 && niveau < min) {
+    toast('Accès réservé — Niveau ' + NIVEAU_LABELS[min], 'error');
+    return;
+  }
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + tabId)?.classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  else {
+    document.querySelectorAll('.nav-tab').forEach(t => {
+      if (t.dataset.tab === tabId) t.classList.add('active');
+    });
+  }
+  // Charger les données de la page
+  onPageEnter(tabId);
+}
+
+function onPageEnter(tabId) {
+  if (tabId === 'messagerie' && currentUser) { loadMessages(); }
+  if (tabId === 'gestion-news' && currentUser) { loadGestionNews(); loadGestionAuds(); }
+  if (tabId === 'admin' && currentUser?.niveau >= 6) { loadUsers(); loadAdmins(); }
+  if (tabId === 'casier-pub' && currentUser) { loadCasierPub(); }
+}
+
+// ════════════════════════════════════════════════════
+//  ACTUALITÉS
+// ════════════════════════════════════════════════════
+function loadPublicNews() {
+  if (!db) return;
+  const coll = db.collection('news').where('publie','==',1).orderBy('createdAt','desc').limit(6);
+  coll.onSnapshot(snap => {
+    document.getElementById('stat-news').textContent = snap.docs.filter(d => d.data.publie).length;
+    const el = document.getElementById('news-list-pub');
+    if (!snap.docs.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📰</div><p>Aucune actualité publiée.</p></div>'; return; }
+    el.innerHTML = snap.docs.map(d => renderNewsCard(d.id, d.data)).join('');
+  }, () => {});
+}
+
+function renderNewsCard(id, n, admin=false) {
+  const date = new Date(n.createdAt || Date.now()).toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});
+  const actions = admin ? `<div style="display:flex;gap:6px;margin-top:10px"><button class="btn btn-ghost btn-sm" onclick="editNews('${id}')">Modifier</button><button class="btn btn-danger btn-sm" onclick="deleteNews('${id}')">Supprimer</button></div>` : '';
+  const brouillon = n.publie == 0 ? '<span class="badge badge-gris" style="margin-left:8px">Brouillon</span>' : '';
+  return `<div class="news-item"><div class="news-title">${esc(n.titre)}${brouillon}</div><div class="news-meta">📅 ${date} &nbsp;·&nbsp; ${esc(n.auteur||'Greffe du tribunal')}</div><div class="news-body">${esc(n.corps)}</div>${actions}</div>`;
+}
+
+async function saveNews(editId=null) {
+  if (!db || !currentUser || currentUser.niveau < 4) return;
+  const titre = document.getElementById('news-titre').value.trim();
+  const corps = document.getElementById('news-corps').value.trim();
+  const publie = parseInt(document.getElementById('news-statut').value);
+  if (!titre || !corps) { toast('Remplissez tous les champs','error'); return; }
+  const data = { titre, corps, publie, auteur: currentUser.nom || currentUser.pseudo, createdAt: Date.now() };
+  try {
+    if (editId) await db.doc('news/'+editId).set(data);
+    else await db.collection('news').add(data);
+    closeModal('modal-new-news');
+    toast('Actualité enregistrée', 'success');
+    document.getElementById('news-titre').value='';
+    document.getElementById('news-corps').value='';
+  } catch(e) { toast('Erreur: '+e.message,'error'); }
+}
+
+async function deleteNews(id) {
+  if (!confirm('Supprimer cette actualité ?')) return;
+  try { await db.doc('news/'+id).delete(); toast('Supprimée','success'); } catch(e) { toast('Erreur','error'); }
+}
+
+function editNews(id) {
+  // On ouvre le modal avec les données existantes
+  db.doc('news/'+id).get().then(snap => {
+    if (!snap.exists) return;
+    document.getElementById('news-titre').value = snap.data.titre || '';
+    document.getElementById('news-corps').value = snap.data.corps || '';
+    document.getElementById('news-statut').value = snap.data.publie ?? 1;
+    // Remplacer temporairement le bouton
+    const btn = document.querySelector('#modal-new-news .modal-foot .btn-primary');
+    btn.onclick = () => saveNews(id);
+    openModal('modal-new-news');
+    // Remettre après fermeture
+    setTimeout(() => { btn.onclick = () => saveNews(null); }, 100);
+  });
+}
+
+function loadGestionNews() {
+  if (!db) return;
+  const el = document.getElementById('gnews-list');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  db.collection('news').orderBy('createdAt','desc').onSnapshot(snap => {
+    if (!snap.docs.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📰</div><p>Aucune actualité.</p></div>'; return; }
+    el.innerHTML = snap.docs.map(d => renderNewsCard(d.id, d.data, true)).join('');
+  }, () => {});
+}
+
+// ════════════════════════════════════════════════════
+//  AUDIENCES
+// ════════════════════════════════════════════════════
+function renderAudCard(d, admin=false) {
+  const dt = new Date(d.dateTs || Date.now());
+  const day = dt.toLocaleDateString('fr-FR',{day:'2-digit'});
+  const mon = dt.toLocaleDateString('fr-FR',{month:'short',year:'numeric'});
+  const actions = admin ? `<div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-danger btn-sm" onclick="deleteAud('${d._id}')">Supprimer</button></div>` : '';
+  const types = { Correctionnel:'badge-rouge', Civil:'badge-bleu', Famille:'badge-or', Commerce:'badge-vert', Assises:'badge-gris' };
+  return `<div class="aud-item">
+    <div class="aud-date"><div class="day">${day}</div><div class="mon">${mon}</div></div>
+    <div class="aud-info" style="flex:1">
+      <h4>${esc(d.dossier||'—')} &nbsp;<span class="badge ${types[d.type]||'badge-gris'}">${esc(d.type||'')}</span></h4>
+      <p>⏰ ${esc(d.heure||'—')} &nbsp;·&nbsp; 🏛️ ${esc(d.salle||'—')} &nbsp;·&nbsp; 👨‍⚖️ ${esc(d.president||'—')}</p>
+      ${actions}
+    </div>
+  </div>`;
+}
+
+function loadPublicAudiences() {
+  if (!db) return;
+  const now = Date.now();
+  db.collection('audiences').where('dateTs','>',now).orderBy('dateTs','asc').limit(6).onSnapshot(snap => {
+    document.getElementById('stat-audiences').textContent = snap.docs.length;
+    const pub = document.getElementById('aud-list-pub');
+    const full = document.getElementById('aud-list-full');
+    const html = snap.docs.length
+      ? snap.docs.map(d => renderAudCard({...d.data, _id:d.id})).join('')
+      : '<div class="empty"><div class="empty-icon">📅</div><p>Aucune audience planifiée.</p></div>';
+    pub.innerHTML = html;
+    full.innerHTML = html;
+  }, () => {});
+}
+
+async function saveAudience() {
+  if (!db || !currentUser || currentUser.niveau < 4) return;
+  const date = document.getElementById('aud-date').value;
+  const heure = document.getElementById('aud-heure').value;
+  const salle = document.getElementById('aud-salle').value.trim();
+  const type = document.getElementById('aud-type').value;
+  const dossier = document.getElementById('aud-dossier').value.trim();
+  const president = document.getElementById('aud-president').value.trim();
+  if (!date || !heure) { toast('Date et heure requises','error'); return; }
+  const dateTs = new Date(date+'T'+heure).getTime();
+  try {
+    await db.collection('audiences').add({ dateTs, heure, salle, type, dossier, president, createdAt:Date.now() });
+    closeModal('modal-new-aud');
+    toast('Audience enregistrée','success');
+  } catch(e) { toast('Erreur: '+e.message,'error'); }
+}
+
+async function deleteAud(id) {
+  if (!confirm('Supprimer cette audience ?')) return;
+  try { await db.doc('audiences/'+id).delete(); toast('Supprimée','success'); } catch(e) { toast('Erreur','error'); }
+}
+
+function loadGestionAuds() {
+  if (!db) return;
+  const el = document.getElementById('gauds-list');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  db.collection('audiences').orderBy('dateTs','asc').onSnapshot(snap => {
+    if (!snap.docs.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📅</div><p>Aucune audience.</p></div>'; return; }
+    el.innerHTML = snap.docs.map(d => renderAudCard({...d.data,_id:d.id}, true)).join('');
+  }, () => {});
+}
+
+// ════════════════════════════════════════════════════
+//  STATS
+// ════════════════════════════════════════════════════
+function loadStats() {
+  if (!db) return;
+  db.collection('users').onSnapshot(snap => {
+    const magistrats = snap.docs.filter(d => ['juge','procureur'].includes(d.data.role)).length;
+    const avocats = snap.docs.filter(d => d.data.role === 'avocat').length;
+    document.getElementById('stat-magistrats').textContent = magistrats;
+    document.getElementById('stat-avocats').textContent = avocats;
+  }, () => {});
+}
+
+// ════════════════════════════════════════════════════
+//  CASIER JUDICIAIRE
+// ════════════════════════════════════════════════════
+async function loadCasierPub() {
+  if (!db || !currentUser) return;
+  const el = document.getElementById('casier-pub-content');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement…</div>';
+  try {
+    const snap = await db.doc('casiers/' + currentUser.discordId).get();
+    if (!snap.exists || !snap.data.items || !snap.data.items.length) {
+      el.innerHTML = '<div class="empty"><div class="empty-icon">✅</div><p>Aucune inscription à votre casier judiciaire.</p></div>';
+    } else {
+      el.innerHTML = '<div class="alert alert-info" style="margin-bottom:16px">Casier judiciaire de <strong>' + esc(currentUser.nom) + '</strong></div>' +
+        snap.data.items.map(item => renderCasierEntry(item)).join('');
+    }
+  } catch(e) {
+    el.innerHTML = '<div class="alert alert-danger">Impossible de charger le casier.</div>';
+  }
+}
+
+function renderCasierEntry(item) {
+  const cols = { Contravention:'badge-or', Délit:'badge-rouge', Crime:'badge-rouge', 'Mention effacée':'badge-gris' };
+  return `<div class="casier-entry">
+    <div class="ce-head">
+      <span class="ce-type"><span class="badge ${cols[item.type]||'badge-gris'}">${esc(item.type||'')}</span> &nbsp;${esc(item.description?.slice(0,60)||'')}</span>
+      <span class="ce-date">${esc(item.date||'')}</span>
+    </div>
+    <div class="ce-desc">${esc(item.description||'')}</div>
+    <div style="font-size:11px;color:var(--gris-t);margin-top:6px">Par : ${esc(item.auteur||'—')}</div>
+  </div>`;
+}
+
+async function searchCasier() {
+  if (!db || !currentUser || currentUser.niveau < 3) { toast('Accès insuffisant','error'); return; }
+  const query = document.getElementById('casier-search-input').value.trim();
+  const el = document.getElementById('casier-search-result');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  // Chercher par ID ou pseudo
+  let discordId = query;
+  if (!/^\d{15,20}$/.test(query)) {
+    // Chercher par pseudo
+    const usersSnap = await db.collection('users').get();
+    const found = usersSnap.docs.find(d => (d.data.pseudo||'').toLowerCase() === query.toLowerCase());
+    if (!found) { el.innerHTML = '<div class="alert alert-danger">Utilisateur introuvable.</div>'; return; }
+    discordId = found.id;
+  }
+  const snap = await db.doc('casiers/'+discordId).get();
+  const userSnap = await db.doc('users/'+discordId).get();
+  const nom = userSnap.exists ? (userSnap.data.nom || userSnap.data.pseudo || discordId) : discordId;
+  if (!snap.exists || !snap.data.items || !snap.data.items.length) {
+    el.innerHTML = `<div class="alert alert-success">✅ Casier vierge pour <strong>${esc(nom)}</strong> (${discordId})</div>`;
+  } else {
+    el.innerHTML = `<div class="alert alert-info">Casier judiciaire de <strong>${esc(nom)}</strong> — ${snap.data.items.length} inscription(s)</div>` +
+      snap.data.items.map(item => renderCasierEntry(item)).join('');
+  }
+  if (currentUser.niveau >= 5) {
+    document.getElementById('casier-mod-id').value = discordId;
+  }
+}
+
+async function addCasierEntry() {
+  if (!db || !currentUser || currentUser.niveau < 5) { toast('Accès insuffisant','error'); return; }
+  const id    = document.getElementById('casier-mod-id').value.trim();
+  const type  = document.getElementById('casier-mod-type').value;
+  const date  = document.getElementById('casier-mod-date').value;
+  const desc  = document.getElementById('casier-mod-desc').value.trim();
+  if (!id || !desc || !date) { toast('Remplissez tous les champs','error'); return; }
+  const snap = await db.doc('casiers/'+id).get();
+  const existing = snap.exists ? (snap.data.items || []) : [];
+  const newEntry = { type, date, description:desc, auteur: currentUser.nom||currentUser.pseudo, addedAt: Date.now() };
+  try {
+    await db.doc('casiers/'+id).set({ items: [...existing, newEntry] });
+    toast('Entrée ajoutée au casier','success');
+    document.getElementById('casier-mod-desc').value='';
+    document.getElementById('casier-mod-date').value='';
+  } catch(e) { toast('Erreur: '+e.message,'error'); }
+}
+
+// ════════════════════════════════════════════════════
+//  MESSAGERIE
+// ════════════════════════════════════════════════════
+let msgUnsubs = [];
+
+function loadMessages() {
+  if (!db || !currentUser) return;
+  msgUnsubs.forEach(u => u());
+  msgUnsubs = [];
+
+  // Inbox
+  const inbox = document.getElementById('msg-inbox');
+  inbox.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  const u1 = db.collection('messages').where('to','==',currentUser.discordId).orderBy('createdAt','desc').limit(50).onSnapshot(snap => {
+    if (!snap.docs.length) { inbox.innerHTML = '<div class="empty"><div class="empty-icon">📭</div><p>Aucun message reçu.</p></div>'; return; }
+    inbox.innerHTML = snap.docs.map(d => renderMsgItem(d.id, d.data, 'inbox')).join('');
+  }, () => {});
+  msgUnsubs.push(u1);
+
+  // Sent
+  const sent = document.getElementById('msg-sent');
+  const u2 = db.collection('messages').where('from','==',currentUser.discordId).orderBy('createdAt','desc').limit(50).onSnapshot(snap => {
+    if (!snap.docs.length) { sent.innerHTML = '<div class="empty"><div class="empty-icon">📤</div><p>Aucun message envoyé.</p></div>'; return; }
+    sent.innerHTML = snap.docs.map(d => renderMsgItem(d.id, d.data, 'sent')).join('');
+  }, () => {});
+  msgUnsubs.push(u2);
+}
+
+function renderMsgItem(id, m, box) {
+  const unread = box === 'inbox' && !m.lu ? ' unread' : '';
+  const date = new Date(m.createdAt||Date.now()).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  const who = box === 'inbox' ? ('De : ' + esc(m.fromPseudo||m.from)) : ('À : ' + esc(m.toPseudo||m.to));
+  return `<div class="msg-item${unread}" onclick="readMessage('${id}','${box}')">
+    <div class="mi-head"><span class="mi-from">${who}</span><span class="mi-date">${date}</span></div>
+    <div class="mi-subj">${esc(m.objet||'(sans objet)')}</div>
+  </div>`;
+}
+
+async function readMessage(id, box) {
+  const snap = await db.doc('messages/'+id).get();
+  if (!snap.exists) return;
+  const m = snap.data;
+  const date = new Date(m.createdAt||Date.now()).toLocaleDateString('fr-FR',{dateStyle:'full',timeStyle:'short'});
+  document.getElementById('rm-title').textContent = m.objet || '(sans objet)';
+  document.getElementById('rm-body').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;font-size:13px;color:var(--gris-t)">
+      <div><strong>De :</strong> ${esc(m.fromPseudo||m.from)}</div>
+      <div><strong>À :</strong> ${esc(m.toPseudo||m.to)}</div>
+      <div><strong>Date :</strong> ${date}</div>
+    </div>
+    <div style="font-size:14px;line-height:1.7;white-space:pre-wrap">${esc(m.corps||'')}</div>`;
+  // Marquer comme lu
+  if (box === 'inbox' && !m.lu) {
+    db.doc('messages/'+id).update({ lu: true }).catch(()=>{});
+  }
+  openModal('modal-read-msg');
+}
+
+async function sendMessage() {
+  if (!db || !currentUser) return;
+  const to    = document.getElementById('msg-to').value.trim();
+  const objet = document.getElementById('msg-subj').value.trim();
+  const corps = document.getElementById('msg-body').value.trim();
+  if (!to || !objet || !corps) { toast('Remplissez tous les champs','error'); return; }
+  // Vérifier si destinataire existe
+  const toSnap = await db.doc('users/'+to).get();
+  const toPseudo = toSnap.exists ? (toSnap.data.pseudo || to) : to;
+  try {
+    await db.collection('messages').add({
+      from: currentUser.discordId, fromPseudo: currentUser.pseudo,
+      to, toPseudo, objet, corps, lu: false, createdAt: Date.now()
+    });
+    closeModal('modal-new-msg');
+    document.getElementById('msg-to').value='';
+    document.getElementById('msg-subj').value='';
+    document.getElementById('msg-body').value='';
+    toast('Message envoyé','success');
+  } catch(e) { toast('Erreur: '+e.message,'error'); }
+}
+
+function showMsgTab(tab, el) {
+  document.getElementById('msg-inbox').style.display = tab==='inbox' ? 'flex' : 'none';
+  document.getElementById('msg-sent').style.display = tab==='sent' ? 'flex' : 'none';
+  document.querySelectorAll('#page-messagerie .inner-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ════════════════════════════════════════════════════
+//  PV FORMULAIRES
+// ════════════════════════════════════════════════════
+function openPVForm(type) {
+  const urlMap = { pv: settings.formPv, audition: settings.formAudition, pve: settings.formPve };
+  const url = urlMap[type];
+  const wrap = document.getElementById('pv-form-container');
+  const content = document.getElementById('pv-form-content');
+  wrap.style.display = 'block';
+  if (url) {
+    content.innerHTML = `<iframe src="${url}" style="width:100%;height:700px;border:none;display:block"></iframe>`;
+  } else {
+    const names = { pv:'PV de Mise en fourrière', audition:"PV d'Audition", pve:'PV Électronique' };
+    content.innerHTML = `<div class="form-placeholder"><div class="fp-icon">📋</div><p>Le formulaire "${names[type]}" n'a pas encore été configuré.</p><p style="font-size:12px;margin-top:8px">Contactez un administrateur O6 pour l'activer.</p></div>`;
+  }
+  wrap.scrollIntoView({behavior:'smooth'});
+}
+
+// ════════════════════════════════════════════════════
+//  ADMIN — MEMBRES
+// ════════════════════════════════════════════════════
+function loadUsers() {
+  if (!db || !currentUser || currentUser.niveau < 6) return;
+  const tbody = document.getElementById('users-tbody');
+  db.collection('users').orderBy('createdAt','desc').onSnapshot(snap => {
+    if (!snap.docs.length) { tbody.innerHTML='<tr><td colspan="6" class="empty">Aucun membre.</td></tr>'; return; }
+    tbody.innerHTML = snap.docs.map(d => {
+      const u = d.data;
+      const cfg = ROLES[u.role] || ROLES.civil;
+      return `<tr>
+        <td><code style="font-size:11px">${esc(d.id)}</code></td>
+        <td>${esc(u.pseudo||'—')}</td>
+        <td><span class="nivel-chip ${cfg.chip}">${cfg.emoji} ${cfg.label}</span></td>
+        <td>${esc(u.titre||'—')}</td>
+        <td>${NIVEAU_LABELS[cfg.niveau]||'—'}</td>
+        <td><button class="btn btn-ghost btn-sm" onclick="prefillEditUser('${d.id}')">Modifier</button></td>
+      </tr>`;
+    }).join('');
+  }, () => {});
+}
+
+function prefillEditUser(discordId) {
+  db.doc('users/'+discordId).get().then(snap => {
+    if (!snap.exists) return;
+    const u = snap.data;
+    document.getElementById('au-discord-id').value = discordId;
+    document.getElementById('au-discord-id').readOnly = true;
+    document.getElementById('au-pseudo').value = u.pseudo || '';
+    document.getElementById('au-nom').value = u.nom || '';
+    document.getElementById('au-role').value = u.role || 'civil';
+    document.getElementById('au-titre').value = u.titre || '';
+    openModal('modal-add-user');
+  });
+}
+
+async function saveUser() {
+  if (!db || !currentUser || currentUser.niveau < 6) { toast('Accès insuffisant','error'); return; }
+  const discordId = document.getElementById('au-discord-id').value.trim();
+  const pseudo    = document.getElementById('au-pseudo').value.trim();
+  const nom       = document.getElementById('au-nom').value.trim();
+  const role      = document.getElementById('au-role').value;
+  const titre     = document.getElementById('au-titre').value;
+  if (!discordId || !pseudo) { toast('ID et pseudo requis','error'); return; }
+  if (!/^\d{15,20}$/.test(discordId)) { toast('ID Discord invalide','error'); return; }
+  try {
+    const snap = await db.doc('users/'+discordId).get();
+    if (snap.exists) {
+      await db.doc('users/'+discordId).update({ pseudo, nom:nom||pseudo, role, titre });
+    } else {
+      await db.doc('users/'+discordId).set({ discordId, pseudo, nom:nom||pseudo, role, titre, createdAt:Date.now() });
+    }
+    closeModal('modal-add-user');
+    document.getElementById('au-discord-id').readOnly = false;
+    toast('Membre enregistré','success');
+    // Si c'est l'utilisateur courant, mettre à jour
+    if (currentUser && currentUser.discordId === discordId) {
+      currentUser.role = role; currentUser.titre = titre; currentUser.nom = nom||pseudo;
+      currentUser.niveau = (ROLES[role]||ROLES.civil).niveau;
+      updateUI();
+    }
+  } catch(e) { toast('Erreur: '+e.message,'error'); }
+}
+
+// ════════════════════════════════════════════════════
+//  ADMIN — ADMINS
+// ════════════════════════════════════════════════════
+function loadAdmins() {
+  if (!db) return;
+  db.doc('config/admins').onSnapshot(snap => {
+    const ids = snap.exists ? (snap.data.ids || []) : [];
+    const el = document.getElementById('admins-list');
+    if (!ids.length) { el.innerHTML='<div class="empty" style="padding:30px 0"><p>Aucun administrateur configuré.</p></div>'; return; }
+    el.innerHTML = ids.map(id => `
+      <div class="role-row">
+        <span class="discord-id">🛡️ ${id}</span>
+        <button class="btn btn-danger btn-sm" onclick="removeAdmin('${id}')">Retirer</button>
+      </div>`).join('');
+  }, () => {});
+}
+
+async function addAdmin() {
+  if (!db || !currentUser || currentUser.niveau < 6) { toast('Accès insuffisant','error'); return; }
+  const id = document.getElementById('new-admin-id').value.trim();
+  if (!/^\d{15,20}$/.test(id)) { toast('ID Discord invalide','error'); return; }
+  const snap = await db.doc('config/admins').get();
+  const ids = snap.exists ? (snap.data.ids || []) : [];
+  if (ids.includes(id)) { toast('Déjà administrateur','error'); return; }
+  try {
+    await db.doc('config/admins').set({ ids: [...ids, id] });
+    document.getElementById('new-admin-id').value='';
+    toast('Administrateur ajouté','success');
+  } catch(e) { toast('Erreur: '+e.message,'error'); }
+}
+
+async function removeAdmin(id) {
+  if (!db || !currentUser || currentUser.niveau < 6) return;
+  if (!confirm('Retirer cet administrateur ?')) return;
+  const snap = await db.doc('config/admins').get();
+  const ids = snap.exists ? (snap.data.ids || []) : [];
+  try {
+    await db.doc('config/admins').set({ ids: ids.filter(x => x !== id) });
+    toast('Administrateur retiré','success');
+  } catch(e) { toast('Erreur: '+e.message,'error'); }
+}
+
+// ════════════════════════════════════════════════════
+//  INNER TAB HELPERS
+// ════════════════════════════════════════════════════
+function showGTab(tab, el) {
+  document.getElementById('gnews-list').style.display = tab==='gnews' ? 'block' : 'none';
+  document.getElementById('gauds-list').style.display = tab==='gauds' ? 'block' : 'none';
+  document.querySelectorAll('#page-gestion-news .inner-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+function showAdminTab(tab, el) {
+  ['a-users','a-admins','a-settings'].forEach(id => document.getElementById(id).style.display = id===tab ? 'block' : 'none');
+  document.querySelectorAll('#page-admin .inner-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  if (tab==='a-admins') loadAdmins();
+  if (tab==='a-settings') applySettings();
+}
+
+// ════════════════════════════════════════════════════
+//  UTILS
+// ════════════════════════════════════════════════════
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+let toastTimer;
+function toast(msg, type='success') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+});
+
+// ════════════════════════════════════════════════════
+//  BOOT
+// ════════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
