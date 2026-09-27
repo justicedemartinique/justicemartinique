@@ -41,15 +41,26 @@
   --shadow-m:0 12px 32px rgba(15,23,55,.14);
   --r:10px;--r-sm:6px;--r-lg:16px;
 }
+html.dark{
+  --bleu:#6699ff;--bleu-h:#0d1f3f;--bleu-l:#1c2c4d;--bleu-ll:#182238;
+  --rouge:#f0576b;--rouge-h:#c23a4c;--rouge-l:#3a1c22;
+  --blanc:#1b2030;--gris:#11141c;--gris-b:#2a3040;--gris-t:#9aa0b4;
+  --noir:#e8eaf2;--bord:#2a3040;--or:#d6b876;--or-l:#3a3222;
+  --shadow:0 1px 3px rgba(0,0,0,.3);
+  --shadow-m:0 12px 32px rgba(0,0,0,.45);
+}
 html{scroll-behavior:smooth}
-body{font-family:'Public Sans',sans-serif;background:var(--gris);color:var(--noir);min-height:100vh}
+body{font-family:'Public Sans',sans-serif;background:var(--gris);color:var(--noir);min-height:100vh;transition:background .2s,color .2s}
 :focus-visible{outline:2px solid var(--bleu);outline-offset:2px}
+
+.theme-toggle{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11px;font-family:'Public Sans',sans-serif;padding:4px 10px;border-radius:999px;cursor:pointer;transition:background .15s}
+.theme-toggle:hover{background:rgba(255,255,255,.2)}
 
 /* ── BANDE TRICOLORE (liseré d'accent en haut de page) ── */
 .tricolor-bar{position:fixed;left:0;right:0;top:0;height:4px;z-index:200;display:flex}
 .tricolor-bar span{flex:1}
 .tricolor-bar span:nth-child(1){background:var(--bleu)}
-.tricolor-bar span:nth-child(2){background:var(--blanc)}
+.tricolor-bar span:nth-child(2){background:#fff}
 .tricolor-bar span:nth-child(3){background:var(--rouge)}
 
 /* ── TOPBAR ── */
@@ -131,7 +142,7 @@ main{flex:1;min-width:0;padding:28px 28px 40px}
 
 /* ── HERO ── */
 .hero{background:linear-gradient(135deg,var(--bleu) 0%,var(--bleu-h) 100%);color:#fff;border-radius:var(--r-lg);padding:40px 44px;margin-bottom:26px;position:relative;overflow:hidden}
-.hero::after{content:'';position:absolute;left:0;right:0;bottom:0;height:5px;background:linear-gradient(90deg,var(--blanc) 0 50%,var(--rouge) 50%)}
+.hero::after{content:'';position:absolute;left:0;right:0;bottom:0;height:5px;background:linear-gradient(90deg,#fff 0 50%,var(--rouge) 50%)}
 .hero-pattern{position:absolute;inset:0;background-image:repeating-linear-gradient(115deg,rgba(255,255,255,.04) 0 1px,transparent 1px 28px)}
 .hero-inner{position:relative;z-index:1;max-width:600px}
 .hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);color:#fff;font-size:10.5px;font-weight:700;padding:5px 12px;margin-bottom:18px;letter-spacing:.1em;text-transform:uppercase;border-radius:999px}
@@ -215,7 +226,7 @@ tr:hover td{background:var(--bleu-ll)}
 .modal-foot{padding:14px 22px;border-top:1px solid var(--bord);display:flex;gap:10px;justify-content:flex-end}
 
 /* ── TOAST ── */
-.toast{position:fixed;bottom:24px;right:24px;background:var(--noir);color:#fff;padding:12px 18px;border-radius:var(--r-sm);font-size:13.5px;border-left:4px solid var(--bleu);box-shadow:var(--shadow-m);transform:translateY(80px);opacity:0;transition:all .3s;z-index:9999;max-width:340px}
+.toast{position:fixed;bottom:24px;right:24px;background:#1c2333;color:#fff;padding:12px 18px;border-radius:var(--r-sm);font-size:13.5px;border-left:4px solid var(--bleu);box-shadow:var(--shadow-m);transform:translateY(80px);opacity:0;transition:all .3s;z-index:9999;max-width:340px}
 .toast.show{transform:translateY(0);opacity:1}
 .toast.success{border-color:#22c55e}
 .toast.error{border-color:var(--rouge)}
@@ -309,7 +320,7 @@ footer{background:var(--bleu-h);color:rgba(255,255,255,.55);font-size:12px;paddi
 <div class="topbar">
   <span>République Française &nbsp;·&nbsp; <strong>Ministère de la Justice</strong> &nbsp;·&nbsp; Collectivité Territoriale de Martinique</span>
   <div class="topbar-right">
-    <a href="#" id="top-discord-link" target="_blank" rel="noopener">Serveur Discord</a>
+    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Basculer le thème clair/sombre">🌙 Sombre</button>
     <span id="top-niveau-label"></span>
   </div>
 </div>
@@ -620,10 +631,6 @@ footer{background:var(--bleu-h);color:rgba(255,255,255,.55);font-size:12px;paddi
       <div class="card-head"><h2>Paramètres du portail</h2></div>
       <div class="card-body">
         <div class="alert alert-info">Colle ici les liens d'intégration de tes Google Forms (bouton « Envoyer » → &lt;/&gt; → copier l'URL du src).</div>
-        <div class="form-group">
-          <label class="form-label" for="s-discord">Lien Discord du serveur</label>
-          <input type="text" class="form-input" id="s-discord" placeholder="https://discord.gg/..."/>
-        </div>
         <div class="form-group">
           <label class="form-label" for="s-form-plainte">Google Form — dépôt de plainte</label>
           <input type="text" class="form-input" id="s-form-plainte" placeholder="https://docs.google.com/forms/d/e/.../viewform?embedded=true"/>
@@ -1151,6 +1158,18 @@ const ls = {
   del(k) { try { localStorage.removeItem(k); } catch (e) {} }
 };
 
+function applyTheme(dark) {
+  document.documentElement.classList.toggle("dark", dark);
+  const btn = document.getElementById("theme-toggle");
+  if (btn) btn.textContent = dark ? "☀️ Clair" : "🌙 Sombre";
+}
+function toggleTheme() {
+  const dark = !document.documentElement.classList.contains("dark");
+  applyTheme(dark);
+  ls.set("jmtq_theme", dark ? "dark" : "light");
+}
+applyTheme(ls.get("jmtq_theme") === "dark");
+
 // DÉMARRAGE
 /* ── config.json ─────────────────────────────────────────────────
    Fichier séparé, à côté de index.html dans le dépôt GitHub. Le
@@ -1226,10 +1245,6 @@ async function init() {
 
 // PARAMÈTRES
 function applySettings() {
-  const link = document.getElementById("top-discord-link");
-  link.href = settings.discord || siteConfig.discord || "#";
-
-  setValue("s-discord", settings.discord || siteConfig.discord);
   setValue("s-form-plainte", settings.formPlainte || siteConfig.formPlainte);
   setValue("s-form-recrutement", settings.formRecrutement || siteConfig.formRecrutement);
   setValue("s-form-pv", settings.formPv || siteConfig.formPv);
@@ -1266,7 +1281,6 @@ function applyForm(wrapId, placeholderId, url) {
 async function saveSettings() {
   if (!requireLevel(6)) return;
   const data = {
-    discord:      document.getElementById("s-discord").value.trim(),
     formPlainte:  document.getElementById("s-form-plainte").value.trim(),
     formRecrutement: document.getElementById("s-form-recrutement").value.trim(),
     formPv:       document.getElementById("s-form-pv").value.trim(),
