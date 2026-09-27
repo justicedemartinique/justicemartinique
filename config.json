@@ -1,14 +1,14 @@
 {
-  "_lisezmoi": "Ce fichier doit rester à côté de index.html, dans le même dossier du dépôt GitHub. Modifie les valeurs ci-dessous et pousse (commit + push) : le site les charge automatiquement au chargement de la page, sans rien à faire dans Administration -> Paramètres. Si un champ est aussi rempli dans Administration -> Paramètres, cette valeur-là est utilisée à la place de celle-ci.",
-
-  "discord": "",
-
-  "_lisezmoi_oauth": "discordClientId = le CLIENT ID de ton application Discord (Discord Developer Portal -> ton appli -> OAuth2 -> General). Ce n'est PAS un secret : c'est un identifiant public, fait pour être visible côté navigateur. Ne mets JAMAIS le 'Client Secret' ici ni nulle part dans ce dépôt : il n'est pas utilisé par ce site (flux OAuth2 implicit) et le mettre en public le compromettrait.",
-  "discordClientId": "",
-
-  "_lisezmoi_supabase": "supabaseUrl / supabaseAnonKey = les mêmes valeurs que Project Settings -> Data API sur app.supabase.com. La clé 'anon public' n'est pas un secret non plus (Supabase la conçoit pour être exposée côté client) : la vraie protection vient des règles RLS créées sur les tables. Ne mets en revanche jamais ici la clé 'service_role' de Supabase, qui elle est un vrai secret.",
   "supabaseUrl": "https://rstutofxjpeyxrjazgcr.supabase.co",
   "supabaseAnonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzdHV0b2Z4anBleXhyamF6Z2NyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk1NzkzNjEsImV4cCI6MjEwNTE1NTM2MX0.lYRzH7V9Dv1tu-hTvM-hZsnhBPggRFOCU17qsISbRFU",
+
+  "discordClientId": "",
+  "discord": "",
+
+  "adminIds": [
+    "801484926573871104",
+    "1091422450786512956"
+  ],
 
   "formPlainte": "",
   "formRecrutement": "",
