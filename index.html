@@ -368,7 +368,7 @@ footer{background:var(--bleu-h);color:rgba(255,255,255,.55);font-size:12px;paddi
     <div class="nav-tab" data-tab="recrutement" onclick="goTab('recrutement',this)">Recrutement</div>
     <div class="nav-tab" data-tab="annonces" onclick="goTab('annonces',this)">Annonces</div>
     <div class="nav-tab" data-tab="audiences" onclick="goTab('audiences',this)">Audiences</div>
-    <div class="nav-tab" data-tab="casier-pub" onclick="goTab('casier-pub',this)">Casier judiciaire</div>
+    <div class="nav-tab locked" data-tab="casier-pub" data-gate="casier-jud" onclick="goTab('casier-pub',this)">Casiers Judiciaires</div>
     <div class="nav-tab locked" data-tab="messagerie" data-min="2" onclick="goTab('messagerie',this)">Messagerie ✉</div>
     <div class="nav-tab locked" data-tab="pv" data-min="3" onclick="goTab('pv',this)">Formulaires PV</div>
     <div class="nav-tab locked" data-tab="casier-opj" data-min="3" onclick="goTab('casier-opj',this)">Casiers</div>
@@ -469,15 +469,18 @@ footer{background:var(--bleu-h);color:rgba(255,255,255,.55);font-size:12px;paddi
   <div id="aud-list-full" class="aud-list"><div class="loading"><div class="spinner"></div> Chargement…</div></div>
 </div>
 
-<!-- ═══ CASIER PUBLIC ═══ -->
+<!-- ═══ CASIERS JUDICIAIRES (recherche tous casiers, accès restreint) ═══ -->
 <div class="page" id="page-casier-pub">
-  <div class="sec-head"><h2 class="sec-title">Casier judiciaire</h2></div>
+  <div class="sec-head"><h2 class="sec-title">Casiers judiciaires</h2></div>
   <div class="card">
-    <div class="card-head"><h2>Consulter mon casier judiciaire</h2></div>
+    <div class="card-head"><h2>Consulter un casier judiciaire</h2></div>
     <div class="card-body">
-      <div id="casier-pub-content">
-        <div class="empty"><div class="empty-icon">🔒</div><p>Connectez-vous avec votre identifiant Discord pour voir votre casier.</p></div>
+      <div class="alert alert-info">Accès réservé au Président du Tribunal Judiciaire, au Procureur Général, au Procureur de la République, aux Substituts et aux administrateurs.</div>
+      <div class="search-bar">
+        <input type="text" class="form-input" id="casier-pub-search-input" placeholder="ID Discord (ex : 123456789012345678) ou pseudo"/>
+        <button class="btn btn-primary" onclick="searchCasierJudiciaire()">Rechercher</button>
       </div>
+      <div id="casier-pub-content"></div>
     </div>
   </div>
 </div>
@@ -527,16 +530,7 @@ footer{background:var(--bleu-h);color:rgba(255,255,255,.55);font-size:12px;paddi
 
 <!-- ═══ CASIERS OPJ ═══ -->
 <div class="page" id="page-casier-opj">
-  <div class="sec-head"><h2 class="sec-title">Consultation des casiers judiciaires</h2></div>
-  <div class="card" style="margin-bottom:20px">
-    <div class="card-body">
-      <div class="search-bar">
-        <input type="text" class="form-input" id="casier-search-input" placeholder="ID Discord (ex : 123456789012345678) ou pseudo"/>
-        <button class="btn btn-primary" onclick="searchCasier()">Rechercher</button>
-      </div>
-      <div id="casier-search-result"></div>
-    </div>
-  </div>
+  <div class="sec-head"><h2 class="sec-title">Casiers — ajout d'une inscription</h2></div>
   <div id="casier-modifier-section" style="display:none">
     <div class="card">
       <div class="card-head"><h2>Ajouter une entrée au casier</h2></div>
@@ -665,7 +659,7 @@ footer{background:var(--bleu-h);color:rgba(255,255,255,.55);font-size:12px;paddi
   <div class="footer-inner">
     <span>© 2026 — Tribunal Judiciaire de Martinique — République Française</span>
     <span class="rp-tag">SERVEUR ROLEPLAY — usage fictif uniquement</span>
-    <span>Portail RP v3.1</span>
+    <span>Portail RP v1.1</span>
   </div>
 </footer>
 
@@ -674,36 +668,12 @@ footer{background:var(--bleu-h);color:rgba(255,255,255,.55);font-size:12px;paddi
   <div class="modal" style="max-width:400px">
     <div class="modal-head"><h3>Connexion au portail</h3><button class="modal-close" onclick="closeModal('modal-login')">×</button></div>
     <div class="modal-body">
-
-      <div id="login-oauth-block" style="display:none">
-        <p style="font-size:13px;color:var(--gris-t);margin-bottom:16px;line-height:1.6">Connecte-toi avec ton compte Discord réel : l'identifiant utilisé sur le portail sera celui renvoyé par Discord, impossible d'usurper le compte de quelqu'un d'autre.</p>
-        <button class="btn btn-primary" style="width:100%;background:#5865F2;justify-content:center" onclick="discordLoginRedirect()">
-          <svg width="18" height="14" viewBox="0 0 127.14 96.36" fill="white" aria-hidden="true"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
-          Se connecter avec Discord
-        </button>
-      </div>
-
-      <div id="login-manual-block">
-        <div class="discord-field">
-          <svg width="20" height="15" viewBox="0 0 127.14 96.36" fill="white" aria-hidden="true"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
-          Identification par identifiant Discord
-        </div>
-        <div class="alert alert-danger" id="login-manual-warning" style="display:none;font-size:12px">⚠️ La connexion Discord officielle n'est pas configurée ici. Ce mode manuel ne vérifie pas l'identité : n'utilise que ton propre identifiant, jamais celui de quelqu'un d'autre.</div>
-        <div class="form-group">
-          <label class="form-label" for="login-discord-id">Identifiant Discord</label>
-          <input type="text" class="form-input" id="login-discord-id" placeholder="ex : 123456789012345678" maxlength="20"/>
-          <div class="form-hint">Discord → Paramètres → Avancés → Mode développeur, puis clic droit sur ton nom → Copier l'identifiant.</div>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="login-pseudo">Pseudo Discord</label>
-          <input type="text" class="form-input" id="login-pseudo" placeholder="TonPseudo"/>
-        </div>
-      </div>
-
-    </div>
-    <div class="modal-foot" id="login-manual-foot">
-      <button class="btn btn-neutral" onclick="closeModal('modal-login')">Annuler</button>
-      <button class="btn btn-primary" onclick="doLogin()">Se connecter</button>
+      <div class="alert alert-danger" id="login-oauth-warning" style="display:none;font-size:12px">⚠️ La connexion Discord officielle n'est pas configurée sur ce portail (discordClientId manquant dans config.json). Un administrateur doit l'activer avant que la connexion soit possible.</div>
+      <p style="font-size:13px;color:var(--gris-t);margin-bottom:16px;line-height:1.6">Connecte-toi avec ton compte Discord réel : l'identifiant utilisé sur le portail sera celui renvoyé par Discord, impossible d'usurper le compte de quelqu'un d'autre.</p>
+      <button class="btn btn-primary" style="width:100%;background:#5865F2;justify-content:center" onclick="discordLoginRedirect()">
+        <svg width="18" height="14" viewBox="0 0 127.14 96.36" fill="white" aria-hidden="true"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
+        Se connecter avec Discord
+      </button>
     </div>
   </div>
 </div>
@@ -833,10 +803,13 @@ footer{background:var(--bleu-h);color:rgba(255,255,255,.55);font-size:12px;paddi
           <label class="form-label" for="au-titre">Titre / qualification</label>
           <select class="form-select" id="au-titre">
             <option value="">— Aucun —</option>
+            <option>Président du Tribunal Judiciaire</option>
             <option>Magistrat du Siège</option>
             <option>Magistrat du Parquet</option>
-            <option>Avocat au Barreau</option>
+            <option>Procureur Général</option>
             <option>Procureur de la République</option>
+            <option>Substitut</option>
+            <option>Avocat au Barreau</option>
             <option>Juge d'instruction</option>
             <option>Greffier en chef</option>
             <option>OPJ — Brigadier</option>
@@ -1127,9 +1100,16 @@ const ROLES = {
 const NIVEAU_LABELS = ["", "O1 — Civil", "O2 — Avocat", "O3 — OPJ", "O4 — Juge", "O5 — Procureur", "O6 — Admin"];
 const ID_RE = /^\d{17,20}$/;
 const DEFAULT_TITRES = [
-  "Magistrat du Siège", "Magistrat du Parquet", "Avocat au Barreau", "Procureur de la République",
-  "Juge d'instruction", "Greffier en chef", "OPJ — Brigadier", "OPJ — Lieutenant", "OPJ — Commandant", "OPJ — Commissaire"
+  "Président du Tribunal Judiciaire", "Magistrat du Siège", "Magistrat du Parquet",
+  "Procureur Général", "Procureur de la République", "Substitut",
+  "Avocat au Barreau", "Juge d'instruction", "Greffier en chef",
+  "OPJ — Brigadier", "OPJ — Lieutenant", "OPJ — Commandant", "OPJ — Commissaire"
 ];
+// Titres autorisés à consulter tous les casiers judiciaires (en plus des administrateurs, niveau O6)
+const CASIER_JUD_TITRES = ["Président du Tribunal Judiciaire", "Procureur Général", "Procureur de la République", "Substitut"];
+function canAccessCasiersJudiciaires(user) {
+  return !!user && (user.niveau === 6 || CASIER_JUD_TITRES.includes(user.titre));
+}
 
 let db = null;
 let currentUser = null;
@@ -1296,10 +1276,7 @@ async function saveSettings() {
 // CONNEXION
 function showLogin() {
   const secure = !!DISCORD_OAUTH.clientId;
-  document.getElementById("login-oauth-block").style.display = secure ? "block" : "none";
-  document.getElementById("login-manual-block").style.display = secure ? "none" : "block";
-  document.getElementById("login-manual-foot").style.display = secure ? "none" : "flex";
-  document.getElementById("login-manual-warning").style.display = secure ? "none" : "block";
+  document.getElementById("login-oauth-warning").style.display = secure ? "none" : "block";
   openModal("modal-login");
 }
 
@@ -1335,15 +1312,6 @@ async function handleDiscordOAuthReturn() {
     toast("Connexion Discord impossible : " + e.message, "error");
     return false;
   }
-}
-
-async function doLogin() {
-  const discordId = document.getElementById("login-discord-id").value.trim();
-  const pseudo = document.getElementById("login-pseudo").value.trim();
-  if (!discordId || !pseudo) { toast("Renseigne l'identifiant et le pseudo", "error"); return; }
-  if (!ID_RE.test(discordId)) { toast("Identifiant Discord invalide (17 à 20 chiffres)", "error"); return; }
-  closeModal("modal-login");
-  await loginWithId(discordId, pseudo, true);
 }
 
 function levelFor(discordId, role) {
@@ -1400,7 +1368,7 @@ function refreshLevel() {
 function doLogout() {
   currentUser = null;
   ls.del("jmtq_discord_id"); ls.del("jmtq_pseudo");
-  ["msg-inbox", "msg-sent"].forEach(n => { if (subs[n]) { subs[n](); delete subs[n]; } });
+  ["msg-inbox", "msg-sent", "casier-pub-search"].forEach(n => { if (subs[n]) { subs[n](); delete subs[n]; } });
   updateUI();
   goTab("accueil");
   toast("Déconnecté", "success");
@@ -1408,6 +1376,14 @@ function doLogout() {
 
 function requireLevel(n) {
   if (!currentUser || currentUser.niveau < n) { toast("Accès réservé au niveau " + NIVEAU_LABELS[n], "error"); return false; }
+  return true;
+}
+
+function requireCasierJudAccess() {
+  if (!canAccessCasiersJudiciaires(currentUser)) {
+    toast("Accès réservé au Président du Tribunal Judiciaire, au Procureur Général, au Procureur de la République, aux Substituts et aux administrateurs", "error");
+    return false;
+  }
   return true;
 }
 
@@ -1426,12 +1402,9 @@ function updateUI() {
     document.getElementById("ub-role").textContent = currentUser.titre || cfg.label;
     document.getElementById("ub-chip").innerHTML = '<span class="nivel-chip ' + cfg.chip + '">' + cfg.emoji + " " + NIVEAU_LABELS[currentUser.niveau] + "</span>";
     document.getElementById("top-niveau-label").innerHTML = '<span class="nivel-chip ' + cfg.chip + '">' + cfg.emoji + " " + cfg.label + "</span>";
-    loadCasierPub();
   } else {
     badge.style.display = "none";
     document.getElementById("top-niveau-label").innerHTML = "";
-    document.getElementById("casier-pub-content").innerHTML =
-      '<div class="empty"><div class="empty-icon">🔒</div><p>Connectez-vous avec votre identifiant Discord pour voir votre casier.</p></div>';
   }
 
   const mod = document.getElementById("casier-modifier-section");
@@ -1446,6 +1419,12 @@ function updateUI() {
     tab.classList.toggle("locked", !ok);
     if (!ok && tab.dataset.tab === currentTab) besoinRetour = true;
   });
+  const casierJudTab = document.querySelector('.nav-tab[data-tab="casier-pub"]');
+  if (casierJudTab) {
+    const casierOk = canAccessCasiersJudiciaires(currentUser);
+    casierJudTab.classList.toggle("locked", !casierOk);
+    if (!casierOk && currentTab === "casier-pub") besoinRetour = true;
+  }
   if (besoinRetour) goTab("accueil");
 
   renderNews();
@@ -1457,6 +1436,7 @@ function goTab(tabId, el) {
   const tabEl = el || document.querySelector('.nav-tab[data-tab="' + tabId + '"]');
   const min = tabEl ? parseInt(tabEl.dataset.min || "0", 10) : 0;
   if (min > 0 && !requireLevel(min)) return;
+  if (tabId === "casier-pub" && !requireCasierJudAccess()) return;
 
   currentTab = tabId;
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
@@ -1466,7 +1446,6 @@ function goTab(tabId, el) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 
   if (tabId === "messagerie" && currentUser) loadMessages();
-  if (tabId === "casier-pub" && currentUser) loadCasierPub();
   if (tabId === "admin") { renderUsersTable(); renderAdmins(); applySettings(); }
 }
 
@@ -1659,18 +1638,6 @@ function casierSummaryBadges(items) {
   ).join("");
 }
 
-function loadCasierPub() {
-  if (!db || !currentUser) return;
-  const el = document.getElementById("casier-pub-content");
-  el.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement…</div>';
-  sub("casier-pub", db.doc("casiers/" + currentUser.discordId), snap => {
-    const items = sortCasierItems(snap.exists ? (snap.data().items || []) : []);
-    el.innerHTML = items.length
-      ? '<div class="alert alert-info">Dossier unique de <strong>' + esc(currentUser.nom) + "</strong> — " + items.length + " inscription(s) au total<br><div style=\"margin-top:8px\">" + casierSummaryBadges(items) + "</div></div>" + items.map(it => casierEntry(it, currentUser.discordId, currentUser.niveau >= 5)).join("")
-      : '<div class="empty"><div class="empty-icon">✅</div><p>Casier vierge : aucune inscription.</p></div>';
-  });
-}
-
 function casierEntry(item, discordId, canDelete) {
   const cols = { Contravention: "badge-or", "Délit": "badge-rouge", Crime: "badge-rouge", "Mention effacée": "badge-gris" };
   const del = (canDelete && item.id)
@@ -1683,10 +1650,10 @@ function casierEntry(item, discordId, canDelete) {
     '<div style="font-size:11px;color:var(--gris-t);margin-top:6px">Inscrit par ' + esc(item.auteur || "—") + "</div></div>";
 }
 
-function searchCasier() {
-  if (!requireLevel(3)) return;
-  const query = document.getElementById("casier-search-input").value.trim();
-  const el = document.getElementById("casier-search-result");
+function searchCasierJudiciaire() {
+  if (!requireCasierJudAccess()) return;
+  const query = document.getElementById("casier-pub-search-input").value.trim();
+  const el = document.getElementById("casier-pub-content");
   if (!query) { el.innerHTML = '<div class="alert alert-danger">Saisis un identifiant Discord ou un pseudo.</div>'; return; }
   el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
 
@@ -1699,7 +1666,7 @@ function searchCasier() {
     discordId = found._id;
   }
 
-  sub("casier-search", db.doc("casiers/" + discordId), snap => {
+  sub("casier-pub-search", db.doc("casiers/" + discordId), snap => {
     const profil = allUsers.find(u => u._id === discordId);
     const nom = profil ? (profil.nom || profil.pseudo || discordId) : discordId;
     const items = sortCasierItems(snap.exists ? (snap.data().items || []) : []);
@@ -1719,7 +1686,7 @@ async function deleteCasier(discordId) {
   try {
     await db.doc("casiers/" + discordId).delete();
     toast("Casier supprimé", "success");
-    searchCasier();
+    searchCasierJudiciaire();
   } catch (e) { toast("Suppression impossible : " + e.message, "error"); }
 }
 
@@ -1742,7 +1709,7 @@ async function addCasierEntry() {
     document.getElementById("casier-mod-desc").value = "";
     document.getElementById("casier-mod-date").value = "";
     toast("Entrée ajoutée au casier", "success");
-    if (document.getElementById("casier-search-input").value.trim()) searchCasier();
+    if (document.getElementById("casier-pub-search-input") && document.getElementById("casier-pub-search-input").value.trim()) searchCasierJudiciaire();
   } catch (e) { toast("Ajout impossible : " + e.message, "error"); }
 }
 
@@ -1754,8 +1721,7 @@ async function deleteCasierEntry(discordId, itemId) {
     const items = snap.exists ? (snap.data().items || []) : [];
     await db.doc("casiers/" + discordId).set({ items: items.filter(it => it.id !== itemId) });
     toast("Inscription supprimée", "success");
-    if (document.getElementById("casier-search-input") && document.getElementById("casier-search-input").value.trim()) searchCasier();
-    if (currentUser && currentUser.discordId === discordId) loadCasierPub();
+    if (document.getElementById("casier-pub-search-input") && document.getElementById("casier-pub-search-input").value.trim()) searchCasierJudiciaire();
   } catch (e) { toast("Suppression impossible : " + e.message, "error"); }
 }
 
