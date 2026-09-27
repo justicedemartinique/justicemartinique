@@ -5,75 +5,29 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Tribunal Judiciaire de Martinique</title>
 <!--
-  ════════════════════════════════════════════════════════════════
-  PORTAIL RP — TRIBUNAL JUDICIAIRE DE MARTINIQUE  (v4.0 — Supabase)
-  ════════════════════════════════════════════════════════════════
+  Portail RP — Tribunal Judiciaire de Martinique
+  Toute la config (Supabase, Discord, formulaires, admins) vit dans config.json, à côté de ce fichier.
 
-  1) CRÉER LE PROJET SUPABASE
-     - app.supabase.com → New project (choisis une région proche,
-       ex. eu-west, et un mot de passe pour la base — à conserver).
-     - Une fois le projet créé : Project Settings → Data API
-       → copie "Project URL" et la clé "anon public".
-
-  2) CRÉER LES TABLES
-     Ouvre l'onglet "SQL Editor" du projet Supabase, colle le SQL
-     ci-dessous, puis clique "Run" :
-
+  1) Supabase : app.supabase.com → New project → Project Settings → Data API (URL + clé "anon public") → colle dans config.json.
+  2) SQL Editor → colle et exécute :
      create table if not exists public.config    (id text primary key, data jsonb not null default '{}'::jsonb, created_at timestamptz not null default now());
      create table if not exists public.news       (id text primary key, data jsonb not null default '{}'::jsonb, created_at timestamptz not null default now());
      create table if not exists public.audiences  (id text primary key, data jsonb not null default '{}'::jsonb, created_at timestamptz not null default now());
      create table if not exists public.users      (id text primary key, data jsonb not null default '{}'::jsonb, created_at timestamptz not null default now());
      create table if not exists public.casiers    (id text primary key, data jsonb not null default '{}'::jsonb, created_at timestamptz not null default now());
      create table if not exists public.messages   (id text primary key, data jsonb not null default '{}'::jsonb, created_at timestamptz not null default now());
-
-     alter table public.config   enable row level security;
-     alter table public.news     enable row level security;
-     alter table public.audiences enable row level security;
-     alter table public.users    enable row level security;
-     alter table public.casiers  enable row level security;
-     alter table public.messages enable row level security;
-
-     create policy "rp open access" on public.config    for all using (true) with check (true);
-     create policy "rp open access" on public.news      for all using (true) with check (true);
+     alter table public.config enable row level security; alter table public.news enable row level security; alter table public.audiences enable row level security; alter table public.users enable row level security; alter table public.casiers enable row level security; alter table public.messages enable row level security;
+     create policy "rp open access" on public.config for all using (true) with check (true);
+     create policy "rp open access" on public.news for all using (true) with check (true);
      create policy "rp open access" on public.audiences for all using (true) with check (true);
-     create policy "rp open access" on public.users     for all using (true) with check (true);
-     create policy "rp open access" on public.casiers   for all using (true) with check (true);
-     create policy "rp open access" on public.messages  for all using (true) with check (true);
-
-     ⚠️ Ces règles laissent tout le monde lire/écrire avec la clé
-     "anon". C'est acceptable pour du RP entre gens de confiance,
-     pas pour de vraies données sensibles.
-
-  3) ACTIVER LE TEMPS RÉEL (fortement recommandé)
-     Tout le site (actualités, audiences, casiers, messagerie,
-     paramètres…) est déjà câblé pour s'actualiser tout seul, sans
-     recharger la page, dès qu'une donnée change — mais ça ne
-     fonctionne ENTRE DIFFÉRENTS joueurs que si le temps réel est
-     activé côté Supabase :
-     Database → Replication → active la réplication pour les 6
-     tables ci-dessus (ou : alter publication supabase_realtime
-     add table config, news, audiences, users, casiers, messages;).
-     Sans ça, chaque joueur voit bien ses propres actions
-     s'afficher instantanément, mais doit changer d'onglet (ou
-     recharger) pour voir les nouveautés publiées par les autres.
-
-  4) CONFIGURATION DU FICHIER
-     Va dans le <script> tout en bas et remplis SUPABASE_CONFIG
-     avec l'URL et la clé "anon public" copiées à l'étape 1.
-     Puis ajoute ton ID Discord dans ADMIN_IDS pour être admin O6.
-
-     Si SUPABASE_CONFIG reste vide, le site fonctionne quand même
-     mais les données restent dans ton navigateur (mode démo local).
-
-  5) Les niveaux O1→O6 sont un confort d'affichage, pas une
-     sécurité : tout se passe côté navigateur.
-
-  6) CONNEXION DISCORD OFFICIELLE (recommandé, optionnelle)
-     Par défaut, la connexion se fait en tapant un identifiant Discord
-     à la main : n'importe qui peut taper celui de quelqu'un d'autre.
-     Pour empêcher ça, configure DISCORD_OAUTH plus bas dans le
-     <script> (instructions juste au-dessus de ce bloc de config).
-  ════════════════════════════════════════════════════════════════
+     create policy "rp open access" on public.users for all using (true) with check (true);
+     create policy "rp open access" on public.casiers for all using (true) with check (true);
+     create policy "rp open access" on public.messages for all using (true) with check (true);
+     (accès ouvert avec la clé anon : ok pour du RP entre gens de confiance, pas pour des données vraiment sensibles)
+  3) Database → Replication → active la réplication sur ces 6 tables (ou : alter publication supabase_realtime add table config, news, audiences, users, casiers, messages;) pour que tout se mette à jour instantanément chez tout le monde, pas seulement chez soi.
+  4) Sans config Supabase, le site tourne quand même en mode démo local (données gardées dans le navigateur, non partagées).
+  5) Les niveaux O1→O6 sont un confort d'affichage, pas une sécurité : tout se passe côté navigateur.
+  6) Connexion Discord officielle (OAuth) : remplis discordClientId dans config.json pour l'activer ; sinon connexion manuelle (id + pseudo tapés à la main).
 -->
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=Public+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
@@ -651,7 +605,7 @@ footer{background:var(--bleu-h);color:rgba(255,255,255,.55);font-size:12px;paddi
     <div class="card">
       <div class="card-head"><h2>Administrateurs du portail</h2></div>
       <div class="card-body">
-        <div class="alert alert-info">Ces identifiants Discord obtiennent le niveau O6. Les IDs inscrits directement dans le fichier (ADMIN_IDS) sont toujours administrateurs et n'apparaissent pas ici.</div>
+        <div class="alert alert-info">Ces identifiants Discord obtiennent le niveau O6. Les IDs inscrits dans config.json (adminIds) sont toujours administrateurs et n'apparaissent pas ici.</div>
         <div class="form-row" style="margin-bottom:16px">
           <input type="text" class="form-input" id="new-admin-id" placeholder="ID Discord (17 à 20 chiffres)"/>
           <button class="btn btn-primary" onclick="addAdmin()">Ajouter</button>
@@ -909,64 +863,12 @@ footer{background:var(--bleu-h);color:rgba(255,255,255,.55);font-size:12px;paddi
 <script>
 "use strict";
 
-/* ════════════════════════════════════════════════════
-   1. CONFIGURATION — À REMPLIR
-   ════════════════════════════════════════════════════ */
-/* Valeurs par défaut ci-dessous. Comme pour DISCORD_OAUTH plus bas,
-   tu peux aussi (et de préférence) renseigner "supabaseUrl" et
-   "supabaseAnonKey" dans config.json : s'ils y sont remplis, ils
-   prennent le dessus sur ce qui est écrit ici, sans avoir à
-   retoucher index.html. */
-const SUPABASE_CONFIG = {
-  url:     "https://rstutofxjpeyxrjazgcr.supabase.co",   // ex : "https://xxxxxxxxxxxx.supabase.co" — tant que c'est vide, le site tourne en mode local
-  anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzdHV0b2Z4anBleXhyamF6Z2NyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk1NzkzNjEsImV4cCI6MjEwNTE1NTM2MX0.lYRzH7V9Dv1tu-hTvM-hZsnhBPggRFOCU17qsISbRFU"    // la clé "anon public" du projet (Project Settings → Data API)
-};
+// Tout est piloté par config.json (URL/clé Supabase, Discord, formulaires, admins). Rien à modifier ici.
+const SUPABASE_CONFIG = { url: "", anonKey: "" };
+const DISCORD_OAUTH = { clientId: "", redirectUri: window.location.origin + window.location.pathname };
+let ADMIN_IDS = [];
 
-/* ── CONNEXION DISCORD OFFICIELLE (OAuth2) ──────────────────────────
-   Tant que clientId est vide, le site reste en connexion manuelle
-   (id + pseudo tapés à la main) : pratique pour tester, mais rien
-   n'empêche quelqu'un de taper l'identifiant d'un autre.
-
-   Pour activer la vraie connexion Discord (recommandé, empêche
-   l'usurpation) :
-   1) discord.com/developers/applications → New Application.
-   2) OAuth2 → General → copie le "CLIENT ID", colle-le ci-dessous.
-   3) OAuth2 → General → "Redirects" → ajoute EXACTEMENT l'URL où ce
-      fichier est hébergé (celle affichée par le navigateur, sans
-      rien après, ex : https://tonsite.exemple/index.html). Le site
-      calcule cette URL tout seul (redirectUri ci-dessous), donc il
-      suffit de recopier ce qui est réellement dans la barre
-      d'adresse une fois le site en ligne.
-   Aucun "client secret" n'est nécessaire : la connexion utilise le
-   flux OAuth2 "implicit" de Discord, entièrement côté navigateur.
-
-   Tu peux coller le Client ID soit directement ci-dessous, soit dans
-   config.json (champ "discordClientId") — s'il est renseigné dans
-   config.json, il prend le dessus et tu n'as plus jamais besoin de
-   rouvrir ce fichier pour le modifier. */
-const DISCORD_OAUTH = {
-  clientId: "",   // ex : "1234567890123456789" — laisse vide pour garder la connexion manuelle
-  redirectUri: window.location.origin + window.location.pathname
-};
-
-/* Administrateurs permanents (niveau O6), impossibles à retirer depuis le site.
-   IMPORTANT : les ID Discord doivent être entre guillemets (chaînes de
-   caractères). Écrits comme des nombres, ils perdent en précision et ne
-   correspondent plus jamais à un vrai ID Discord. */
-const ADMIN_IDS = [
-  "801484926573871104",
-  "1091422450786512956",
-];
-
-/* ════════════════════════════════════════════════════
-   2. COUCHE DONNÉES
-   Supabase si configuré, sinon stockage local du navigateur.
-   Les deux exposent la même API : doc/collection, get, set,
-   update, delete, where, orderBy, limit, onSnapshot, add.
-   Cette API de type document (doc/collection) est reconstruite
-   au-dessus de Supabase (tables Postgres génériques {id, data
-   jsonb}) pour que tout le reste du site n'ait rien à changer.
-   ════════════════════════════════════════════════════ */
+// Couche données : Supabase si configuré, sinon stockage local du navigateur (même API doc/collection dans les deux cas)
 let DB_MODE = "local";
 
 function loadScript(src) {
@@ -1206,9 +1108,7 @@ function makeLocalDb() {
   return { doc: docRef, collection: p => makeQuery(p, {}) };
 }
 
-/* ════════════════════════════════════════════════════
-   3. CONSTANTES & ÉTAT
-   ════════════════════════════════════════════════════ */
+// CONSTANTES & ÉTAT
 const ROLES = {
   civil:     { label: "Civil / justiciable", niveau: 1, chip: "nivel-o1", emoji: "👤" },
   avocat:    { label: "Avocat",              niveau: 2, chip: "nivel-o2", emoji: "⚖️" },
@@ -1251,9 +1151,7 @@ const ls = {
   del(k) { try { localStorage.removeItem(k); } catch (e) {} }
 };
 
-/* ════════════════════════════════════════════════════
-   4. DÉMARRAGE
-   ════════════════════════════════════════════════════ */
+// DÉMARRAGE
 /* ── config.json ─────────────────────────────────────────────────
    Fichier séparé, à côté de index.html dans le dépôt GitHub. Le
    modifier (et le pousser sur GitHub) change directement le site,
@@ -1266,16 +1164,12 @@ async function loadSiteConfig() {
     const res = await fetch("config.json", { cache: "no-store" });
     if (res.ok) siteConfig = await res.json();
   } catch (e) {
-    console.warn("config.json introuvable ou illisible, valeurs par défaut utilisées.", e);
+    console.warn("config.json introuvable ou illisible.", e);
   }
-  /* Si config.json renseigne ces champs, ils prennent le pas sur les
-     valeurs codées en dur juste au-dessus dans ce fichier — pratique
-     pour tout piloter depuis config.json sans jamais retoucher
-     index.html. S'ils sont vides ou absents, les valeurs codées en
-     dur ci-dessus continuent de s'appliquer normalement. */
-  if (siteConfig.supabaseUrl) SUPABASE_CONFIG.url = siteConfig.supabaseUrl;
-  if (siteConfig.supabaseAnonKey) SUPABASE_CONFIG.anonKey = siteConfig.supabaseAnonKey;
-  if (siteConfig.discordClientId) DISCORD_OAUTH.clientId = siteConfig.discordClientId;
+  SUPABASE_CONFIG.url = siteConfig.supabaseUrl || "";
+  SUPABASE_CONFIG.anonKey = siteConfig.supabaseAnonKey || "";
+  DISCORD_OAUTH.clientId = siteConfig.discordClientId || "";
+  ADMIN_IDS = (siteConfig.adminIds || []).map(String);
   populateTitreOptions();
 }
 
@@ -1329,9 +1223,7 @@ async function init() {
   }
 }
 
-/* ════════════════════════════════════════════════════
-   5. PARAMÈTRES
-   ════════════════════════════════════════════════════ */
+// PARAMÈTRES
 function applySettings() {
   const link = document.getElementById("top-discord-link");
   link.href = settings.discord || siteConfig.discord || "#";
@@ -1386,9 +1278,7 @@ async function saveSettings() {
   } catch (e) { toast("Enregistrement impossible : " + e.message, "error"); }
 }
 
-/* ════════════════════════════════════════════════════
-   6. CONNEXION
-   ════════════════════════════════════════════════════ */
+// CONNEXION
 function showLogin() {
   const secure = !!DISCORD_OAUTH.clientId;
   document.getElementById("login-oauth-block").style.display = secure ? "block" : "none";
@@ -1506,9 +1396,7 @@ function requireLevel(n) {
   return true;
 }
 
-/* ════════════════════════════════════════════════════
-   7. INTERFACE
-   ════════════════════════════════════════════════════ */
+// INTERFACE
 function updateUI() {
   const loggedIn = !!currentUser;
   document.getElementById("btn-login").style.display = loggedIn ? "none" : "";
@@ -1567,9 +1455,7 @@ function goTab(tabId, el) {
   if (tabId === "admin") { renderUsersTable(); renderAdmins(); applySettings(); }
 }
 
-/* ════════════════════════════════════════════════════
-   8. ANNONCES
-   ════════════════════════════════════════════════════ */
+// ANNONCES
 /* Affiche les 2 premiers éléments puis regroupe le reste derrière un
    bouton « Voir plus » (menu déroulant), pour ne pas surcharger l'accueil. */
 function renderWithMore(items, cardFn, count) {
@@ -1675,9 +1561,7 @@ async function deleteNews(id) {
   catch (e) { toast("Suppression impossible : " + e.message, "error"); }
 }
 
-/* ════════════════════════════════════════════════════
-   9. AUDIENCES
-   ════════════════════════════════════════════════════ */
+// AUDIENCES
 function renderAudiences() {
   const now = Date.now();
   const futures = allAuds.filter(a => (a.dateTs || 0) > now);
@@ -1736,17 +1620,13 @@ async function deleteAud(id) {
   catch (e) { toast("Suppression impossible : " + e.message, "error"); }
 }
 
-/* ════════════════════════════════════════════════════
-   10. STATISTIQUES
-   ════════════════════════════════════════════════════ */
+// STATISTIQUES
 function renderStatsUsers() {
   document.getElementById("stat-magistrats").textContent = allUsers.filter(u => u.role === "juge" || u.role === "procureur").length;
   document.getElementById("stat-avocats").textContent = allUsers.filter(u => u.role === "avocat").length;
 }
 
-/* ════════════════════════════════════════════════════
-   11. CASIERS
-   ════════════════════════════════════════════════════ */
+// CASIERS
 /* Toutes les inscriptions (contraventions, délits, crimes…) d'une personne
    vivent dans un seul document "casiers/{discordId}" — jamais plusieurs
    dossiers pour la même personne. Ces deux fonctions les trient et
@@ -1864,9 +1744,7 @@ async function deleteCasierEntry(discordId, itemId) {
   } catch (e) { toast("Suppression impossible : " + e.message, "error"); }
 }
 
-/* ════════════════════════════════════════════════════
-   12. MESSAGERIE
-   ════════════════════════════════════════════════════ */
+// MESSAGERIE
 function loadMessages() {
   if (!db || !currentUser) return;
   const inbox = document.getElementById("msg-inbox");
@@ -1955,9 +1833,7 @@ function showMsgTab(tab, el) {
   el.classList.add("active");
 }
 
-/* ════════════════════════════════════════════════════
-   13. FORMULAIRES PV
-   ════════════════════════════════════════════════════ */
+// FORMULAIRES PV
 function openPVForm(type) {
   const urls = {
     pv: settings.formPv || siteConfig.formPv,
@@ -1982,9 +1858,7 @@ function openPVForm(type) {
   wrap.scrollIntoView({ behavior: "smooth" });
 }
 
-/* ════════════════════════════════════════════════════
-   14. ADMINISTRATION
-   ════════════════════════════════════════════════════ */
+// ADMINISTRATION
 function renderUsersTable() {
   const tbody = document.getElementById("users-tbody");
   if (!tbody) return;
@@ -2065,13 +1939,13 @@ function renderAdmins() {
   const el = document.getElementById("admins-list");
   if (!el) return;
   const fixes = ADMIN_IDS.map(id =>
-    '<div class="role-row"><span class="discord-id">🛡️ ' + esc(id) + ' (inscrit dans le fichier)</span></div>');
+    '<div class="role-row"><span class="discord-id">🛡️ ' + esc(id) + ' (config.json)</span></div>');
   const dyn = dbAdminIds.map(id =>
     '<div class="role-row"><span class="discord-id">🛡️ ' + esc(id) + "</span>" +
     '<button class="btn btn-danger btn-sm" onclick="removeAdmin(\'' + id + '\')">Retirer</button></div>');
   const all = fixes.concat(dyn);
   el.innerHTML = all.length ? all.join("")
-    : '<div class="empty" style="padding:30px 0"><p>Aucun administrateur. Ajoute ton identifiant ci-dessus ou dans ADMIN_IDS.</p></div>';
+    : '<div class="empty" style="padding:30px 0"><p>Aucun administrateur. Ajoute ton identifiant ci-dessus ou dans config.json (adminIds).</p></div>';
 }
 
 async function addAdmin() {
@@ -2095,9 +1969,7 @@ async function removeAdmin(id) {
   } catch (e) { toast("Retrait impossible : " + e.message, "error"); }
 }
 
-/* ════════════════════════════════════════════════════
-   15. ONGLETS INTERNES & UTILITAIRES
-   ════════════════════════════════════════════════════ */
+// ONGLETS INTERNES & UTILITAIRES
 function showGTab(tab, el) {
   document.getElementById("gnews-list").style.display = tab === "gnews" ? "block" : "none";
   document.getElementById("gauds-list").style.display = tab === "gauds" ? "block" : "none";
