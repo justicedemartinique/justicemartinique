@@ -1162,9 +1162,10 @@ const ls = {
 async function loadSiteConfig() {
   try {
     const res = await fetch("config.json", { cache: "no-store" });
-    if (res.ok) siteConfig = await res.json();
+    if (res.ok) { siteConfig = await res.json(); }
+    else { toast("config.json introuvable (code " + res.status + ") : héberge bien ce fichier à côté de index.html.", "error"); }
   } catch (e) {
-    console.warn("config.json introuvable ou illisible.", e);
+    toast("config.json illisible : " + e.message + " — le site doit être servi via http(s), pas ouvert en double-cliquant sur le fichier.", "error");
   }
   SUPABASE_CONFIG.url = siteConfig.supabaseUrl || "";
   SUPABASE_CONFIG.anonKey = siteConfig.supabaseAnonKey || "";
