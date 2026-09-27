@@ -157,7 +157,7 @@ main{flex:1;min-width:0;padding:28px 28px 40px}
 .news-item{flex-direction:column;border-left:3px solid var(--bleu)}
 .news-title{font-weight:600;font-size:15px;margin-bottom:4px}
 .news-meta{font-size:12px;color:var(--gris-t);margin-bottom:8px}
-.news-body{font-size:14px;color:#374151;line-height:1.6;white-space:pre-wrap}
+.news-body{font-size:14px;color:var(--noir);line-height:1.6;white-space:pre-wrap}
 .aud-date{min-width:64px;text-align:center;background:var(--bleu);color:#fff;border-radius:var(--r-sm);padding:8px 6px;flex-shrink:0;height:fit-content}
 .aud-date .day{font-family:'Source Serif 4',serif;font-size:20px;font-weight:700;line-height:1}
 .aud-date .mon{font-size:10px;opacity:.8;font-weight:600;text-transform:uppercase}
@@ -204,6 +204,9 @@ tr:hover td{background:var(--bleu-ll)}
 .alert-info{background:var(--bleu-ll);border-color:var(--bleu);color:var(--bleu-h)}
 .alert-danger{background:var(--rouge-l);border-color:var(--rouge);color:var(--rouge-h)}
 .alert-success{background:#f0fdf4;border-color:#22c55e;color:#15803d}
+html.dark .alert-info{color:#dbe6ff}
+html.dark .alert-danger{color:#ffd9de}
+html.dark .alert-success{background:#132a1c;color:#bbf7d0}
 
 /* ── SECTION HEADER ── */
 .sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px}
@@ -236,7 +239,7 @@ tr:hover td{background:var(--bleu-ll)}
 .casier-entry .ce-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:10px}
 .casier-entry .ce-type{font-weight:600;font-size:14px}
 .casier-entry .ce-date{font-size:12px;color:var(--gris-t);white-space:nowrap}
-.casier-entry .ce-desc{font-size:13px;color:#374151;line-height:1.5}
+.casier-entry .ce-desc{font-size:13px;color:var(--noir);line-height:1.5}
 .ce-del-btn{background:none;border:none;color:var(--gris-t);font-size:14px;line-height:1;cursor:pointer;padding:2px 4px;border-radius:2px;transition:color .15s,background .15s}
 .ce-del-btn:hover{color:var(--rouge);background:var(--rouge-l)}
 
@@ -659,7 +662,7 @@ footer{background:var(--bleu-h);color:rgba(255,255,255,.55);font-size:12px;paddi
   <div class="footer-inner">
     <span>© 2026 — Tribunal Judiciaire de Martinique — République Française</span>
     <span class="rp-tag">SERVEUR ROLEPLAY — usage fictif uniquement</span>
-    <span>Portail RP v1.1</span>
+    <span>Portail RP v3.1</span>
   </div>
 </footer>
 
@@ -1124,11 +1127,20 @@ let currentTab = "accueil";
 const subs = {};   // abonnements actifs, un par nom
 
 function sub(name, ref, next) {
-  if (subs[name]) { subs[name](); delete subs[name]; }
-  subs[name] = ref.onSnapshot(next, err => {
+  if (subs[name]) { subs[name].unsub(); delete subs[name]; }
+  const unsub = ref.onSnapshot(next, err => {
     console.error("[" + name + "]", err);
     toast("Lecture impossible : " + (err && err.message ? err.message : name), "error");
   });
+  subs[name] = { unsub, ref, next };
+}
+
+/* Force un re-fetch immédiat d'un abonnement (en plus du temps réel), pour que
+   les actions de l'utilisateur s'affichent tout de suite sans recharger la page. */
+function refresh(name) {
+  const s = subs[name];
+  if (!s) return Promise.resolve();
+  return Promise.resolve(s.ref.get()).then(s.next).catch(err => console.error("[refresh:" + name + "]", err));
 }
 
 /* ── Stockage local sécurisé ── */
@@ -1221,6 +1233,11 @@ async function init() {
     const savedPseudo = ls.get("jmtq_pseudo");
     if (savedId && savedPseudo) loginWithId(savedId, savedPseudo, false);
   }
+
+  /* Synchronisation périodique en arrière-plan : garantit que ce qu'une
+     autre personne fait (nouvelle annonce, message reçu…) apparaît ici
+     tout seul, même si le temps réel Supabase n'est pas actif. */
+  setInterval(() => { Object.keys(subs).forEach(name => refresh(name)); }, 8000);
 }
 
 // PARAMÈTRES
@@ -1270,6 +1287,7 @@ async function saveSettings() {
   try {
     await db.doc("config/settings").set(data, { merge: true });
     toast("Paramètres enregistrés", "success");
+    refresh("settings");
   } catch (e) { toast("Enregistrement impossible : " + e.message, "error"); }
 }
 
@@ -1368,7 +1386,7 @@ function refreshLevel() {
 function doLogout() {
   currentUser = null;
   ls.del("jmtq_discord_id"); ls.del("jmtq_pseudo");
-  ["msg-inbox", "msg-sent", "casier-pub-search"].forEach(n => { if (subs[n]) { subs[n](); delete subs[n]; } });
+  ["msg-inbox", "msg-sent", "casier-pub-search"].forEach(n => { if (subs[n]) { subs[n].unsub(); delete subs[n]; } });
   updateUI();
   goTab("accueil");
   toast("Déconnecté", "success");
@@ -1545,13 +1563,14 @@ async function saveNews() {
     closeModal("modal-new-news");
     editingNewsId = null;
     toast(publie ? "Annonce publiée" : "Brouillon enregistré", "success");
+    refresh("news");
   } catch (e) { toast("Enregistrement impossible : " + e.message, "error"); }
 }
 
 async function deleteNews(id) {
   if (!requireLevel(4)) return;
   if (!confirm("Supprimer cette annonce ?")) return;
-  try { await db.doc("news/" + id).delete(); toast("Annonce supprimée", "success"); }
+  try { await db.doc("news/" + id).delete(); toast("Annonce supprimée", "success"); refresh("news"); }
   catch (e) { toast("Suppression impossible : " + e.message, "error"); }
 }
 
@@ -1604,13 +1623,14 @@ async function saveAudience() {
     closeModal("modal-new-aud");
     ["aud-salle", "aud-dossier", "aud-president"].forEach(id => { document.getElementById(id).value = ""; });
     toast("Audience enregistrée", "success");
+    refresh("audiences");
   } catch (e) { toast("Enregistrement impossible : " + e.message, "error"); }
 }
 
 async function deleteAud(id) {
   if (!requireLevel(4)) return;
   if (!confirm("Supprimer cette audience ?")) return;
-  try { await db.doc("audiences/" + id).delete(); toast("Audience supprimée", "success"); }
+  try { await db.doc("audiences/" + id).delete(); toast("Audience supprimée", "success"); refresh("audiences"); }
   catch (e) { toast("Suppression impossible : " + e.message, "error"); }
 }
 
@@ -1686,7 +1706,7 @@ async function deleteCasier(discordId) {
   try {
     await db.doc("casiers/" + discordId).delete();
     toast("Casier supprimé", "success");
-    searchCasierJudiciaire();
+    refresh("casier-pub-search");
   } catch (e) { toast("Suppression impossible : " + e.message, "error"); }
 }
 
@@ -1709,7 +1729,7 @@ async function addCasierEntry() {
     document.getElementById("casier-mod-desc").value = "";
     document.getElementById("casier-mod-date").value = "";
     toast("Entrée ajoutée au casier", "success");
-    if (document.getElementById("casier-pub-search-input") && document.getElementById("casier-pub-search-input").value.trim()) searchCasierJudiciaire();
+    refresh("casier-pub-search");
   } catch (e) { toast("Ajout impossible : " + e.message, "error"); }
 }
 
@@ -1721,7 +1741,7 @@ async function deleteCasierEntry(discordId, itemId) {
     const items = snap.exists ? (snap.data().items || []) : [];
     await db.doc("casiers/" + discordId).set({ items: items.filter(it => it.id !== itemId) });
     toast("Inscription supprimée", "success");
-    if (document.getElementById("casier-pub-search-input") && document.getElementById("casier-pub-search-input").value.trim()) searchCasierJudiciaire();
+    refresh("casier-pub-search");
   } catch (e) { toast("Suppression impossible : " + e.message, "error"); }
 }
 
@@ -1772,7 +1792,7 @@ async function readMessage(id, box) {
       "<div><strong>À :</strong> " + esc(m.toPseudo || m.to) + "</div>" +
       "<div><strong>Date :</strong> " + date + "</div></div>" +
       '<div style="font-size:14px;line-height:1.7;white-space:pre-wrap">' + esc(m.corps || "") + "</div>";
-    if (box === "inbox" && !m.lu) db.doc("messages/" + id).set({ lu: true }, { merge: true }).catch(() => {});
+    if (box === "inbox" && !m.lu) db.doc("messages/" + id).set({ lu: true }, { merge: true }).then(() => refresh("msg-inbox")).catch(() => {});
     openModal("modal-read-msg");
   } catch (e) { toast("Message illisible : " + e.message, "error"); }
 }
@@ -1783,6 +1803,7 @@ async function deleteMessage(id) {
     await db.doc("messages/" + id).delete();
     if (currentReadMsgId === id) { closeModal("modal-read-msg"); currentReadMsgId = null; }
     toast("Message supprimé", "success");
+    refresh("msg-inbox"); refresh("msg-sent");
   } catch (e) { toast("Suppression impossible : " + e.message, "error"); }
 }
 
@@ -1804,6 +1825,7 @@ async function sendMessage() {
     closeModal("modal-new-msg");
     ["msg-to", "msg-subj", "msg-body"].forEach(id => { document.getElementById(id).value = ""; });
     toast("Message envoyé", "success");
+    refresh("msg-sent");
   } catch (e) { toast("Envoi impossible : " + e.message, "error"); }
 }
 
@@ -1907,6 +1929,7 @@ async function saveUser() {
     closeModal("modal-add-user");
     document.getElementById("au-discord-id").readOnly = false;
     toast("Membre enregistré", "success");
+    refresh("users");
     if (currentUser.discordId === discordId) {
       currentUser.nom = nom || pseudo; currentUser.titre = titre;
       const lvl = levelFor(discordId, role);
@@ -1938,6 +1961,7 @@ async function addAdmin() {
     await db.doc("config/admins").set({ ids: dbAdminIds.concat([id]) });
     document.getElementById("new-admin-id").value = "";
     toast("Administrateur ajouté", "success");
+    refresh("admins");
   } catch (e) { toast("Ajout impossible : " + e.message, "error"); }
 }
 
@@ -1947,6 +1971,7 @@ async function removeAdmin(id) {
   try {
     await db.doc("config/admins").set({ ids: dbAdminIds.filter(x => x !== id) });
     toast("Administrateur retiré", "success");
+    refresh("admins");
   } catch (e) { toast("Retrait impossible : " + e.message, "error"); }
 }
 
